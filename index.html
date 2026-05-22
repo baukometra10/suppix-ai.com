@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+  /* Styling für den Hamburger-Button */
+.hamburger-btn {
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 15px;
+  margin-left: -150px;
+  font-size: xx-large;
+}
+
+
+/* Die drei Striche */
+.hamburger-btn span  {
+  width: 100%;
+  height: 3px;
+  background-color:blue; /* Farbe der Striche */
+  transition: all 0.3s ease;
+}
+
+/* Das Hauptmenü standardmäßig für die Animation vorbereiten */
+.vertikales-menue {
+  width: 100%;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out;
+}
+
+/* Wenn das Hauptmenü geöffnet ist */
+.vertikales-menue.menue-offen {
+  max-height: 500px; /* Genug Platz für alle Menüpunkte */
+
+}
+
+/* --- Altes CSS für die Listen und Untermenüs bleibt gleich --- */
+.vertikales-menue ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+
+}
+
+.vertikales-menue li a {
+  display: block;
+  padding: 12px 15px;
+  background-color: blue;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid #444;
+
+}
+
+.vertikales-menue .untermenue {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  padding-left: 15px;
+  background: blue;
+ 
+}
+
+.vertikales-menue li.aktiv .untermenue {
+  max-height: 200px;
+
+}
+#hinter{
+    background: gray;
+    width: 100%;
+    z-index: 2;
+    height: 50px;
+    position: fixed;
+    padding-left: 10pc;
+}
+
+
+</style>
+<body>
+<div id="hinter">
+<!-- Der Hamburger-Button -->
+<button class="hamburger-btn"  id="hamburgerBtn">&#9776;</button>
+
+<!-- Das vertikale Menü -->
+<nav class="vertikales-menue" id="hauptMenue">
+  <ul>
+    <li><a href="#">Startseite</a></li>
+    <li>
+      <a href="#">Dienstleistungen ▼</a>
+      <ul class="untermenue">
+        <li><a href="webdesign.html">Webdesign</a></li>
+        <li><a href="#">SEO</a></li>
+        <li><a href="#">Marketing</a></li>
+      </ul>
+    </li>
+    <li><a href="#">Über uns</a></li>
+    <li><a href="#">Kontakt</a></li>
+  </ul>
+</nav>
+</div>
+
+
+<script>
+ 
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const hamburgerBtn = document.getElementById("hamburgerBtn");
+  const hauptMenue = document.getElementById("hauptMenue");
+  const menuItems = document.querySelectorAll(".vertikales-menue > ul > li");
+
+  // 1. Hauptmenü über Hamburger-Button öffnen/schließen
+  hamburgerBtn.addEventListener("click", () => {
+    hauptMenue.classList.toggle("menue-offen");
+  });
+
+  // 2. Logik für die Untermenüs (Akkordeon-Effekt)
+  menuItems.forEach(item => {
+    const link = item.querySelector("a");
+    const hatUntermenue = item.querySelector(".untermenue");
+
+    if (hatUntermenue) {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        menuItems.forEach(anderesItem => {
+          if (anderesItem !== item) {
+            anderesItem.classList.remove("aktiv");
+          }
+        });
+
+        item.classList.toggle("aktiv");
+      });
+    }
+  });
+
+  // 3. NEU: Automatisches Schließen beim Verlassen mit der Maus (mouseleave)
+  // Wir prüfen, ob die Maus das Hauptmenü verlässt
+  hauptMenue.addEventListener("mouseleave", () => {
+    // Schließt das Hauptmenü
+    hauptMenue.classList.remove("menue-offen");
+    
+    // Schließt alle eventuell noch offenen Untermenüs
+    menuItems.forEach(item => {
+      item.classList.remove("aktiv");
+    });
+  });
+});
+
+
+
+</script>
+</body>
+</html>
