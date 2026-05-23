@@ -1,165 +1,892 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<style>
-  /* Styling für den Hamburger-Button */
-.hamburger-btn {
-  display:flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 30px;
-  height: 21px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  margin-bottom: 15px;
-  margin-left: -150px;
-  font-size: xx-large;
-}
-
-
-/* Die drei Striche */
-.hamburger-btn span  {
-  width: 100%;
-  height: 3px;
-  background-color:blue; /* Farbe der Striche */
-  transition: all 0.3s ease;
-}
-
-/* Das Hauptmenü standardmäßig für die Animation vorbereiten */
-.vertikales-menue {
-  width: 100%;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease-in-out;
-}
-
-/* Wenn das Hauptmenü geöffnet ist */
-.vertikales-menue.menue-offen {
-  max-height: 500px; /* Genug Platz für alle Menüpunkte */
-
-}
-
-/* --- Altes CSS für die Listen und Untermenüs bleibt gleich --- */
-.vertikales-menue ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-
-}
-
-.vertikales-menue li a {
-  display: block;
-  padding: 12px 15px;
-  background-color: blue;
-  color: #fff;
-  text-decoration: none;
-  border-bottom: 1px solid #444;
-
-}
-
-.vertikales-menue .untermenue {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
-  padding-left: 15px;
-  background: blue;
- 
-}
-
-.vertikales-menue li.aktiv .untermenue {
-  max-height: 200px;
-
-}
-#hinter{
-    background: gray;
-    width: 100%;
-    z-index: 2;
-    height: 50px;
-    position: fixed;
-    padding-left: 10pc;
-}
-
-
-</style>
-<body>
-<div id="hinter">
-<!-- Der Hamburger-Button -->
-<button class="hamburger-btn"  id="hamburgerBtn">&#9776;</button>
-
-<!-- Das vertikale Menü -->
-<nav class="vertikales-menue" id="hauptMenue">
-  <ul>
-    <li><a href="#">Startseite</a></li>
-    <li>
-      <a href="#">Dienstleistungen ▼</a>
-      <ul class="untermenue">
-        <li><a href="webdesign.html">Webdesign</a></li>
-        <li><a href="#">SEO</a></li>
-        <li><a href="#">Marketing</a></li>
-      </ul>
-    </li>
-    <li><a href="#">Über uns</a></li>
-    <li><a href="#">Kontakt</a></li>
-  </ul>
-</nav>
-</div>
-
-
-<script>
- 
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const hamburgerBtn = document.getElementById("hamburgerBtn");
-  const hauptMenue = document.getElementById("hauptMenue");
-  const menuItems = document.querySelectorAll(".vertikales-menue > ul > li");
-
-  // 1. Hauptmenü über Hamburger-Button öffnen/schließen
-  hamburgerBtn.addEventListener("click", () => {
-    hauptMenue.classList.toggle("menue-offen");
-  });
-
-  // 2. Logik für die Untermenüs (Akkordeon-Effekt)
-  menuItems.forEach(item => {
-    const link = item.querySelector("a");
-    const hatUntermenue = item.querySelector(".untermenue");
-
-    if (hatUntermenue) {
-      link.addEventListener("click", (event) => {
-        event.preventDefault();
-
-        menuItems.forEach(anderesItem => {
-          if (anderesItem !== item) {
-            anderesItem.classList.remove("aktiv");
-          }
-        });
-
-        item.classList.toggle("aktiv");
-      });
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Baupass Controll – Digitales Zeiterfassungssystem von Baukometra. Physische Karten und App für jeden Mitarbeiter. Für Bau, Industrie und alle Branchen.">
+  <meta name="keywords" content="Zeiterfassung, Baupass, KontrollPass, Baukometra, Baustelle, Industrie, Ausweiskarte, App">
+  <meta name="author" content="Baukometra">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://baupass-controll.de/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Baupass Controll – Zeiterfassung für jede Branche">
+  <meta property="og:description" content="Physische Karten und App – Zeiterfassung für Bau, Industrie und alle Branchen.">
+  <meta property="og:image" content="https://baupass-controll.de/assets/og-share.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://baupass-controll.de/">
+  <meta name="twitter:title" content="Baupass Controll – Zeiterfassung für jede Branche">
+  <meta name="twitter:description" content="Physische Karten und App – Zeiterfassung für Bau, Industrie und alle Branchen.">
+  <meta name="twitter:image" content="https://baupass-controll.de/assets/og-share.png">
+  <meta property="og:locale" content="de_DE">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0f1419">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="alternate" hreflang="de" href="index.html">
+  <link rel="alternate" hreflang="en" href="en/index.html">
+  <title>Baupass Controll – Zeiterfassung für jede Branche | Baukometra</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="extras.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Baupass Controll",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web, iOS, Android",
+    "offers": { "@type": "Offer", "price": "19", "priceCurrency": "EUR" },
+    "provider": {
+      "@type": "Organization",
+      "name": "Baukometra",
+      "url": "https://baupass-controll.de",
+      "email": "baupass-control@outlook.de",
+      "logo": "https://baupass-controll.de/assets/logo.png"
     }
-  });
+  }
+  </script>
+</head>
+<body>
 
-  // 3. NEU: Automatisches Schließen beim Verlassen mit der Maus (mouseleave)
-  // Wir prüfen, ob die Maus das Hauptmenü verlässt
-  hauptMenue.addEventListener("mouseleave", () => {
-    // Schließt das Hauptmenü
-    hauptMenue.classList.remove("menue-offen");
-    
-    // Schließt alle eventuell noch offenen Untermenüs
-    menuItems.forEach(item => {
-      item.classList.remove("aktiv");
-    });
-  });
-});
+  <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
 
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <img src="assets/logo.png" alt="BauKometra – Digitale Baustellenkontrolle" class="logo-img">
+        <div class="logo-text">
+          <span class="logo-platform">Baupass Controll</span>
+          <span class="logo-sub">Digitale Zeiterfassung</span>
+        </div>
+      </a>
 
+      <nav class="nav-desktop">
+        <a href="#system">System</a>
+        <a href="#vorschau">Vorschau</a>
+        <a href="#funktionen">Funktionen</a>
+        <a href="#branchen">Branchen</a>
+        <a href="#preise">Preise</a>
+        <a href="#faq">FAQ</a>
+        <a href="#kontakt">Kontakt</a>
+        <div class="nav-actions">
+          <a href="#" class="btn-login" data-login>Firmenportal</a>
+          <a href="en/index.html" class="lang-switch">EN</a>
+          <a href="#kontakt" class="btn btn-primary">Demo anfragen</a>
+        </div>
+      </nav>
 
-</script>
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menü öffnen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <nav class="mobile-nav" id="mobileNav">
+      <ul>
+        <li><a href="#system">System</a></li>
+        <li><a href="#vorschau">Vorschau</a></li>
+        <li><a href="#funktionen">Funktionen</a></li>
+        <li><a href="#branchen">Branchen</a></li>
+        <li><a href="#preise">Preise</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+        <li><a href="#" data-login>Firmenportal</a></li>
+        <li><a href="en/index.html">English</a></li>
+        <li><a href="#kontakt">Demo anfragen</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="main-content">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <span class="hero-badge">Digitale Zeiterfassung – für jeden Mitarbeiter</span>
+        <h1>Zeiterfassung, die <span>jeder</span> nutzen kann</h1>
+        <p class="hero-text">
+          Baupass Controll von Baukometra verbindet physische Ausweiskarten mit einer leistungsstarken App-Plattform. Ob Bauarbeiter ohne Smartphone oder Techniker mit modernem Handy – Ihr Team erfasst Arbeitszeiten zuverlässig und digital.
+        </p>
+        <div class="hero-actions">
+          <a href="#kontakt" class="btn btn-primary">Kostenlose Demo buchen</a>
+          <a href="#rechner" class="btn btn-outline">Preis berechnen</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-cards-showcase">
+          <img src="assets/ausweis-baupass.png" alt="BauPass Ausweis" class="hero-card-img hero-card-left">
+          <img src="assets/app-splash.png" alt="BauPass App" class="hero-card-img hero-card-center">
+          <img src="assets/ausweis-kontrollpass-blau.png" alt="KontrollPass Ausweis" class="hero-card-img hero-card-right">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="container stats-grid">
+      <div>
+        <div class="stat-number">2-in-1</div>
+        <div class="stat-label">Karte & App kombiniert</div>
+      </div>
+      <div>
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Branchenflexibel</div>
+      </div>
+      <div>
+        <div class="stat-number">📧</div>
+        <div class="stat-label">Interne E-Mail & Doku</div>
+      </div>
+      <div>
+        <div class="stat-number">∞</div>
+        <div class="stat-label">Skalierbar für jede Firma</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust -->
+  <section class="trust-bar" aria-label="Vertrauensmerkmale">
+    <div class="container trust-bar-grid">
+      <div class="trust-item">
+        <span class="trust-icon" aria-hidden="true">🔒</span>
+        <strong>DSGVO-konform</strong>
+        <span>Datenschutz by design</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon" aria-hidden="true">🇩🇪</span>
+        <strong>Made for Germany</strong>
+        <span>Rechtssichere Zeiterfassung</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon" aria-hidden="true">🪪</span>
+        <strong>Karte + App</strong>
+        <span>Für jeden Mitarbeiter</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon" aria-hidden="true">🎧</span>
+        <strong>Persönlicher Support</strong>
+        <span>Vom Demo bis Enterprise</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- System -->
+  <section id="system" class="reveal">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">So funktioniert's</span>
+        <h2>Physische Karte oder App – Sie entscheiden</h2>
+        <p>Nicht jeder Mitarbeiter hat ein modernes Smartphone. Deshalb bietet Baupass Controll beides: gedruckte Ausweiskarten zum Stempeln und digitale Pässe in der App.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Karte erhalten</h3>
+          <p>Jeder Mitarbeiter bekommt eine personalisierte Ausweiskarte – gedruckt und einsatzbereit. Ideal für Baustellen und Produktionshallen.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Zeit erfassen</h3>
+          <p>Mit Karte am Terminal stempeln oder bequem über die App ein- und ausstempeln. Beides läuft über dasselbe System.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Alles dokumentiert</h3>
+          <p>Arbeitszeiten, Berichte und Dokumentation – alles zentral verwaltet. Inklusive interner E-Mail für nahtlose Kommunikation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- System Vorschau -->
+  <section class="system-preview reveal" id="vorschau">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Systemstatus</span>
+        <h2>Das Baupass Controll Dashboard</h2>
+        <p>Ein Blick ins System: Mitarbeiter-Ausweise, Zutrittskontrolle, Dokumentenstatus und Compliance – alles in einer Oberfläche.</p>
+      </div>
+
+      <div class="preview-showcase">
+        <div class="preview-glow preview-glow-left"></div>
+        <div class="preview-glow preview-glow-right"></div>
+
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="browser-url">
+              🔒 app.baupass-controll.de / dashboard
+            </div>
+            <span class="browser-live">Live-Vorschau</span>
+          </div>
+          <div class="browser-content">
+            <img src="assets/system-screenshot.png" alt="Baupass Controll Dashboard – Mitarbeiter-Ausweise und Zutritt" loading="lazy">
+          </div>
+        </div>
+
+        <div class="preview-stats">
+          <div class="preview-stat">
+            <span class="preview-stat-icon">👥</span>
+            <div>
+              <strong>Mitarbeiter</strong>
+              <span>Ausweise & Zutritt</span>
+            </div>
+          </div>
+          <div class="preview-stat">
+            <span class="preview-stat-icon">📸</span>
+            <div>
+              <strong>Foto & Badge-ID</strong>
+              <span>Digitale Ausweise</span>
+            </div>
+          </div>
+          <div class="preview-stat">
+            <span class="preview-stat-icon">🏢</span>
+            <div>
+              <strong>Multi-Firma</strong>
+              <span>Mandantenfähig</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="preview-note">Aktueller Entwicklungsstand – das System wird laufend erweitert.</p>
+      <div class="preview-tags">
+        <span class="preview-tag">Fotoaufnahme</span>
+        <span class="preview-tag">Zutrittslog</span>
+        <span class="preview-tag">Mandantenfähig</span>
+        <span class="preview-tag">Compliance</span>
+        <span class="preview-tag">Dokumentenstatus</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery reveal" id="galerie">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Einblicke</span>
+        <h2>Das System im Überblick</h2>
+        <p>Karten, App und Dashboard – alles aus einer Hand.</p>
+      </div>
+      <div class="gallery-grid gallery-grid-5">
+        <figure class="gallery-item">
+          <div class="gallery-thumb">
+            <img src="assets/system-screenshot.png" alt="Control Pass Dashboard">
+          </div>
+          <figcaption>
+            <strong>Firmenportal Dashboard</strong>
+            <span>Mitarbeiter, Zutritt & Compliance</span>
+          </figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <div class="gallery-thumb">
+            <img src="assets/ausweis-baupass.png" alt="BauPass Mitarbeiterausweis">
+          </div>
+          <figcaption>
+            <strong>BauPass Ausweis</strong>
+            <span>QR-Code · Foto · Badge-ID</span>
+          </figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <div class="gallery-thumb">
+            <img src="assets/ausweis-kontrollpass-bronze.png" alt="KontrollPass Ausweis Bronze">
+          </div>
+          <figcaption>
+            <strong>KontrollPass · Bronze</strong>
+            <span>Industrie-Ausweis mit Foto</span>
+          </figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <div class="gallery-thumb">
+            <img src="assets/ausweis-kontrollpass-blau.png" alt="KontrollPass Ausweis Blau">
+          </div>
+          <figcaption>
+            <strong>KontrollPass · Blau</strong>
+            <span>Alternatives Design</span>
+          </figcaption>
+        </figure>
+        <figure class="gallery-item">
+          <div class="gallery-thumb">
+            <img src="assets/app-splash.png" alt="BauPass Mitarbeiter-App">
+          </div>
+          <figcaption>
+            <strong>Mitarbeiter-App</strong>
+            <span>BauPass · Digitaler Pass</span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Video -->
+  <section class="video-section reveal" id="video">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Demo</span>
+        <h2>Baupass Controll in Aktion</h2>
+        <p>Sehen Sie, wie einfach Zeiterfassung mit Karte und App funktioniert.</p>
+      </div>
+      <div class="video-showcase">
+        <div class="video-wrapper video-wrapper-real">
+          <video id="demoVideo" controls playsinline preload="auto" poster="assets/video-poster.jpg">
+            <source src="assets/baupass-demo-v4.mp4?v=4" type="video/mp4">
+            Ihr Browser unterstützt kein Video.
+          </video>
+        </div>
+        <p class="preview-note">▶ Abspielen · 🔊 Lautsprecher aktivieren · KI-Erklärstimme mit Hintergrundmusik</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features reveal" id="funktionen">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Funktionen</span>
+        <h2>Ein System – unzählige Möglichkeiten</h2>
+        <p>Baupass Controll ist weit mehr als Zeiterfassung. Es ist eine komplette Plattform für Unternehmen jeder Größe.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🪪</div>
+          <h3>Physische Ausweiskarten</h3>
+          <p>Gedruckte Karten für Mitarbeiter ohne Smartphone. Robust, einfach und sofort einsatzbereit auf jeder Baustelle oder im Werk.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>Digitale App-Karte</h3>
+          <p>Mitarbeiter mit modernen Handys nutzen ihre Karte direkt in der App – mit Ein- und Ausstempeln, Übersicht und Benachrichtigungen.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🏭</div>
+          <h3>Branchenanpassung</h3>
+          <p>BauPass für Bauunternehmen, KontrollPass für Industrie – der Name und das Design passen sich Ihrer Branche an.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📧</div>
+          <h3>Interne E-Mail</h3>
+          <p>Integriertes E-Mail-System für Dokumentation und Kommunikation – alles an einem Ort, ohne externe Tools.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <h3>Dokumentation</h3>
+          <p>Arbeitszeiten, Berichte und Nachweise zentral gespeichert. Rechtssicher und jederzeit abrufbar.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📦</div>
+          <h3>Flexible Pakete</h3>
+          <p>Vom Besucherkarten-Modell bis Enterprise – wählen Sie das Paket, das zu Ihrer Unternehmensgröße passt.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Industries -->
+  <section class="industries reveal" id="branchen">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Branchen</span>
+        <h2>Nicht nur für Bau – für jede Industrie</h2>
+        <p>Baupass Controll passt sich Ihrer Branche an. Der Pass-Name, das Design und die Funktionen werden individuell konfiguriert.</p>
+      </div>
+
+      <div class="industry-cards">
+        <div class="industry-card">
+          <div class="industry-icon">🏗️</div>
+          <span class="industry-pass">BauPass</span>
+          <h3>Bau & Handwerk</h3>
+          <p>Baustellen, Subunternehmer, Handwerksbetriebe – Zeiterfassung direkt vor Ort mit Karte oder App.</p>
+          <a href="bau.html" class="industry-card-link">Mehr erfahren →</a>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon">⚙️</div>
+          <span class="industry-pass">KontrollPass</span>
+          <h3>Industrie & Produktion</h3>
+          <p>Schichtarbeit, Produktionslinien, Qualitätskontrolle – der KontrollPass macht Zeiterfassung im Werk einfach.</p>
+          <a href="industrie.html" class="industry-card-link">Mehr erfahren →</a>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon">🏢</div>
+          <span class="industry-pass">Ihr Pass-Name</span>
+          <h3>Alle weiteren Branchen</h3>
+          <p>Logistik, Gastronomie, Pflege, Einzelhandel – jede Branche bekommt ihren eigenen, passenden Pass-Namen.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="preise" class="reveal">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Pakete & Preise</span>
+        <h2>Der richtige Plan für Ihr Unternehmen</h2>
+        <p>Transparente Preise – alle Mitarbeiter inklusive. Skalieren Sie mit, wenn Ihr Team wächst.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-name">Besucherkarte</div>
+          <div class="pricing-price">19 €<span>/Monat</span></div>
+          <p class="pricing-note">Alle Mitarbeiter inklusive</p>
+          <ul class="pricing-features">
+            <li>Besucherverwaltung</li>
+            <li>Physische Karten</li>
+            <li>Basis-Zeiterfassung</li>
+            <li>Ideal für kleine Teams</li>
+          </ul>
+          <a href="#kontakt" class="btn btn-outline">Anfragen</a>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-name">Starter</div>
+          <div class="pricing-price">149 €<span>/Monat</span></div>
+          <p class="pricing-note">Alle Mitarbeiter inklusive</p>
+          <ul class="pricing-features">
+            <li>Karten & App</li>
+            <li>Zeiterfassung</li>
+            <li>Basis-Dokumentation</li>
+            <li>E-Mail-Support</li>
+          </ul>
+          <a href="#kontakt" class="btn btn-outline">Anfragen</a>
+        </div>
+
+        <div class="pricing-card featured">
+          <span class="pricing-badge">Beliebtestes Paket</span>
+          <div class="pricing-name">Professional</div>
+          <div class="pricing-price">999 €<span>/Monat</span></div>
+          <p class="pricing-note">+ 2,50 € pro MA ab dem 11. Mitarbeiter</p>
+          <ul class="pricing-features">
+            <li>Alles aus Starter</li>
+            <li>Interne E-Mail & Doku</li>
+            <li>Branchenanpassung</li>
+            <li>Erweiterte Berichte</li>
+            <li>Prioritäts-Support</li>
+          </ul>
+          <a href="#kontakt" class="btn btn-primary">Demo buchen</a>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-name">Enterprise</div>
+          <div class="pricing-price">2.490 €<span>/Monat</span></div>
+          <p class="pricing-note">+ 3,00 € pro Mitarbeiter</p>
+          <ul class="pricing-features">
+            <li>Alles aus Professional</li>
+            <li>Unbegrenzte Skalierung</li>
+            <li>Individuelle Anpassung</li>
+            <li>API & Integrationen</li>
+            <li>Persönlicher Ansprechpartner</li>
+          </ul>
+          <a href="#kontakt" class="btn btn-outline">Kontakt aufnehmen</a>
+        </div>
+      </div>
+
+      <div class="pricing-compare-wrap" id="vergleich">
+        <h3 class="pricing-compare-title">Pakete im direkten Vergleich</h3>
+        <div class="pricing-compare-scroll">
+          <table class="pricing-compare">
+            <thead>
+              <tr>
+                <th>Funktion</th>
+                <th>Besucherkarte</th>
+                <th>Starter</th>
+                <th>Professional</th>
+                <th>Enterprise</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Physische Ausweiskarten</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><td>App & digitaler Pass</td><td class="no">–</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><td>Zeiterfassung</td><td>Basis</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><td>Besucherverwaltung</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><td>Interne E-Mail & Doku</td><td class="no">–</td><td class="no">–</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><td>Erweiterte Berichte</td><td class="no">–</td><td class="no">–</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><td>Branchenanpassung (BauPass/KontrollPass)</td><td class="no">–</td><td>Basis</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><td>API & Integrationen</td><td class="no">–</td><td class="no">–</td><td class="no">–</td><td class="yes">✓</td></tr>
+              <tr><td>Support</td><td>E-Mail</td><td>E-Mail</td><td>Priorität</td><td>Persönlich</td></tr>
+              <tr><td>Preis ab 11. MA</td><td>–</td><td>–</td><td>2,50 €/MA</td><td>3,00 €/MA</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Price Calculator -->
+  <section class="calculator" id="rechner">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Preisrechner</span>
+        <h2>Monatliche Kosten berechnen</h2>
+        <p>Wählen Sie Ihr Paket und die Anzahl der Mitarbeiter.</p>
+      </div>
+      <div class="calculator-box">
+        <label for="calcPaket">Paket wählen</label>
+        <select id="calcPaket">
+          <option value="besucherkarte">Besucherkarte – 19 €/Monat</option>
+          <option value="starter">Starter – 149 €/Monat</option>
+          <option value="professional" selected>Professional – 999 €/Monat</option>
+          <option value="enterprise">Enterprise – 2.490 €/Monat</option>
+        </select>
+        <label for="calcEmployees">Anzahl Mitarbeiter</label>
+        <input type="range" id="calcEmployees" min="1" max="200" value="15">
+        <div class="range-value"><span id="calcEmployeesValue">15</span> Mitarbeiter</div>
+        <div class="calc-result">
+          <div class="calc-result-label">Geschätzte monatliche Kosten</div>
+          <div class="calc-result-price" id="calcPrice">1.011,50 €</div>
+          <div class="calc-result-note" id="calcNote">Professional: 999 € + 5 × 2,50 €</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials" id="referenzen">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Kundenstimmen</span>
+        <h2>Das sagen unsere Kunden</h2>
+        <p>Unternehmen aus Bau und Industrie vertrauen auf Baupass Controll.</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <blockquote>„Endlich ein System, das unsere Bauarbeiter mit Karte und die Bürokraft mit der App nutzen kann. Einfach und übersichtlich."</blockquote>
+          <div class="testimonial-author">
+            <strong>Thomas M.</strong>
+            <span>Geschäftsführer · Bauunternehmen</span>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <blockquote>„Der KontrollPass passt perfekt in unsere Produktion. Schichtplanung und Zutrittskontrolle in einem System – das spart uns täglich Zeit."</blockquote>
+          <div class="testimonial-author">
+            <strong>Sandra K.</strong>
+            <span>HR-Leiterin · Industrie AG</span>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <blockquote>„Die interne E-Mail und Dokumentation ist genial. Alles an einem Ort, ohne zehn verschiedene Tools. Genau was wir gesucht haben."</blockquote>
+          <div class="testimonial-author">
+            <strong>Markus W.</strong>
+            <span>Projektleiter · Handwerksbetrieb</span>
+          </div>
+        </div>
+      </div>
+      <p class="section-note">Beispielhafte Kundenstimmen zur Illustration des Nutzens in Bau und Industrie.</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq reveal" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">FAQ</span>
+        <h2>Häufig gestellte Fragen</h2>
+        <p>Antworten auf die wichtigsten Fragen zu Baupass Controll.</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            Brauchen alle Mitarbeiter ein Smartphone?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Nein. Mitarbeiter ohne modernes Handy erhalten eine physische Ausweiskarte zum Stempeln. Wer ein Smartphone hat, kann zusätzlich die App mit dem digitalen Pass nutzen.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            Kann ich den Pass-Namen an meine Branche anpassen?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Ja. Bauunternehmen nutzen z. B. den BauPass, Industriebetriebe den KontrollPass. Jede Branche bekommt einen passenden Namen und ihr eigenes Design.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            Welches Paket ist das richtige für mich?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Besucherkarte (19 €) für kleine Teams, Starter (149 €) für Karten & App, Professional (999 €) für volle Funktionen inkl. E-Mail & Doku, Enterprise (2.490 €) für große Unternehmen mit API und persönlichem Support.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            Ist das System mandantenfähig?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Ja. Mehrere Firmen können das System parallel nutzen. Jede Firma verwaltet ihr Team separat – ideal für Vermieter, Generalunternehmer und Multi-Standort-Betriebe.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            Wie starte ich mit einer Demo?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Füllen Sie das Kontaktformular aus, schreiben Sie uns per E-Mail an baupass-control@outlook.de oder kontaktieren Sie uns per WhatsApp. Wir richten eine kostenlose Demo für Ihr Unternehmen ein.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            Ist Baupass Controll DSGVO-konform?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Ja. Personenbezogene Daten werden ausschließlich für Zeiterfassung, Zutrittskontrolle und dokumentierte Kommunikation verarbeitet. Zugriffsrechte, Löschkonzepte und Hosting in Deutschland können je nach Paket konfiguriert werden.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            Funktioniert das System auch offline?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Physische Karten funktionieren am Terminal auch bei instabiler Verbindung – Einträge werden synchronisiert, sobald das Netzwerk wieder verfügbar ist. Die App speichert Stempelungen zwischen und überträgt sie automatisch.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            Was passiert bei verlorener oder defekter Karte?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Karten können im Dashboard gesperrt und neu ausgestellt werden. Der Mitarbeiter kann parallel den digitalen Pass in der App nutzen, bis eine Ersatzkarte gedruckt ist.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why -->
+  <section class="why-section reveal" id="warum">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Warum Baupass Controll</span>
+        <h2>Professionell. Flexibel. Zukunftssicher.</h2>
+        <p>Ein System, das mit Ihrem Unternehmen wächst – von der ersten Karte bis zum Enterprise-Setup.</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-card-icon" aria-hidden="true">⚡</div>
+          <h3>Schneller Start</h3>
+          <p>Karten ausgeben, App verteilen, loslegen. Keine monatelange Einführung – Ihr Team ist in wenigen Tagen produktiv.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon" aria-hidden="true">🛡️</div>
+          <h3>Compliance & Kontrolle</h3>
+          <p>Lückenlose Dokumentation, Zutrittslogs und nachvollziehbare Auswertungen – wichtig für Baustellen, Werke und Audits.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon" aria-hidden="true">🔧</div>
+          <h3>Individuell anpassbar</h3>
+          <p>BauPass, KontrollPass oder Ihr eigener Pass-Name. Design, Rollen und Pakete passen sich Ihrer Branche an.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta reveal">
+    <div class="container">
+      <h2>Bereit für moderne Zeiterfassung?</h2>
+      <p>Entdecken Sie Baupass Controll in einer kostenlosen Demo. Wir zeigen Ihnen, wie Karte und App in Ihrem Unternehmen funktionieren.</p>
+      <div class="cta-actions">
+        <a href="#kontakt" class="btn btn-accent">Jetzt Demo vereinbaren</a>
+        <a href="#preise" class="btn btn-outline">Pakete vergleichen</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter" id="newsletter">
+    <div class="container">
+      <div class="newsletter-box">
+        <span class="section-tag">Newsletter</span>
+        <h2 style="color: var(--white); font-size: 1.75rem; font-weight: 800; margin-bottom: 0.5rem;">Bleiben Sie informiert</h2>
+        <p style="color: var(--gray-500);">Updates zu Baupass Controll, neuen Funktionen und Tipps für Ihre Zeiterfassung.</p>
+        <form class="newsletter-form" id="newsletterForm">
+          <input type="email" id="newsletterEmail" placeholder="ihre@email.de" required aria-label="E-Mail für Newsletter">
+          <button type="submit" class="btn btn-primary">Anmelden</button>
+        </form>
+        <div class="form-status" id="newsletterStatus"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="kontakt">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Kontakt</span>
+        <h2>Sprechen Sie mit uns</h2>
+        <p>Fragen zu Baupass Controll? Wir beraten Sie gerne und richten eine Demo für Ihr Unternehmen ein.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>Baukometra</h3>
+          <p style="color: var(--gray-500); margin-bottom: 1.5rem;">
+            Entwickler und Anbieter von Baupass Controll – dem flexiblen Zeiterfassungssystem für Unternehmen jeder Branche.
+          </p>
+
+          <div class="contact-item">
+            <div class="contact-item-icon">📧</div>
+            <div>
+              <strong style="color: var(--white);">E-Mail</strong><br>
+              <a href="mailto:baupass-control@outlook.de" style="color: var(--primary);" data-email>baupass-control@outlook.de</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">📞</div>
+            <div>
+              <strong style="color: var(--white);">Telefon</strong><br>
+              <a href="tel:+493012345678" style="color: var(--gray-500);" data-phone-link>+49 (0) 30 123 456 78</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">💬</div>
+            <div>
+              <strong style="color: var(--white);">WhatsApp</strong><br>
+              <a href="#" id="contactWhatsApp" style="color: var(--primary);">Demo per WhatsApp anfragen</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">🏢</div>
+            <div>
+              <strong style="color: var(--white);">Unternehmen</strong><br>
+              <span style="color: var(--gray-500);">Baukometra · Baupass Controll</span>
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form" id="contactForm">
+          <div class="form-group">
+            <label for="name">Name *</label>
+            <input type="text" id="name" name="name" required placeholder="Ihr Name">
+          </div>
+          <div class="form-group">
+            <label for="company">Unternehmen</label>
+            <input type="text" id="company" name="company" placeholder="Firmenname">
+          </div>
+          <div class="form-group">
+            <label for="email">E-Mail *</label>
+            <input type="email" id="email" name="email" required placeholder="ihre@email.de">
+          </div>
+          <div class="form-group">
+            <label for="paket">Interesse an Paket</label>
+            <select id="paket" name="paket">
+              <option value="">Bitte wählen</option>
+              <option value="besucherkarte">Besucherkarte (19 €/Monat)</option>
+              <option value="starter">Starter (149 €/Monat)</option>
+              <option value="professional">Professional (999 €/Monat)</option>
+              <option value="enterprise">Enterprise (2.490 €/Monat)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Nachricht</label>
+            <textarea id="message" name="message" placeholder="Erzählen Sie uns von Ihrem Unternehmen und Ihren Anforderungen..."></textarea>
+          </div>
+          <div class="form-group form-checkbox">
+            <label class="checkbox-label">
+              <input type="checkbox" id="privacy" name="privacy" required>
+              <span>Ich habe die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu. *</span>
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Nachricht senden</button>
+          <div class="form-status" id="contactStatus"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <img src="assets/logo.png" alt="BauKometra – Digitale Baustellenkontrolle" class="logo-img">
+          </a>
+          <p>Das digitale Zeiterfassungssystem mit physischen Karten und App – flexibel für Bau, Industrie und alle Branchen.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Produkt</h4>
+          <ul>
+            <li><a href="#system">System</a></li>
+            <li><a href="#vorschau">System-Vorschau</a></li>
+            <li><a href="#funktionen">Funktionen</a></li>
+            <li><a href="#branchen">Branchen</a></li>
+            <li><a href="#preise">Preise</a></li>
+            <li><a href="#vergleich">Paketvergleich</a></li>
+            <li><a href="#warum">Warum wir</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#rechner">Preisrechner</a></li>
+            <li><a href="flyer.html">Flyer (PDF)</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Unternehmen</h4>
+          <ul>
+            <li><a href="ueber-uns.html">Über uns</a></li>
+            <li><a href="bau.html">Bau & Handwerk</a></li>
+            <li><a href="industrie.html">Industrie</a></li>
+            <li><a href="#kontakt">Kontakt</a></li>
+            <li><a href="#kontakt">Demo buchen</a></li>
+            <li><a href="en/index.html">English</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Rechtliches</h4>
+          <ul>
+            <li><a href="impressum.html">Impressum</a></li>
+            <li><a href="datenschutz.html">Datenschutz</a></li>
+            <li><a href="agb.html">AGB</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; <span data-year>2026</span> Baukometra. Alle Rechte vorbehalten.</span>
+        <span>Baupass Controll – Zeiterfassung für jede Branche</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Sticky CTA -->
+  <div class="mobile-cta-bar" id="mobileCtaBar" aria-hidden="true">
+    <a href="#kontakt" class="btn btn-primary">Demo anfragen</a>
+    <a href="#" class="btn btn-outline" id="mobileCtaWhatsapp">WhatsApp</a>
+  </div>
+
+  <!-- WhatsApp -->
+  <a href="#" class="whatsapp-float" id="whatsappBtn" target="_blank" rel="noopener" data-tooltip="Demo per WhatsApp">
+    <span class="whatsapp-float-icon" aria-hidden="true">💬</span>
+    <span class="whatsapp-float-label">WhatsApp</span>
+  </a>
+
+  <!-- Cookie Banner -->
+  <div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Cookie-Hinweis">
+    <div class="cookie-inner">
+      <p>Wir verwenden nur technisch notwendige Cookies für die Grundfunktion dieser Website. Mehr in unserer <a href="datenschutz.html">Datenschutzerklärung</a>.</p>
+      <div class="cookie-buttons">
+        <button type="button" class="btn btn-outline btn-sm" id="cookieDecline">Ablehnen</button>
+        <button type="button" class="btn btn-primary btn-sm" id="cookieAccept">Akzeptieren</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="site-config.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

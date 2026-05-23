@@ -1,0 +1,13 @@
+# Video/audio build artifacts (not needed on the live site)
+assets/bg-music*.wav
+assets/bg-music.mp3
+assets/demo-video.mp4
+assets/baupass-demo.mp4
+assets/voiceover-*.wav
+assets/voiceover-raw.mp3
+assets/demo-voice-music*.m4a
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/

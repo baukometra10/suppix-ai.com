@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://baupass-controll.de/sitemap.xml

@@ -1,0 +1,22 @@
+const SITE_CONFIG = {
+  company: "Baukometra",
+  platform: "Baupass Controll",
+  tagline: "Digitale Baustellenkontrolle",
+  email: "baupass-control@outlook.de",
+  phone: "+49 17631676589",
+  phoneRaw: "+4917631676589",
+  whatsapp: "+4917631676589",
+  appLoginUrl: "index.html#vorschau",
+  domain: "baupass-controll.de",
+  url: "https://baupass-controll.de",
+  address: {
+    street: "[Straße und Hausnummer]",
+    city: "[PLZ Ort]",
+    country: "Deutschland",
+  },
+  ceo: "[Name des Geschäftsführers]",
+  vatId: "[USt-IdNr.]",
+  registerCourt: "[Amtsgericht]",
+  registerNumber: "[HRB-Nummer]",
+  formEndpoint: "https://formsubmit.co/ajax/baupass-control@outlook.de",
+};

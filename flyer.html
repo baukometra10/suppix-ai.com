@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Baupass Controll Flyer – Digitale Zeiterfassung mit Karte und App">
+  <title>Baupass Controll – Flyer | Baukometra</title>
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="extras.css">
+</head>
+<body class="flyer-body">
+
+  <div class="flyer-toolbar no-print">
+    <div class="container flyer-toolbar-inner">
+      <a href="index.html" class="btn btn-outline btn-sm">← Zur Website</a>
+      <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">Als PDF drucken</button>
+    </div>
+  </div>
+
+  <article class="flyer-page" id="main">
+    <header class="flyer-header">
+      <img src="assets/logo.png" alt="Baukometra" class="flyer-logo">
+      <div>
+        <p class="flyer-brand">Baukometra präsentiert</p>
+        <h1>Baupass Controll</h1>
+        <p class="flyer-tagline">Digitale Zeiterfassung mit physischer Karte & App – für jede Branche</p>
+      </div>
+    </header>
+
+    <div class="flyer-hero-grid">
+      <div class="flyer-copy">
+        <h2>Das 2-in-1 System</h2>
+        <ul class="flyer-list">
+          <li><strong>Physische Ausweiskarte</strong> – für Mitarbeiter ohne Smartphone</li>
+          <li><strong>Digitale App</strong> – BauPass / KontrollPass auf dem Handy</li>
+          <li><strong>Dashboard</strong> – Anwesenheit, Projekte, Berichte in Echtzeit</li>
+          <li><strong>Interne E-Mail & Doku</strong> – alles in einer Plattform</li>
+          <li><strong>Mandantenfähig</strong> – mehrere Firmen, ein System</li>
+        </ul>
+      </div>
+      <figure class="flyer-visual">
+        <img src="assets/ausweis-baupass.png" alt="BauPass Ausweis">
+        <img src="assets/app-splash.png" alt="Baupass App" class="flyer-visual-app">
+      </figure>
+    </div>
+
+    <div class="flyer-pricing">
+      <h2>Pakete & Preise</h2>
+      <table class="flyer-table">
+        <thead>
+          <tr><th>Paket</th><th>Preis / Monat</th><th>Ideal für</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Besucherkarte</td><td>19 €</td><td>Kleine Teams, Besucher</td></tr>
+          <tr><td>Starter</td><td>149 €</td><td>Karten & App, Basis</td></tr>
+          <tr><td>Professional</td><td>999 € + 2,50 €/MA ab 11.</td><td>Vollpaket mit Doku</td></tr>
+          <tr><td>Enterprise</td><td>2.490 € + 3,00 €/MA</td><td>Große Organisationen</td></tr>
+        </tbody>
+      </table>
+      <p class="flyer-note">Alle Pakete: alle Mitarbeiter inklusive (außer Zuschläge ab 11. MA bei Professional/Enterprise).</p>
+    </div>
+
+    <div class="flyer-branches">
+      <div class="flyer-branch"><strong>BauPass</strong><span>Bau & Handwerk</span></div>
+      <div class="flyer-branch"><strong>KontrollPass</strong><span>Industrie & Produktion</span></div>
+      <div class="flyer-branch"><strong>Ihr Pass-Name</strong><span>Weitere Branchen</span></div>
+    </div>
+
+    <footer class="flyer-footer">
+      <div>
+        <strong>Kostenlose Demo vereinbaren</strong>
+        <p data-email>baupass-control@outlook.de</p>
+        <p data-phone-link>+49 (0) 30 123 456 78</p>
+        <p>baupass-controll.de</p>
+      </div>
+      <div class="flyer-qr-placeholder">
+        <div class="flyer-qr-box" aria-hidden="true">QR</div>
+        <span>Website scannen</span>
+      </div>
+    </footer>
+  </article>
+
+  <script src="site-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
