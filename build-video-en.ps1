@@ -1,10 +1,10 @@
 $ffmpeg = "C:\Users\u4363\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.1.1-full_build\bin\ffmpeg.exe"
 $input = "c:\Users\u4363\Desktop\Screenshots\Recording 2026-05-22 222913.mp4"
-$music = "c:\Users\u4363\Desktop\test-folder\assets\bg-music-soft.wav"
-$voiceText = "c:\Users\u4363\Desktop\test-folder\assets\voiceover-text-en.txt"
-$wav = "c:\Users\u4363\Desktop\test-folder\assets\voiceover-en-raw.wav"
-$audio = "c:\Users\u4363\Desktop\test-folder\assets\demo-voice-music-en.m4a"
-$final = "c:\Users\u4363\Desktop\test-folder\assets\baupass-demo-en.mp4"
+$music = "c:\Users\u4363\Desktop\Baukometra\assets\bg-music-soft.wav"
+$voiceText = "c:\Users\u4363\Desktop\Baukometra\assets\voiceover-text-en.txt"
+$wav = "c:\Users\u4363\Desktop\Baukometra\assets\voiceover-en-raw.wav"
+$audio = "c:\Users\u4363\Desktop\Baukometra\assets\demo-voice-music-en.m4a"
+$final = "c:\Users\u4363\Desktop\Baukometra\assets\baupass-demo-en.mp4"
 
 Write-Host "1/3 English voice (Windows SAPI)..."
 $text = Get-Content $voiceText -Raw

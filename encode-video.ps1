@@ -1,8 +1,8 @@
 $ffmpeg = "C:\Users\u4363\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.1.1-full_build\bin\ffmpeg.exe"
 $input = "c:\Users\u4363\Desktop\Screenshots\Recording 2026-05-22 222913.mp4"
-$music = "c:\Users\u4363\Desktop\test-folder\assets\bg-music.wav"
-$raw = "c:\Users\u4363\Desktop\test-folder\assets\demo-video-raw.mp4"
-$final = "c:\Users\u4363\Desktop\test-folder\assets\demo-video.mp4"
+$music = "c:\Users\u4363\Desktop\Baukometra\assets\bg-music.wav"
+$raw = "c:\Users\u4363\Desktop\Baukometra\assets\demo-video-raw.mp4"
+$final = "c:\Users\u4363\Desktop\Baukometra\assets\demo-video.mp4"
 
 Write-Host "Step 1/2: Video + Musik encodieren..."
 & $ffmpeg -y -hide_banner -loglevel error -stats -i $input -i $music `

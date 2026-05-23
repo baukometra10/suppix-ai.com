@@ -1,11 +1,11 @@
 $ffmpeg = "C:\Users\u4363\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.1.1-full_build\bin\ffmpeg.exe"
 $input = "c:\Users\u4363\Desktop\Screenshots\Recording 2026-05-22 222913.mp4"
-$music = "c:\Users\u4363\Desktop\test-folder\assets\bg-music-soft.wav"
-$voiceText = "c:\Users\u4363\Desktop\test-folder\assets\voiceover-text.txt"
-$voiceRaw = "c:\Users\u4363\Desktop\test-folder\assets\voiceover-raw.mp3"
-$mixedAudio = "c:\Users\u4363\Desktop\test-folder\assets\demo-voice-music.m4a"
-$raw = "c:\Users\u4363\Desktop\test-folder\assets\baupass-v4-raw.mp4"
-$final = "c:\Users\u4363\Desktop\test-folder\assets\baupass-demo-v4.mp4"
+$music = "c:\Users\u4363\Desktop\Baukometra\assets\bg-music-soft.wav"
+$voiceText = "c:\Users\u4363\Desktop\Baukometra\assets\voiceover-text.txt"
+$voiceRaw = "c:\Users\u4363\Desktop\Baukometra\assets\voiceover-raw.mp3"
+$mixedAudio = "c:\Users\u4363\Desktop\Baukometra\assets\demo-voice-music.m4a"
+$raw = "c:\Users\u4363\Desktop\Baukometra\assets\baupass-v4-raw.mp4"
+$final = "c:\Users\u4363\Desktop\Baukometra\assets\baupass-demo-v4.mp4"
 
 Write-Host "1/4 KI-Stimme (de-DE-KatjaNeural)..."
 edge-tts --voice de-DE-KatjaNeural --rate="-3%" --file $voiceText --write-media $voiceRaw
@@ -28,7 +28,7 @@ Write-Host "4/4 Browser-Optimierung..."
 & $ffmpeg -v error -i $final -f null -
 if ($LASTEXITCODE -ne 0) { throw "Validierung fehlgeschlagen" }
 
-Copy-Item -Force $final "c:\Users\u4363\Desktop\test-folder\assets\baupass-demo.mp4"
-Copy-Item -Force $final "c:\Users\u4363\Desktop\test-folder\assets\demo-video.mp4"
+Copy-Item -Force $final "c:\Users\u4363\Desktop\Baukometra\assets\baupass-demo.mp4"
+Copy-Item -Force $final "c:\Users\u4363\Desktop\Baukometra\assets\demo-video.mp4"
 Remove-Item $raw -Force -ErrorAction SilentlyContinue
 Write-Host "FERTIG: $final"
