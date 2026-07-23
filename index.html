@@ -3,42 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Baupass Controll – Digitales Zeiterfassungssystem von Baukometra. Physische Karten und App für jeden Mitarbeiter. Für Bau, Industrie und alle Branchen.">
-  <meta name="keywords" content="Zeiterfassung, Baupass, KontrollPass, Baukometra, Baustelle, Industrie, Ausweiskarte, App">
-  <meta name="author" content="Baukometra">
+  <meta name="description" content="SUPPIX von Suppix Technologie UG – digitale Identität, Zutritt (QR/NFC/GPS), Compliance, Berichte, Multi-Mandant-SaaS und Ops für Bau, Industrie, Logistik und Behörden.">
+  <meta name="keywords" content="SUPPIX, Suppix Technologie UG, WorkPass, digitale Identität, Zutritt, QR, NFC, Geofence, Compliance, DATEV, Multi-Mandant, Drehkreuz">
+  <meta name="author" content="Suppix Technologie UG">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://baupass-controll.de/">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Baupass Controll – Zeiterfassung für jede Branche">
-  <meta property="og:description" content="Physische Karten und App – Zeiterfassung für Bau, Industrie und alle Branchen.">
+  <meta property="og:title" content="SUPPIX – Von Papier & Karte zur digitalen Identity-Plattform">
+  <meta property="og:description" content="Digitale Identität, intelligenter Zutritt, automatische Compliance und Berichte für Management – eine Plattform.">
   <meta property="og:image" content="https://baupass-controll.de/assets/og-share.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://baupass-controll.de/">
-  <meta name="twitter:title" content="Baupass Controll – Zeiterfassung für jede Branche">
+  <meta name="twitter:title" content="SUPPIX – Zeiterfassung für jede Branche">
   <meta name="twitter:description" content="Physische Karten und App – Zeiterfassung für Bau, Industrie und alle Branchen.">
   <meta name="twitter:image" content="https://baupass-controll.de/assets/og-share.png">
   <meta property="og:locale" content="de_DE">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#0f1419">
+  <meta name="theme-color" content="#070b14">
   <link rel="manifest" href="site.webmanifest">
-  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="icon" href="assets/icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="preload" href="assets/logo.png" as="image">
   <link rel="alternate" hreflang="de" href="index.html">
   <link rel="alternate" hreflang="en" href="en/index.html">
-  <title>Baupass Controll – Zeiterfassung für jede Branche | Baukometra</title>
+  <link rel="alternate" hreflang="ar" href="ar/index.html">
+  <link rel="alternate" hreflang="x-default" href="index.html">
+  <title>SUPPIX – Enterprise Identity & Workforce | Suppix Technologie UG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="extras.css">
+  <link rel="stylesheet" href="premium.css">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "Baupass Controll",
+    "name": "SUPPIX",
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Web, iOS, Android",
     "offers": { "@type": "Offer", "price": "19", "priceCurrency": "EUR" },
     "provider": {
       "@type": "Organization",
-      "name": "Baukometra",
+      "name": "Suppix Technologie UG",
       "url": "https://baupass-controll.de",
       "email": "baupass-control@outlook.de",
       "logo": "https://baupass-controll.de/assets/logo.png"
@@ -46,7 +54,7 @@
   }
   </script>
 </head>
-<body>
+<body class="theme-premium">
 
   <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
 
@@ -54,71 +62,89 @@
   <header class="header" id="header">
     <div class="container header-inner">
       <a href="index.html" class="logo">
-        <img src="assets/logo.png" alt="BauKometra – Digitale Baustellenkontrolle" class="logo-img">
+        <img src="assets/logo.png" alt="SUPPIX AI – Suppix Technologie UG" class="logo-img" width="180" height="52" decoding="async">
         <div class="logo-text">
-          <span class="logo-platform">Baupass Controll</span>
-          <span class="logo-sub">Digitale Zeiterfassung</span>
+          <span class="logo-platform" data-brand-platform>SUPPIX</span>
+          <span class="logo-sub" data-brand-tagline>Enterprise Identity · Zutritt · Workforce</span>
         </div>
       </a>
 
-      <nav class="nav-desktop">
-        <a href="#system">System</a>
-        <a href="#vorschau">Vorschau</a>
+      <nav class="nav-desktop" aria-label="Hauptnavigation">
         <a href="#funktionen">Funktionen</a>
-        <a href="#branchen">Branchen</a>
+        <a href="#ablauf">Ablauf</a>
+        <a href="#betreuung">Betreuung</a>
+        <a href="#branding">Branding</a>
         <a href="#preise">Preise</a>
         <a href="#faq">FAQ</a>
-        <a href="#kontakt">Kontakt</a>
         <div class="nav-actions">
-          <a href="#" class="btn-login" data-login>Firmenportal</a>
-          <a href="en/index.html" class="lang-switch">EN</a>
-          <a href="#kontakt" class="btn btn-primary">Demo anfragen</a>
+          <a href="#" class="btn-login" data-login>Portal</a>
+          <a href="#kontakt" class="btn btn-primary btn-nav">Demo</a>
         </div>
       </nav>
 
-      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menü öffnen">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+      <div class="header-tools">
+        <div class="lang-switch-group" aria-label="Sprache">
+          <a href="index.html" class="lang-switch is-active" hreflang="de" aria-current="page">DE</a>
+          <a href="en/index.html" class="lang-switch" hreflang="en">EN</a>
+          <a href="ar/index.html" class="lang-switch" hreflang="ar">AR</a>
+        </div>
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobileNav">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
     </div>
 
-    <nav class="mobile-nav" id="mobileNav">
+    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile Navigation">
       <ul>
-        <li><a href="#system">System</a></li>
-        <li><a href="#vorschau">Vorschau</a></li>
         <li><a href="#funktionen">Funktionen</a></li>
+        <li><a href="#wandel">Vorher / Nachher</a></li>
+        <li><a href="#rollen">Rollen</a></li>
+        <li><a href="#ablauf">Ablauf</a></li>
+        <li><a href="#betreuung">Betreuung</a></li>
+        <li><a href="#branding">Branding</a></li>
         <li><a href="#branchen">Branchen</a></li>
         <li><a href="#preise">Preise</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="#kontakt">Kontakt</a></li>
         <li><a href="#" data-login>Firmenportal</a></li>
-        <li><a href="en/index.html">English</a></li>
-        <li><a href="#kontakt">Demo anfragen</a></li>
+        <li class="mobile-lang-row" aria-label="Sprache">
+          <a href="index.html" class="lang-switch is-active" hreflang="de" aria-current="page">DE</a>
+          <a href="en/index.html" class="lang-switch" hreflang="en">EN</a>
+          <a href="ar/index.html" class="lang-switch" hreflang="ar">AR</a>
+        </li>
+        <li><a href="#kontakt" class="mobile-nav-cta">Demo anfragen</a></li>
       </ul>
     </nav>
   </header>
 
   <!-- Hero -->
-  <section class="hero" id="main-content">
+  <section class="hero hero-premium" id="main-content">
+    <div class="hero-ambient" aria-hidden="true"></div>
     <div class="container hero-grid">
       <div class="hero-content">
-        <span class="hero-badge">Digitale Zeiterfassung – für jeden Mitarbeiter</span>
-        <h1>Zeiterfassung, die <span>jeder</span> nutzen kann</h1>
+        <span class="hero-badge hero-badge-premium">Enterprise · Multi-Mandant · DSGVO-ready</span>
+        <h1>Vom Papier zur <span>digitalen Identity</span></h1>
         <p class="hero-text">
-          Baupass Controll von Baukometra verbindet physische Ausweiskarten mit einer leistungsstarken App-Plattform. Ob Bauarbeiter ohne Smartphone oder Techniker mit modernem Handy – Ihr Team erfasst Arbeitszeiten zuverlässig und digital.
+          <strong data-brand-platform>SUPPIX</strong> steuert den kompletten Zyklus am Einsatzort: Identität · Zutritt · Compliance · Berichte – und bleibt nah am Team: Einsatzplan, Chat, Anrufe, Video-Meetings, Sicherheit und proaktive E-Mails. Mit <strong>Ihrem Branding</strong> statt nur dem Standardnamen <span data-brand-product>WorkPass</span>.
         </p>
         <div class="hero-actions">
-          <a href="#kontakt" class="btn btn-primary">Kostenlose Demo buchen</a>
-          <a href="#rechner" class="btn btn-outline">Preis berechnen</a>
+          <a href="#kontakt" class="btn btn-primary btn-glow">Live-Demo buchen</a>
+          <a href="#ablauf" class="btn btn-outline">In 4 Schritten starten</a>
+          <a href="#" class="btn btn-outline" data-login>Plattform öffnen</a>
+        </div>
+        <div class="hero-quick-contact">
+          <a href="tel:+4917631676589" class="hero-quick-link" data-phone-link>📞 017631676589</a>
+          <a href="https://wa.me/4917631676589?text=Hallo%2C%20ich%20interessiere%20mich%20f%C3%BCr%20SUPPIX." class="hero-quick-link" id="heroWhatsApp">💬 WhatsApp</a>
         </div>
       </div>
 
       <div class="hero-visual">
         <div class="hero-cards-showcase">
-          <img src="assets/ausweis-baupass.png" alt="BauPass Ausweis" class="hero-card-img hero-card-left">
-          <img src="assets/app-splash.png" alt="BauPass App" class="hero-card-img hero-card-center">
-          <img src="assets/ausweis-kontrollpass-blau.png" alt="KontrollPass Ausweis" class="hero-card-img hero-card-right">
+          <img src="assets/ausweis-baupass.png" alt="BauPass Ausweis" class="hero-card-img hero-card-left" width="220" height="320" decoding="async">
+          <img src="assets/app-splash.png" alt="BauPass App" class="hero-card-img hero-card-center" width="200" height="400" decoding="async">
+          <img src="assets/ausweis-kontrollpass-blau.png" alt="KontrollPass Ausweis" class="hero-card-img hero-card-right" width="220" height="320" decoding="async">
         </div>
       </div>
     </div>
@@ -128,20 +154,20 @@
   <div class="stats-bar">
     <div class="container stats-grid">
       <div>
-        <div class="stat-number">2-in-1</div>
-        <div class="stat-label">Karte & App kombiniert</div>
+        <div class="stat-number">1</div>
+        <div class="stat-label">Plattform statt 5 Tools</div>
       </div>
       <div>
-        <div class="stat-number">100%</div>
-        <div class="stat-label">Branchenflexibel</div>
+        <div class="stat-number">QR·NFC·GPS</div>
+        <div class="stat-label">Zutritt ohne Papier</div>
       </div>
       <div>
-        <div class="stat-number">📧</div>
-        <div class="stat-label">Interne E-Mail & Doku</div>
+        <div class="stat-number">Live</div>
+        <div class="stat-label">Wer ist auf dem Gelände</div>
       </div>
       <div>
-        <div class="stat-number">∞</div>
-        <div class="stat-label">Skalierbar für jede Firma</div>
+        <div class="stat-number">SaaS</div>
+        <div class="stat-label">Multi-Firma &amp; White-Label</div>
       </div>
     </div>
   </div>
@@ -151,23 +177,213 @@
     <div class="container trust-bar-grid">
       <div class="trust-item">
         <span class="trust-icon" aria-hidden="true">🔒</span>
-        <strong>DSGVO-konform</strong>
-        <span>Datenschutz by design</span>
+        <strong>DSGVO &amp; Audit</strong>
+        <span>Rollen, Logs, Zero-Trust-Option</span>
       </div>
       <div class="trust-item">
-        <span class="trust-icon" aria-hidden="true">🇩🇪</span>
-        <strong>Made for Germany</strong>
-        <span>Rechtssichere Zeiterfassung</span>
+        <span class="trust-icon" aria-hidden="true">🏢</span>
+        <strong>Isolierte Mandanten</strong>
+        <span>Super-Admin · Firma · Pförtner · Arbeiter</span>
       </div>
       <div class="trust-item">
         <span class="trust-icon" aria-hidden="true">🪪</span>
-        <strong>Karte + App</strong>
-        <span>Für jeden Mitarbeiter</span>
+        <strong>Digitale Identität</strong>
+        <span>Foto · QR · Wallet · PIN</span>
       </div>
       <div class="trust-item">
-        <span class="trust-icon" aria-hidden="true">🎧</span>
-        <strong>Persönlicher Support</strong>
-        <span>Vom Demo bis Enterprise</span>
+        <span class="trust-icon" aria-hidden="true">📊</span>
+        <strong>PDF · DATEV · E-Mail</strong>
+        <span>Berichte für Management</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon" aria-hidden="true">💬</span>
+        <strong>Chat · Anruf · Meeting</strong>
+        <span>Team bleibt erreichbar</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon" aria-hidden="true">🛡️</span>
+        <strong>Sicherheit · Alarme</strong>
+        <span>System meldet sich von selbst</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cycle -->
+  <section id="zyklus" class="reveal cycle-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Was macht SUPPIX?</span>
+        <h2>Der komplette Zyklus am Einsatzort</h2>
+        <p>Bau, Industrie, Logistik, Sicherheit und öffentlicher Sektor – eine Plattform für Identität, Zutritt, Compliance, Anwesenheit und Betrieb.</p>
+      </div>
+      <div class="cycle-grid">
+        <article class="cycle-card">
+          <span class="cycle-num">01</span>
+          <h3>Identität</h3>
+          <p>Arbeiter, Besucher, Subunternehmer – digitaler Ausweis mit Foto, QR, Badge-ID und Gültigkeit. Optional Apple/Google Wallet.</p>
+        </article>
+        <article class="cycle-card">
+          <span class="cycle-num">02</span>
+          <h3>Zutritt</h3>
+          <p>Check-in / Check-out per Drehkreuz, QR, NFC oder GPS-Geofence – ohne Papierliste, mit Audit-Trail.</p>
+        </article>
+        <article class="cycle-card">
+          <span class="cycle-num">03</span>
+          <h3>Live-Betrieb</h3>
+          <p>Pförtner sieht sofort Foto, Name, Firma und Zeit. Ampel für offene Eintritte – Grün / Gelb / Rot.</p>
+        </article>
+        <article class="cycle-card">
+          <span class="cycle-num">04</span>
+          <h3>Compliance</h3>
+          <p>Dokumente mit Ablaufwarnung, Zuordnung, OCR-Inbox – weniger rechtliche und betriebliche Risiken.</p>
+        </article>
+        <article class="cycle-card">
+          <span class="cycle-num">05</span>
+          <h3>Berichte</h3>
+          <p>PDF per E-Mail, DATEV-CSV, Tagesabschluss – für Buchhaltung, Bauleitung und Management.</p>
+        </article>
+        <article class="cycle-card">
+          <span class="cycle-num">06</span>
+          <h3>Team &amp; Betreuung</h3>
+          <p>Einsatzplan, Chat, Anrufe, Video-Meetings, Sicherheitschecks und proaktive Alarme – das System bleibt nah am Betrieb.</p>
+        </article>
+      </div>
+      <p class="cycle-tagline">„Vom Papier und der Plastikkarte — zur digitalen Identität, intelligentem Zutritt, automatischer Compliance und dem fertigen Management-Bericht.“</p>
+    </div>
+  </section>
+
+  <!-- Before / After -->
+  <section class="contrast-section reveal" id="wandel">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Vorher → Nachher</span>
+        <h2>Vom Chaos zur klaren Lage</h2>
+        <p>Was Kunden vorher manuell jagen – und was SUPPIX danach automatisch sichtbar macht.</p>
+      </div>
+      <div class="contrast-stage">
+        <article class="contrast-panel contrast-before">
+          <span class="contrast-label">Vorher</span>
+          <h3>Papier · Excel · Nachfragen</h3>
+          <ul>
+            <li>Listen an der Pforte, die niemand aktuell hält</li>
+            <li>WhatsApp-Chaos: „Wer ist heute da?“</li>
+            <li>Ablaufende Dokumente erst bei Kontrolle entdeckt</li>
+            <li>Schichten und Pläne in getrennten Dateien</li>
+            <li>Berichte erst nach Tagen für die Buchhaltung</li>
+          </ul>
+        </article>
+        <div class="contrast-bridge" aria-hidden="true">
+          <span>SUPPIX</span>
+        </div>
+        <article class="contrast-panel contrast-after">
+          <span class="contrast-label">Nachher</span>
+          <h3>Identität · Live · Betreuung</h3>
+          <ul>
+            <li>Digitaler Ausweis + Live-Zutritt mit Foto und Zeit</li>
+            <li>Chat, Anruf und Meeting direkt in der App</li>
+            <li>Alarme bei Verspätung und ablaufenden Dokumenten</li>
+            <li>Monatsplan per E-Mail &amp; Push an alle Mitarbeiter</li>
+            <li>PDF / DATEV fertig für Management und Buchhaltung</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Roles -->
+  <section class="roles-section reveal" id="rollen">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Rollen</span>
+        <h2>Jeder sieht genau das, was er braucht</h2>
+        <p>Klare Trennung – Super-Admin behält die Systemhoheit, Firmen bleiben isoliert.</p>
+      </div>
+      <div class="roles-grid">
+        <article class="role-card">
+          <span class="role-badge">01</span>
+          <h3>Super-Admin</h3>
+          <p>Plattform, Tarife, Mandanten und globale Sicherheit – volle Systemhoheit.</p>
+          <ul>
+            <li>Firmen anlegen &amp; sperren</li>
+            <li>White-Label &amp; Billing</li>
+            <li>Audit &amp; Guardian</li>
+          </ul>
+        </article>
+        <article class="role-card">
+          <span class="role-badge">02</span>
+          <h3>Firmen-Admin</h3>
+          <p>Nur die eigene Firma: Team, Pläne, Dokumente, Berichte und Branding.</p>
+          <ul>
+            <li>Mitarbeiter &amp; Ausweise</li>
+            <li>Einsatzplan versenden</li>
+            <li>Chat &amp; Alarme steuern</li>
+          </ul>
+        </article>
+        <article class="role-card">
+          <span class="role-badge">03</span>
+          <h3>Pförtner / Tor</h3>
+          <p>Schneller Zutrittsmodus: Foto, Name, Firma, Zeit – live und nachvollziehbar.</p>
+          <ul>
+            <li>Live-Einlass</li>
+            <li>Offene Eintritte</li>
+            <li>Alarm bei Auffälligkeiten</li>
+          </ul>
+        </article>
+        <article class="role-card">
+          <span class="role-badge">04</span>
+          <h3>Mitarbeiter</h3>
+          <p>App mit digitalem Pass, Tagesplan, Sicherheit und direkter Kommunikation.</p>
+          <ul>
+            <li>Pass &amp; Check-in</li>
+            <li>Plan &amp; Push</li>
+            <li>Chat · Anruf · Video</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- How to start -->
+  <section class="start-section reveal" id="ablauf">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">So starten Sie</span>
+        <h2>In vier Schritten produktiv</h2>
+        <p>Kein monatelanges Projekt – von der Demo bis zum ersten Live-Zutritt in klaren Schritten.</p>
+      </div>
+      <ol class="start-path">
+        <li class="start-step">
+          <span class="start-num">1</span>
+          <div>
+            <h3>Live-Demo</h3>
+            <p>Wir zeigen Identität → Zutritt → Lagebild → Plan → Chat → Alarm – an Ihrem Szenario.</p>
+          </div>
+        </li>
+        <li class="start-step">
+          <span class="start-num">2</span>
+          <div>
+            <h3>Firma einrichten</h3>
+            <p>Mandant, Branding, Standorte und Rollen – Ihre Marke statt nur WorkPass.</p>
+          </div>
+        </li>
+        <li class="start-step">
+          <span class="start-num">3</span>
+          <div>
+            <h3>Ausweise &amp; App</h3>
+            <p>Karten erzeugen, QR scannen, Mitarbeiter-App aktiv – physisch und digital parallel.</p>
+          </div>
+        </li>
+        <li class="start-step">
+          <span class="start-num">4</span>
+          <div>
+            <h3>Go-live am Tor</h3>
+            <p>Erster Check-in, Pförtner-Live, Plan-Versand und Alarme – Betrieb ohne Excel-Jagd.</p>
+          </div>
+        </li>
+      </ol>
+      <div class="start-cta">
+        <a href="#kontakt" class="btn btn-primary btn-glow">Jetzt Demo buchen</a>
+        <a href="#" class="btn btn-outline" data-login>Plattform öffnen</a>
       </div>
     </div>
   </section>
@@ -176,26 +392,31 @@
   <section id="system" class="reveal">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">So funktioniert's</span>
-        <h2>Physische Karte oder App – Sie entscheiden</h2>
-        <p>Nicht jeder Mitarbeiter hat ein modernes Smartphone. Deshalb bietet Baupass Controll beides: gedruckte Ausweiskarten zum Stempeln und digitale Pässe in der App.</p>
+        <span class="section-tag">So überzeugt es Kunden</span>
+        <h2>Identität → Zutritt → Live-Lage → Bericht</h2>
+        <p>Die Kernstory in vier Schritten – genau das, was in einer Demo in 60–90 Sekunden sichtbar werden soll.</p>
       </div>
 
       <div class="steps">
         <div class="step">
           <div class="step-number">1</div>
-          <h3>Karte erhalten</h3>
-          <p>Jeder Mitarbeiter bekommt eine personalisierte Ausweiskarte – gedruckt und einsatzbereit. Ideal für Baustellen und Produktionshallen.</p>
+          <h3>Digitale Identität</h3>
+          <p>Ausweis mit Foto, QR und Gültigkeit erzeugen. QR scannen – Mitarbeiter-App (PWA/Flutter) in Sekunden aktiv.</p>
         </div>
         <div class="step">
           <div class="step-number">2</div>
-          <h3>Zeit erfassen</h3>
-          <p>Mit Karte am Terminal stempeln oder bequem über die App ein- und ausstempeln. Beides läuft über dasselbe System.</p>
+          <h3>Lebendiger Zutritt</h3>
+          <p>Check-in per NFC, GPS/Geofence oder Drehkreuz. Der Pförtner sieht sofort Bild, Firma und Zeitstempel.</p>
         </div>
         <div class="step">
           <div class="step-number">3</div>
-          <h3>Alles dokumentiert</h3>
-          <p>Arbeitszeiten, Berichte und Dokumentation – alles zentral verwaltet. Inklusive interner E-Mail für nahtlose Kommunikation.</p>
+          <h3>Wer ist vor Ort?</h3>
+          <p>Live-Anwesenheit und offene Eintritte auf einen Blick – Sicherheit und Betrieb ohne Excel.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3>Compliance &amp; PDF</h3>
+          <p>Ablaufende Dokumente mit Alarm, danach fertiger PDF-Bericht oder DATEV-Export für die Verwaltung.</p>
         </div>
       </div>
     </div>
@@ -206,7 +427,7 @@
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Systemstatus</span>
-        <h2>Das Baupass Controll Dashboard</h2>
+        <h2>Das SUPPIX Dashboard</h2>
         <p>Ein Blick ins System: Mitarbeiter-Ausweise, Zutrittskontrolle, Dokumentenstatus und Compliance – alles in einer Oberfläche.</p>
       </div>
 
@@ -220,47 +441,48 @@
               <span></span><span></span><span></span>
             </div>
             <div class="browser-url">
-              🔒 app.baupass-controll.de / dashboard
+              🔒 suppix-workpass-ai.up.railway.app
             </div>
-            <span class="browser-live">Live-Vorschau</span>
+            <span class="browser-live">Live-Plattform</span>
           </div>
           <div class="browser-content">
-            <img src="assets/system-screenshot.png" alt="Baupass Controll Dashboard – Mitarbeiter-Ausweise und Zutritt" loading="lazy">
+            <img src="assets/system-screenshot.png" alt="SUPPIX Dashboard – Mitarbeiter-Ausweise und Zutritt" loading="lazy">
           </div>
         </div>
 
         <div class="preview-stats">
           <div class="preview-stat">
-            <span class="preview-stat-icon">👥</span>
+            <span class="preview-stat-icon">🪪</span>
             <div>
-              <strong>Mitarbeiter</strong>
-              <span>Ausweise & Zutritt</span>
+              <strong>Identität</strong>
+              <span>Ausweis · QR · Wallet</span>
             </div>
           </div>
           <div class="preview-stat">
-            <span class="preview-stat-icon">📸</span>
+            <span class="preview-stat-icon">🚪</span>
             <div>
-              <strong>Foto & Badge-ID</strong>
-              <span>Digitale Ausweise</span>
+              <strong>Zutritt live</strong>
+              <span>Drehkreuz · NFC · GPS</span>
             </div>
           </div>
           <div class="preview-stat">
             <span class="preview-stat-icon">🏢</span>
             <div>
               <strong>Multi-Firma</strong>
-              <span>Mandantenfähig</span>
+              <span>Isolierte Mandanten</span>
             </div>
           </div>
         </div>
       </div>
 
-      <p class="preview-note">Aktueller Entwicklungsstand – das System wird laufend erweitert.</p>
+      <p class="preview-note">Enterprise-Plattform – Identity, Zutritt, Compliance und Ops in einer Oberfläche.</p>
       <div class="preview-tags">
-        <span class="preview-tag">Fotoaufnahme</span>
-        <span class="preview-tag">Zutrittslog</span>
-        <span class="preview-tag">Mandantenfähig</span>
+        <span class="preview-tag">Digitale Identität</span>
+        <span class="preview-tag">QR · NFC · Geofence</span>
+        <span class="preview-tag">Pförtner-Live</span>
         <span class="preview-tag">Compliance</span>
-        <span class="preview-tag">Dokumentenstatus</span>
+        <span class="preview-tag">PDF · DATEV</span>
+        <span class="preview-tag">White-Label</span>
       </div>
     </div>
   </section>
@@ -323,22 +545,71 @@
     </div>
   </section>
 
-  <!-- Video -->
+  <!-- Video / Storyboard -->
   <section class="video-section reveal" id="video">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Demo</span>
-        <h2>Baupass Controll in Aktion</h2>
-        <p>Sehen Sie, wie einfach Zeiterfassung mit Karte und App funktioniert.</p>
+        <span class="section-tag">Demo-Story</span>
+        <h2>SUPPIX in 75 Sekunden</h2>
+        <p>So erzählt das Produktvideo die Plattform – Szene für Szene. Das fertige Film folgt; bis dahin zeigen wir die Kernstory hier.</p>
       </div>
-      <div class="video-showcase">
-        <div class="video-wrapper video-wrapper-real">
-          <video id="demoVideo" controls playsinline preload="auto" poster="assets/video-poster.jpg">
-            <source src="assets/baupass-demo-v4.mp4?v=4" type="video/mp4">
+
+      <ol class="storyboard-grid">
+        <li class="storyboard-card">
+          <span class="storyboard-time">0:00–0:12</span>
+          <span class="storyboard-num">01</span>
+          <h3>Digitale Identität</h3>
+          <p>Ausweis mit Foto, QR, Badge-ID und Gültigkeit – für Arbeiter, Besucher und Subunternehmer.</p>
+        </li>
+        <li class="storyboard-card">
+          <span class="storyboard-time">0:12–0:22</span>
+          <span class="storyboard-num">02</span>
+          <h3>QR → App</h3>
+          <p>Scannen und die Mitarbeiter-App ist in Sekunden aktiv – ohne Papier und langes Setup.</p>
+        </li>
+        <li class="storyboard-card">
+          <span class="storyboard-time">0:22–0:35</span>
+          <span class="storyboard-num">03</span>
+          <h3>Lebendiger Zutritt</h3>
+          <p>Check-in per QR, NFC oder GPS-Geofence – mit lückenlosem Audit-Trail.</p>
+        </li>
+        <li class="storyboard-card">
+          <span class="storyboard-time">0:35–0:48</span>
+          <span class="storyboard-num">04</span>
+          <h3>Pförtner live</h3>
+          <p>Sofort sichtbar: Foto, Name, Firma und Zeit – wer betritt das Gelände.</p>
+        </li>
+        <li class="storyboard-card">
+          <span class="storyboard-time">0:48–0:60</span>
+          <span class="storyboard-num">05</span>
+          <h3>Compliance-Alarm</h3>
+          <p>Ablaufende Dokumente mit Warnung – bevor Risiken entstehen.</p>
+        </li>
+        <li class="storyboard-card">
+          <span class="storyboard-time">0:60–0:75</span>
+          <span class="storyboard-num">06</span>
+          <h3>PDF &amp; DATEV</h3>
+          <p>Bericht per E-Mail und Export – fertig für Buchhaltung und Management.</p>
+        </li>
+      </ol>
+
+      <div class="video-showcase storyboard-player">
+        <div class="video-wrapper video-wrapper-real demo-video-stage is-soon" id="demoVideoStage">
+          <div class="demo-video-soon" id="demoVideoSoon">
+            <span class="demo-video-soon-label">Film in Produktion</span>
+            <strong>Demo-Video folgt</strong>
+            <p>Kernstory: Identität → Zutritt → Live-Lage → Dokument → Report. Bis dahin: Live-Demo buchen oder Plattform öffnen.</p>
+            <div class="demo-video-actions">
+              <a href="#kontakt" class="btn btn-primary btn-sm">Live-Demo buchen</a>
+              <a href="#" class="btn btn-outline btn-sm" data-login>Plattform öffnen</a>
+            </div>
+          </div>
+          <video id="demoVideo" controls playsinline preload="none" poster="assets/video-poster.jpg" hidden>
+            <source src="" type="video/mp4">
             Ihr Browser unterstützt kein Video.
           </video>
         </div>
-        <p class="preview-note">▶ Abspielen · 🔊 Lautsprecher aktivieren · KI-Erklärstimme mit Hintergrundmusik</p>
+        <p class="preview-note">Drehbuch: <code>assets/video-script-suppix.txt</code> · Enterprise-Extras: Kamera · KI · Wallet · White-Label</p>
       </div>
     </div>
   </section>
@@ -348,40 +619,156 @@
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Funktionen</span>
-        <h2>Ein System – unzählige Möglichkeiten</h2>
-        <p>Baupass Controll ist weit mehr als Zeiterfassung. Es ist eine komplette Plattform für Unternehmen jeder Größe.</p>
+        <h2>Eine Plattform – der volle Betrieb</h2>
+        <p>Statt getrennter Systeme für Karte, Anwesenheit, Dokumente und Rechnungen: alles in SUPPIX – mandantenfähig und auditierbar.</p>
       </div>
 
       <div class="features-grid">
         <div class="feature-card">
           <div class="feature-icon">🪪</div>
-          <h3>Physische Ausweiskarten</h3>
-          <p>Gedruckte Karten für Mitarbeiter ohne Smartphone. Robust, einfach und sofort einsatzbereit auf jeder Baustelle oder im Werk.</p>
+          <h3>Digitale Identität</h3>
+          <p>Foto, Badge-ID, QR, PIN, Gültigkeit – physische Karte und App. Optional Apple/Google Wallet. Unterschrift bei Ausweisübergabe als Nachweis.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">📱</div>
-          <h3>Digitale App-Karte</h3>
-          <p>Mitarbeiter mit modernen Handys nutzen ihre Karte direkt in der App – mit Ein- und Ausstempeln, Übersicht und Benachrichtigungen.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🏭</div>
-          <h3>Branchenanpassung</h3>
-          <p>BauPass für Bauunternehmen, KontrollPass für Industrie – der Name und das Design passen sich Ihrer Branche an.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📧</div>
-          <h3>Interne E-Mail</h3>
-          <p>Integriertes E-Mail-System für Dokumentation und Kommunikation – alles an einem Ort, ohne externe Tools.</p>
+          <div class="feature-icon">🚪</div>
+          <h3>Intelligenter Zutritt</h3>
+          <p>Drehkreuz, QR, NFC/HCE oder GPS-Geofence. Pförtner-Live mit Foto und Alarm – kein Papiereintrag mehr.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">📋</div>
-          <h3>Dokumentation</h3>
-          <p>Arbeitszeiten, Berichte und Nachweise zentral gespeichert. Rechtssicher und jederzeit abrufbar.</p>
+          <h3>Compliance live</h3>
+          <p>Ablaufende Dokumente, Inbox mit Zuordnung, DSGVO-Anfragen – Warnungen bevor Risiken entstehen.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">📦</div>
-          <h3>Flexible Pakete</h3>
-          <p>Vom Besucherkarten-Modell bis Enterprise – wählen Sie das Paket, das zu Ihrer Unternehmensgröße passt.</p>
+          <div class="feature-icon">📊</div>
+          <h3>Berichte &amp; DATEV</h3>
+          <p>PDF per E-Mail, DATEV-CSV, Tagesabschluss und Betriebsreports – fertig für Buchhaltung und Leitung.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🏢</div>
+          <h3>Multi-Firma SaaS</h3>
+          <p>Jede Firma ist ein isolierter Mandant. Subunternehmer verknüpfen. Rollen: Super-Admin, Firmen-Admin, Pförtner, Arbeiter.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>Ihr Branding überall</h3>
+          <p>Die Plattform heißt standardmäßig <strong>WorkPass</strong>. Mit Ihrem Branding erscheinen Firmenname und Logo in der Mitarbeiter-App, auf Ausweisen und im gesamten System.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📅</div>
+          <h3>Einsatzplan &amp; Tagesplan</h3>
+          <p>Monatsplan erstellen, an Mitarbeiter senden (E-Mail + Push). In der App: Tagesplan mit Check-in, Checkout und Sicherheitscheck.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <h3>Chat · Anruf · Video</h3>
+          <p>Interne Kommunikation in der Mitarbeiter-App: Chat mit Dateien und Standort, Sprachnachrichten, Anrufe und Video-Konferenzen.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔔</div>
+          <h3>Proaktive Alarme</h3>
+          <p>Verspätungs-Alarm, Ablaufwarnungen, Plan-Versand und E-Mail-Benachrichtigungen – das System meldet, bevor Sie nachfragen müssen.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <h3>Ops · Kamera · KI</h3>
+          <p>Kameras/RTSP, Automatisierungsregeln, Copilot und Notfall/Roll-Call – Entscheidungen ohne manuelle Nacharbeit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Betreuung / Care -->
+  <section class="care-section reveal" id="betreuung">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Betreuung durchs System</span>
+        <h2>Nicht nur Kontrolle – echte Fürsorge für Team und Betrieb</h2>
+        <p>SUPPIX hält Sie auf dem Laufenden: wer kommt, wer verspätet ist, was geplant ist, und wie Sie sicher und schnell mit dem Team sprechen.</p>
+      </div>
+      <div class="care-grid">
+        <article class="care-card">
+          <span class="care-icon" aria-hidden="true">🛡️</span>
+          <h3>Sicherheit im Alltag</h3>
+          <p>Sicherheitschecks im Tagesplan, Vor-Ort-Hinweise, Live-Anwesenheit und Notfall/Roll-Call – damit Verantwortung nicht im Chaos untergeht.</p>
+        </article>
+        <article class="care-card">
+          <span class="care-icon" aria-hidden="true">📅</span>
+          <h3>Arbeits- &amp; Einsatzplanung</h3>
+          <p>Monats-Einsatzplan mit Ort und Zeiten, Versand an alle Mitarbeiter per E-Mail und Push. Die App zeigt den Tagesplan klar und verständlich.</p>
+        </article>
+        <article class="care-card">
+          <span class="care-icon" aria-hidden="true">💬</span>
+          <h3>Interne Kommunikation</h3>
+          <p>Chat zwischen Firma und Mitarbeitern – inkl. Dateien, Standort, Sprachnachrichten und Lesebestätigung. Erreichbar genau dort, wo der Pass lebt: in der App.</p>
+        </article>
+        <article class="care-card">
+          <span class="care-icon" aria-hidden="true">📞</span>
+          <h3>Anrufe &amp; Online-Meetings</h3>
+          <p>Direkte Sprachanrufe und Video-Konferenzen aus der App – ohne Extra-Tool, wenn Absprache oder kurze Besprechung nötig ist.</p>
+        </article>
+        <article class="care-card care-card-wide">
+          <span class="care-icon" aria-hidden="true">✉️</span>
+          <h3>Das System meldet sich – ehrlich und rechtzeitig</h3>
+          <p>
+            Verspätungs-Alarm bei verspätetem Start · Hinweise wer erwartet wird und wer vor Ort ist ·
+            Ablaufende Dokumente · Einsatzplan-Versand · PDF-Berichte per E-Mail · Push in der App.
+            So fühlt sich der Betrieb betreut an – nicht nur „digital erfasst“.
+          </p>
+          <ul class="care-alert-list">
+            <li>Wer kommt / wer ist verspätet</li>
+            <li>Wer ist vor Ort (Live)</li>
+            <li>Plan gesendet &amp; bestätigt</li>
+            <li>Dokumente bald abgelaufen</li>
+            <li>Chat, Anruf oder Meeting starten</li>
+          </ul>
+          <div class="branding-actions">
+            <a href="#kontakt" class="btn btn-primary">Live zeigen: Alarme &amp; Chat</a>
+            <a href="#" class="btn btn-outline" data-login>Plattform öffnen</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- White-Label -->
+  <section class="branding-section reveal" id="branding">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">White-Label</span>
+        <h2>Ihr Name. Ihr Logo. Überall im System.</h2>
+        <p>Kunden verkaufen und nutzen die Plattform unter der eigenen Marke – ohne dass Endnutzer „fremdes“ Branding sehen müssen.</p>
+      </div>
+      <div class="branding-grid">
+        <div class="branding-copy">
+          <p class="branding-lead">
+            Der technische Produktname ist <strong data-brand-product>WorkPass</strong>.
+            Sobald Sie Ihr Firmenbranding hinterlegen, ersetzt es den Standardnamen überall dort, wo Mitarbeiter und Partner die Software sehen.
+          </p>
+          <ul class="branding-list">
+            <li><strong>Firmenname &amp; Logo</strong> in der Mitarbeiter-App</li>
+            <li><strong>Digitale und physische Ausweise</strong> mit Ihrem Design</li>
+            <li><strong>Login, Dashboard, PDFs und Berichte</strong> im Kundenlook</li>
+            <li><strong>Pass-Name</strong> wählbar (z. B. BauPass, KontrollPass oder Ihr Name)</li>
+            <li><strong>Farben &amp; Rechnungslogo</strong> für White-Label-SaaS und Vermietung</li>
+          </ul>
+          <div class="branding-actions">
+            <a href="#kontakt" class="btn btn-primary">Branding in der Demo zeigen</a>
+            <a href="#" class="btn btn-outline" data-login>Plattform öffnen</a>
+          </div>
+        </div>
+        <div class="branding-visual" aria-hidden="true">
+          <div class="branding-mock branding-mock-default">
+            <span class="branding-mock-label">Standard</span>
+            <strong>WorkPass</strong>
+            <small>Plattform-Name</small>
+          </div>
+          <div class="branding-arrow">→</div>
+          <div class="branding-mock branding-mock-custom">
+            <span class="branding-mock-label">Ihr Branding</span>
+            <strong>Ihre Firma</strong>
+            <small>Logo · Name · Farben</small>
+          </div>
         </div>
       </div>
     </div>
@@ -392,30 +779,30 @@
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Branchen</span>
-        <h2>Nicht nur für Bau – für jede Industrie</h2>
-        <p>Baupass Controll passt sich Ihrer Branche an. Der Pass-Name, das Design und die Funktionen werden individuell konfiguriert.</p>
+        <h2>Für jeden Einsatzort – White-Label ready</h2>
+        <p>Bau, Industrie, Logistik, Sicherheit, öffentlicher Sektor – Pass-Name und Branding passen sich Ihrem Sektor an.</p>
       </div>
 
       <div class="industry-cards">
         <div class="industry-card">
           <div class="industry-icon">🏗️</div>
           <span class="industry-pass">BauPass</span>
-          <h3>Bau & Handwerk</h3>
-          <p>Baustellen, Subunternehmer, Handwerksbetriebe – Zeiterfassung direkt vor Ort mit Karte oder App.</p>
+          <h3>Bau &amp; Handwerk</h3>
+          <p>Baustellen, Subunternehmer, Geofence und Live-Anwesenheit – Identität und Zutritt direkt vor Ort.</p>
           <a href="bau.html" class="industry-card-link">Mehr erfahren →</a>
         </div>
         <div class="industry-card">
           <div class="industry-icon">⚙️</div>
           <span class="industry-pass">KontrollPass</span>
-          <h3>Industrie & Produktion</h3>
-          <p>Schichtarbeit, Produktionslinien, Qualitätskontrolle – der KontrollPass macht Zeiterfassung im Werk einfach.</p>
+          <h3>Industrie &amp; Logistik</h3>
+          <p>Drehkreuz, Schichtbetrieb, Dokumentenstatus und Pförtner-Live für Werk und Lager.</p>
           <a href="industrie.html" class="industry-card-link">Mehr erfahren →</a>
         </div>
         <div class="industry-card">
-          <div class="industry-icon">🏢</div>
-          <span class="industry-pass">Ihr Pass-Name</span>
-          <h3>Alle weiteren Branchen</h3>
-          <p>Logistik, Gastronomie, Pflege, Einzelhandel – jede Branche bekommt ihren eigenen, passenden Pass-Namen.</p>
+          <div class="industry-icon">🏛️</div>
+          <span class="industry-pass">Ihr Branding</span>
+          <h3>Sicherheit &amp; Behörden</h3>
+          <p>Roll-Call, Kameras, Audit und White-Label – bereit für Enterprise und öffentlichen Sektor.</p>
         </div>
       </div>
     </div>
@@ -464,9 +851,10 @@
           <p class="pricing-note">+ 2,50 € pro MA ab dem 11. Mitarbeiter</p>
           <ul class="pricing-features">
             <li>Alles aus Starter</li>
-            <li>Interne E-Mail & Doku</li>
-            <li>Branchenanpassung</li>
-            <li>Erweiterte Berichte</li>
+            <li>Einsatzplan + Versand (E-Mail/Push)</li>
+            <li>Chat · Anrufe · Video-Meetings</li>
+            <li>Verspätungs-Alarm &amp; E-Mail-Benachrichtigungen</li>
+            <li>Interne Doku &amp; erweiterte Berichte</li>
             <li>Prioritäts-Support</li>
           </ul>
           <a href="#kontakt" class="btn btn-primary">Demo buchen</a>
@@ -478,9 +866,9 @@
           <p class="pricing-note">+ 3,00 € pro Mitarbeiter</p>
           <ul class="pricing-features">
             <li>Alles aus Professional</li>
+            <li>White-Label &amp; Multi-Site</li>
+            <li>API, Kameras, KI-Copilot</li>
             <li>Unbegrenzte Skalierung</li>
-            <li>Individuelle Anpassung</li>
-            <li>API & Integrationen</li>
             <li>Persönlicher Ansprechpartner</li>
           </ul>
           <a href="#kontakt" class="btn btn-outline">Kontakt aufnehmen</a>
@@ -503,12 +891,14 @@
             <tbody>
               <tr><td>Physische Ausweiskarten</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
               <tr><td>App & digitaler Pass</td><td class="no">–</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-              <tr><td>Zeiterfassung</td><td>Basis</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><td>Zeiterfassung &amp; Zutritt</td><td>Basis</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
               <tr><td>Besucherverwaltung</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-              <tr><td>Interne E-Mail & Doku</td><td class="no">–</td><td class="no">–</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-              <tr><td>Erweiterte Berichte</td><td class="no">–</td><td class="no">–</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><td>Einsatzplan (Monatsplan)</td><td class="no">–</td><td class="no">–</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><td>Chat · Anruf · Video</td><td class="no">–</td><td class="no">–</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><td>Verspätungs-Alarm &amp; E-Mail-Alarme</td><td class="no">–</td><td class="no">–</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+              <tr><td>Interne Doku &amp; erweiterte Berichte</td><td class="no">–</td><td class="no">–</td><td class="yes">✓</td><td class="yes">✓</td></tr>
               <tr><td>Branchenanpassung (BauPass/KontrollPass)</td><td class="no">–</td><td>Basis</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-              <tr><td>API & Integrationen</td><td class="no">–</td><td class="no">–</td><td class="no">–</td><td class="yes">✓</td></tr>
+              <tr><td>White-Label · API · KI · Kameras</td><td class="no">–</td><td class="no">–</td><td class="no">–</td><td class="yes">✓</td></tr>
               <tr><td>Support</td><td>E-Mail</td><td>E-Mail</td><td>Priorität</td><td>Persönlich</td></tr>
               <tr><td>Preis ab 11. MA</td><td>–</td><td>–</td><td>2,50 €/MA</td><td>3,00 €/MA</td></tr>
             </tbody>
@@ -542,6 +932,7 @@
           <div class="calc-result-price" id="calcPrice">1.011,50 €</div>
           <div class="calc-result-note" id="calcNote">Professional: 999 € + 5 × 2,50 €</div>
         </div>
+        <button type="button" class="btn btn-primary calc-demo-btn" id="calcDemoBtn">Demo für dieses Paket anfragen</button>
       </div>
     </div>
   </section>
@@ -552,12 +943,12 @@
       <div class="section-header">
         <span class="section-tag">Kundenstimmen</span>
         <h2>Das sagen unsere Kunden</h2>
-        <p>Unternehmen aus Bau und Industrie vertrauen auf Baupass Controll.</p>
+        <p>Echte Bewertungen aus der SUPPIX-Plattform – sobald Kunden Feedback geben, erscheint es hier.</p>
       </div>
-      <div class="testimonials-grid">
+      <div class="testimonials-grid" id="testimonialsGrid" data-reviews-source="platform">
         <div class="testimonial-card">
           <div class="testimonial-stars">★★★★★</div>
-          <blockquote>„Endlich ein System, das unsere Bauarbeiter mit Karte und die Bürokraft mit der App nutzen kann. Einfach und übersichtlich."</blockquote>
+          <blockquote>„Endlich Identität, Zutritt und Compliance in einem System – ohne Papierlisten und Excel."</blockquote>
           <div class="testimonial-author">
             <strong>Thomas M.</strong>
             <span>Geschäftsführer · Bauunternehmen</span>
@@ -565,22 +956,22 @@
         </div>
         <div class="testimonial-card">
           <div class="testimonial-stars">★★★★★</div>
-          <blockquote>„Der KontrollPass passt perfekt in unsere Produktion. Schichtplanung und Zutrittskontrolle in einem System – das spart uns täglich Zeit."</blockquote>
+          <blockquote>„Pförtner sieht sofort Foto und Firma. Offene Eintritte und ablaufende Dokumente sind klar sichtbar."</blockquote>
           <div class="testimonial-author">
             <strong>Sandra K.</strong>
-            <span>HR-Leiterin · Industrie AG</span>
+            <span>HR-Leiterin · Industrie</span>
           </div>
         </div>
         <div class="testimonial-card">
           <div class="testimonial-stars">★★★★★</div>
-          <blockquote>„Die interne E-Mail und Dokumentation ist genial. Alles an einem Ort, ohne zehn verschiedene Tools. Genau was wir gesucht haben."</blockquote>
+          <blockquote>„PDF und DATEV sparen uns jeden Monat Zeit. Multi-Firma funktioniert für unsere Subunternehmer."</blockquote>
           <div class="testimonial-author">
             <strong>Markus W.</strong>
-            <span>Projektleiter · Handwerksbetrieb</span>
+            <span>Projektleiter · Handwerk</span>
           </div>
         </div>
       </div>
-      <p class="section-note">Beispielhafte Kundenstimmen zur Illustration des Nutzens in Bau und Industrie.</p>
+      <p class="section-note" id="testimonialsNote">Platzhalter – Live-Bewertungen werden mit der Plattform-API verbunden.</p>
     </div>
   </section>
 
@@ -590,43 +981,97 @@
       <div class="section-header">
         <span class="section-tag">FAQ</span>
         <h2>Häufig gestellte Fragen</h2>
-        <p>Antworten auf die wichtigsten Fragen zu Baupass Controll.</p>
+        <p>Antworten auf die wichtigsten Fragen zu SUPPIX.</p>
       </div>
       <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            Meldet das System Verspätungen und erwartet Anwesenheit?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Ja. Es gibt Verspätungs-Alarme, Live-Anwesenheit („wer ist vor Ort“), Einsatzplan-Versand per E-Mail und Push sowie Warnungen bei ablaufenden Dokumenten – damit Sie nicht erst nachfragen müssen.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            Gibt es Einsatzplan, Chat und Meetings in der App?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Ja. Monats-Einsatzplan und Tagesplan, interner Chat (Dateien, Standort, Sprache), Sprachanrufe und Video-Konferenzen – plus Sicherheitschecks im Alltag. Alles in der Mitarbeiter-App und im Firmenportal.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            Kann ich mein eigenes Branding nutzen?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Ja. Der Standard-Produktname ist <strong>WorkPass</strong>. Mit Ihrem Branding erscheinen Firmenname und Logo in der Mitarbeiter-App, auf digitalen und physischen Ausweisen sowie im gesamten System – inklusive Farben und Pass-Namen (White-Label).</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            Was macht SUPPIX genau?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>SUPPIX steuert den kompletten Zyklus am Einsatzort: digitale Identität, Zutritt, Compliance, Anwesenheit &amp; Berichte – plus Einsatzplan, Team-Chat, Anrufe/Video-Meetings, Sicherheitschecks und proaktive E-Mail-/Push-Alarme. Multi-Firmen-SaaS und Ops (Kameras, Automatisierung, KI) inklusive.</p>
+          </div>
+        </div>
         <div class="faq-item">
           <button class="faq-question" type="button">
             Brauchen alle Mitarbeiter ein Smartphone?
             <span class="faq-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>Nein. Mitarbeiter ohne modernes Handy erhalten eine physische Ausweiskarte zum Stempeln. Wer ein Smartphone hat, kann zusätzlich die App mit dem digitalen Pass nutzen.</p>
+            <p>Nein. Mitarbeiter ohne Handy nutzen die physische Karte. Andere aktivieren den digitalen Pass per QR in der Mitarbeiter-App (PWA/Flutter) – inkl. Offline-Sync.</p>
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-question" type="button">
-            Kann ich den Pass-Namen an meine Branche anpassen?
+            Wie unterscheiden sich die Rollen?
             <span class="faq-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>Ja. Bauunternehmen nutzen z. B. den BauPass, Industriebetriebe den KontrollPass. Jede Branche bekommt einen passenden Namen und ihr eigenes Design.</p>
+            <p>Jede Firma ist ein isolierter Mandant. Rollen: Super-Admin (Systemhoheit), Firmen-Admin (nur eigene Firma), Pförtner/Drehkreuz (schneller Zutritt), Arbeiter (App/Ausweis).</p>
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-question" type="button">
-            Welches Paket ist das richtige für mich?
+            Welche Zutrittsarten gibt es?
             <span class="faq-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>Besucherkarte (19 €) für kleine Teams, Starter (149 €) für Karten & App, Professional (999 €) für volle Funktionen inkl. E-Mail & Doku, Enterprise (2.490 €) für große Unternehmen mit API und persönlichem Support.</p>
+            <p>Drehkreuz/QR am Tor, NFC/HCE, GPS-Geofence und manueller Einlass. Der Pförtner sieht live Foto, Name, Firma und Zeit – mit Alarm bei offenen Einträgen.</p>
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-question" type="button">
-            Ist das System mandantenfähig?
+            Kann ich Subunternehmer abbilden?
             <span class="faq-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>Ja. Mehrere Firmen können das System parallel nutzen. Jede Firma verwaltet ihr Team separat – ideal für Vermieter, Generalunternehmer und Multi-Standort-Betriebe.</p>
+            <p>Ja. Subunternehmen anlegen und Mitarbeiter zuordnen – typisch für Bau und große Projekte, ohne dass Daten vermischt werden.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            Welche Berichte und Integrationen gibt es?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>PDF per E-Mail, DATEV-CSV, Tagesabschluss, Webhooks und API. Enterprise: Kameras/RTSP, Automatisierung, Copilot, SSO (Entra/Google), 2FA und Audit.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" type="button">
+            Ist SUPPIX DSGVO-konform?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Ja. Rollenbasierter Zugriff, Audit-Logs, Lösch-/Auskunftsprozesse und optional verschlüsselte Felder. Datenverarbeitung für Identität, Zutritt, Compliance und dokumentierte Kommunikation.</p>
           </div>
         </div>
         <div class="faq-item">
@@ -635,34 +1080,7 @@
             <span class="faq-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>Füllen Sie das Kontaktformular aus, schreiben Sie uns per E-Mail an baupass-control@outlook.de oder kontaktieren Sie uns per WhatsApp. Wir richten eine kostenlose Demo für Ihr Unternehmen ein.</p>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question" type="button">
-            Ist Baupass Controll DSGVO-konform?
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-answer">
-            <p>Ja. Personenbezogene Daten werden ausschließlich für Zeiterfassung, Zutrittskontrolle und dokumentierte Kommunikation verarbeitet. Zugriffsrechte, Löschkonzepte und Hosting in Deutschland können je nach Paket konfiguriert werden.</p>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question" type="button">
-            Funktioniert das System auch offline?
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-answer">
-            <p>Physische Karten funktionieren am Terminal auch bei instabiler Verbindung – Einträge werden synchronisiert, sobald das Netzwerk wieder verfügbar ist. Die App speichert Stempelungen zwischen und überträgt sie automatisch.</p>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question" type="button">
-            Was passiert bei verlorener oder defekter Karte?
-            <span class="faq-icon">+</span>
-          </button>
-          <div class="faq-answer">
-            <p>Karten können im Dashboard gesperrt und neu ausgestellt werden. Der Mitarbeiter kann parallel den digitalen Pass in der App nutzen, bis eine Ersatzkarte gedruckt ist.</p>
+            <p>Kontaktformular, E-Mail oder WhatsApp – wir zeigen Live Identität → Zutritt → Lagebild → Compliance → Bericht. Optional öffnen Sie direkt die Plattform.</p>
           </div>
         </div>
       </div>
@@ -673,25 +1091,25 @@
   <section class="why-section reveal" id="warum">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Warum Baupass Controll</span>
-        <h2>Professionell. Flexibel. Zukunftssicher.</h2>
-        <p>Ein System, das mit Ihrem Unternehmen wächst – von der ersten Karte bis zum Enterprise-Setup.</p>
+        <span class="section-tag">Warum SUPPIX</span>
+        <h2>Anders als Karte + Excel + Insellösungen</h2>
+        <p>Traditionell: Plastikkarte, Papier und getrennte Tools. SUPPIX: digitale Identität, smarter Zutritt, Live-Lage und fertige Reports – in einer Plattform.</p>
       </div>
       <div class="why-grid">
         <div class="why-card">
           <div class="why-card-icon" aria-hidden="true">⚡</div>
-          <h3>Schneller Start</h3>
-          <p>Karten ausgeben, App verteilen, loslegen. Keine monatelange Einführung – Ihr Team ist in wenigen Tagen produktiv.</p>
+          <h3>Schneller Go-live</h3>
+          <p>Ausweis erzeugen, QR scannen, App aktiv – produktiv in Tagen statt Monaten.</p>
         </div>
         <div class="why-card">
           <div class="why-card-icon" aria-hidden="true">🛡️</div>
-          <h3>Compliance & Kontrolle</h3>
-          <p>Lückenlose Dokumentation, Zutrittslogs und nachvollziehbare Auswertungen – wichtig für Baustellen, Werke und Audits.</p>
+          <h3>Live-Kontrolle &amp; Fürsorge</h3>
+          <p>Wer ist auf dem Gelände? Verspätet? Dokumente ablaufend? Chat, Anruf oder Meeting – das System hält Sie nah am Team.</p>
         </div>
         <div class="why-card">
           <div class="why-card-icon" aria-hidden="true">🔧</div>
-          <h3>Individuell anpassbar</h3>
-          <p>BauPass, KontrollPass oder Ihr eigener Pass-Name. Design, Rollen und Pakete passen sich Ihrer Branche an.</p>
+          <h3>Verkaufsfähiges SaaS</h3>
+          <p>Multi-Mandant, White-Label, API, DATEV, Kameras und KI – bereit für Enterprise und Vermietung.</p>
         </div>
       </div>
     </div>
@@ -700,10 +1118,11 @@
   <!-- CTA -->
   <section class="cta reveal">
     <div class="container">
-      <h2>Bereit für moderne Zeiterfassung?</h2>
-      <p>Entdecken Sie Baupass Controll in einer kostenlosen Demo. Wir zeigen Ihnen, wie Karte und App in Ihrem Unternehmen funktionieren.</p>
+      <h2>Bereit für digitale Identity &amp; Zutritt?</h2>
+      <p>Live-Demo: Identität → Zutritt → Lagebild → Compliance → PDF-Bericht. Oder öffnen Sie die Plattform direkt.</p>
       <div class="cta-actions">
         <a href="#kontakt" class="btn btn-accent">Jetzt Demo vereinbaren</a>
+        <a href="#" class="btn btn-outline" data-login>Plattform öffnen</a>
         <a href="#preise" class="btn btn-outline">Pakete vergleichen</a>
       </div>
     </div>
@@ -715,7 +1134,7 @@
       <div class="newsletter-box">
         <span class="section-tag">Newsletter</span>
         <h2 style="color: var(--white); font-size: 1.75rem; font-weight: 800; margin-bottom: 0.5rem;">Bleiben Sie informiert</h2>
-        <p style="color: var(--gray-500);">Updates zu Baupass Controll, neuen Funktionen und Tipps für Ihre Zeiterfassung.</p>
+        <p style="color: var(--gray-500);">Updates zu SUPPIX: Identity, Zutritt, Team-Betreuung und Enterprise-Funktionen.</p>
         <form class="newsletter-form" id="newsletterForm">
           <input type="email" id="newsletterEmail" placeholder="ihre@email.de" required aria-label="E-Mail für Newsletter">
           <button type="submit" class="btn btn-primary">Anmelden</button>
@@ -731,14 +1150,14 @@
       <div class="section-header">
         <span class="section-tag">Kontakt</span>
         <h2>Sprechen Sie mit uns</h2>
-        <p>Fragen zu Baupass Controll? Wir beraten Sie gerne und richten eine Demo für Ihr Unternehmen ein.</p>
+        <p>Fragen zu SUPPIX? Wir beraten Sie gerne und richten eine Demo für Ihr Unternehmen ein.</p>
       </div>
 
       <div class="contact-grid">
         <div class="contact-info">
-          <h3>Baukometra</h3>
+          <h3>Suppix Technologie UG</h3>
           <p style="color: var(--gray-500); margin-bottom: 1.5rem;">
-            Entwickler und Anbieter von Baupass Controll – dem flexiblen Zeiterfassungssystem für Unternehmen jeder Branche.
+            Entwickler und Anbieter von SUPPIX – digitale Identity, Zutritt und Workforce-SaaS für Unternehmen jeder Branche.
           </p>
 
           <div class="contact-item">
@@ -759,14 +1178,21 @@
             <div class="contact-item-icon">💬</div>
             <div>
               <strong style="color: var(--white);">WhatsApp</strong><br>
-              <a href="#" id="contactWhatsApp" style="color: var(--primary);">Demo per WhatsApp anfragen</a>
+              <a href="https://wa.me/4917631676589?text=Hallo%2C%20ich%20interessiere%20mich%20f%C3%BCr%20SUPPIX." id="contactWhatsApp" style="color: var(--primary);">Demo per WhatsApp anfragen</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">📅</div>
+            <div>
+              <strong style="color: var(--white);">Termin</strong><br>
+              <a href="#kontakt" data-booking data-booking-label="auto" style="color: var(--primary);">Termin per WhatsApp anfragen</a>
             </div>
           </div>
           <div class="contact-item">
             <div class="contact-item-icon">🏢</div>
             <div>
               <strong style="color: var(--white);">Unternehmen</strong><br>
-              <span style="color: var(--gray-500);">Baukometra · Baupass Controll</span>
+              <span style="color: var(--gray-500);">Suppix Technologie UG · SUPPIX</span>
             </div>
           </div>
         </div>
@@ -817,20 +1243,20 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <a href="index.html" class="logo">
-            <img src="assets/logo.png" alt="BauKometra – Digitale Baustellenkontrolle" class="logo-img">
+            <img src="assets/logo.png" alt="Suppix Technologie UG – Digitale Baustellenkontrolle" class="logo-img">
           </a>
-          <p>Das digitale Zeiterfassungssystem mit physischen Karten und App – flexibel für Bau, Industrie und alle Branchen.</p>
+          <p>SUPPIX – digitale Identität, Zutritt, Team-Betreuung und Workforce-SaaS für Bau, Industrie und Behörden.</p>
         </div>
         <div class="footer-col">
           <h4>Produkt</h4>
           <ul>
-            <li><a href="#system">System</a></li>
-            <li><a href="#vorschau">System-Vorschau</a></li>
             <li><a href="#funktionen">Funktionen</a></li>
-            <li><a href="#branchen">Branchen</a></li>
+            <li><a href="#wandel">Vorher / Nachher</a></li>
+            <li><a href="#rollen">Rollen</a></li>
+            <li><a href="#ablauf">Ablauf</a></li>
+            <li><a href="#betreuung">Betreuung</a></li>
+            <li><a href="#branding">Branding</a></li>
             <li><a href="#preise">Preise</a></li>
-            <li><a href="#vergleich">Paketvergleich</a></li>
-            <li><a href="#warum">Warum wir</a></li>
             <li><a href="#faq">FAQ</a></li>
             <li><a href="#rechner">Preisrechner</a></li>
             <li><a href="flyer.html">Flyer (PDF)</a></li>
@@ -845,6 +1271,7 @@
             <li><a href="#kontakt">Kontakt</a></li>
             <li><a href="#kontakt">Demo buchen</a></li>
             <li><a href="en/index.html">English</a></li>
+            <li><a href="ar/index.html">العربية</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -857,8 +1284,8 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>&copy; <span data-year>2026</span> Baukometra. Alle Rechte vorbehalten.</span>
-        <span>Baupass Controll – Zeiterfassung für jede Branche</span>
+        <span>&copy; <span data-year>2026</span> Suppix Technologie UG. Alle Rechte vorbehalten.</span>
+        <span>SUPPIX – Enterprise Identity & Workforce</span>
       </div>
     </div>
   </footer>
@@ -866,11 +1293,11 @@
   <!-- Mobile Sticky CTA -->
   <div class="mobile-cta-bar" id="mobileCtaBar" aria-hidden="true">
     <a href="#kontakt" class="btn btn-primary">Demo anfragen</a>
-    <a href="#" class="btn btn-outline" id="mobileCtaWhatsapp">WhatsApp</a>
+    <a href="https://wa.me/4917631676589?text=Hallo%2C%20ich%20m%C3%B6chte%20eine%20Demo%20f%C3%BCr%20Baupass%20Controll%20buchen." class="btn btn-outline" id="mobileCtaWhatsapp">WhatsApp</a>
   </div>
 
   <!-- WhatsApp -->
-  <a href="#" class="whatsapp-float" id="whatsappBtn" target="_blank" rel="noopener" data-tooltip="Demo per WhatsApp">
+  <a href="https://wa.me/4917631676589?text=Hallo%2C%20ich%20interessiere%20mich%20f%C3%BCr%20Baupass%20Controll.%20K%C3%B6nnen%20wir%20eine%20Demo%20vereinbaren%3F" class="whatsapp-float" id="whatsappBtn" data-tooltip="Demo per WhatsApp">
     <span class="whatsapp-float-icon" aria-hidden="true">💬</span>
     <span class="whatsapp-float-label">WhatsApp</span>
   </a>

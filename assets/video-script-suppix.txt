@@ -1,0 +1,268 @@
+SUPPIX – Demo-Video Drehbuch
+Suppix Technologie UG
+Ziel: 60–90 Sekunden Kernstory + optionale Enterprise-Extras
+Marketing-Satz: „Vom Papier und der Plastikkarte — zur digitalen Identität, intelligentem Zutritt, automatischer Compliance und dem fertigen Management-Bericht.“
+
+═══════════════════════════════════════════════════════════════
+TEIL A – KERNFILM (60–90 Sekunden)
+Empfohlene Gesamtlänge: ~75 Sekunden
+═══════════════════════════════════════════════════════════════
+
+──────────────────────────────────────
+SZENE 1 · Digitale Identität
+Dauer: 0:00 – 0:12  (ca. 12 Sek.)
+──────────────────────────────────────
+BILD / HANDLUNG:
+• Firmenportal: Mitarbeiter anlegen (Name, Firma, Foto)
+• Ausweis-Vorschau: Foto + QR + Badge-ID + Gültig-bis
+• Kurzer Zoom auf QR und Foto
+• Optional: physische Karte kurz neben dem digitalen Pass zeigen
+
+WARUM ÜBERZEUGEND:
+Ersetzt die reine Plastikkarte – der Kunde sieht sofort „moderne Identität“.
+
+VOICEOVER (DE):
+„Jeder Mitarbeiter, Besucher oder Subunternehmer erhält eine digitale Identität –
+mit Foto, QR-Code, Badge-ID und Gültigkeit.“
+
+VOICEOVER (EN):
+„Every worker, visitor or subcontractor gets a digital identity –
+with photo, QR code, badge ID and validity.“
+
+TEXT-EINBLENDUNG (optional):
+Digitale Identität · Foto · QR · Badge
+
+──────────────────────────────────────
+SZENE 2 · Schnelle Aktivierung
+Dauer: 0:12 – 0:22  (ca. 10 Sek.)
+──────────────────────────────────────
+BILD / HANDLUNG:
+• QR auf Ausweis / Bildschirm scannen (Handy)
+• Mitarbeiter-App öffnet sich (PWA oder Flutter)
+• Digitaler Pass erscheint auf dem Handy
+• Optional: Badge-PIN kurz zeigen
+
+WARUM ÜBERZEUGEND:
+Aktivierung in Sekunden – kein kompliziertes Onboarding.
+
+VOICEOVER (DE):
+„QR scannen – und die Mitarbeiter-App ist in Sekunden aktiv.
+Kein Papierchaos. Kein langes Setup.“
+
+VOICEOVER (EN):
+„Scan the QR – and the worker app is live in seconds.
+No paperwork. No long setup.“
+
+TEXT-EINBLENDUNG:
+QR → App · Aktiv in Sekunden
+
+──────────────────────────────────────
+SZENE 3 · Lebendiger Zutritt
+Dauer: 0:22 – 0:35  (ca. 13 Sek.)
+──────────────────────────────────────
+BILD / HANDLUNG:
+• Check-in: QR am Tor ODER NFC ODER GPS/Geofence (eine Variante klar zeigen)
+• Optional zweite Variante als kurzer Cut (1–2 Sek.)
+• Event erscheint im Zutrittsprotokoll
+
+WARUM ÜBERZEUGEND:
+Kein Papiereintrag – digitaler Nachweis in Echtzeit.
+
+VOICEOVER (DE):
+„Check-in per QR, NFC oder GPS-Geofence –
+Zutritt ohne Papierliste, mit lückenlosem Audit-Trail.“
+
+VOICEOVER (EN):
+„Check in via QR, NFC or GPS geofence –
+access without paper lists, with a complete audit trail.“
+
+TEXT-EINBLENDUNG:
+QR · NFC · GPS · Drehkreuz
+
+──────────────────────────────────────
+SZENE 4 · Pförtner / Live-Lage
+Dauer: 0:35 – 0:48  (ca. 13 Sek.)
+──────────────────────────────────────
+BILD / HANDLUNG:
+• Pförtner-/Drehkreuz-Ansicht
+• Sofort: Foto, Name, Firma, Zeitstempel
+• Optional: kurzer Sound-Hinweis / Toast „Zutritt gebucht“
+• Ampel oder Status „vor Ort“ kurz zeigen
+
+WARUM ÜBERZEUGEND:
+Visuelle Kontrolle in Echtzeit – Sicherheit und Betrieb.
+
+VOICEOVER (DE):
+„Der Pförtner sieht sofort Foto, Name, Firma und Zeit.
+Wer betritt das Gelände – live und nachvollziehbar.“
+
+VOICEOVER (EN):
+„The gate sees photo, name, company and time instantly.
+Who enters the site – live and fully traceable.“
+
+TEXT-EINBLENDUNG:
+Live · Foto · Firma · Zeit
+
+──────────────────────────────────────
+SZENE 5 · Compliance-Alarm
+Dauer: 0:48 – 0:60  (ca. 12 Sek.)
+──────────────────────────────────────
+BILD / HANDLUNG:
+• Dokumentenstatus / „bald ablaufend“
+• Rote/gelbe Warnung auf einem Dokument
+• Optional: Detail öffnen (Ablaufdatum)
+
+WARUM ÜBERZEUGEND:
+Rechtliche und betriebliche Risiken werden sichtbar, bevor sie teuer werden.
+
+VOICEOVER (DE):
+„Ablaufende Dokumente werden automatisch erkannt –
+mit Warnung, bevor Risiken entstehen.“
+
+VOICEOVER (EN):
+„Expiring documents are detected automatically –
+with alerts before risks turn into costs.“
+
+TEXT-EINBLENDUNG:
+Compliance · Ablaufwarnung
+
+──────────────────────────────────────
+SZENE 6 · Bericht fürs Management
+Dauer: 0:60 – 0:75  (ca. 15 Sek.)
+──────────────────────────────────────
+BILD / HANDLUNG:
+• Button „PDF per E-Mail“ oder Tagesabschluss
+• Kurz PDF-Vorschau / Versand-Hinweis
+• Optional: DATEV-CSV-Export kurz einblenden
+• Abschluss: Logo SUPPIX AI + Slogan
+
+WARUM ÜBERZEUGEND:
+Von der Baustelle/Werk direkt zur Verwaltung – fertiger Report.
+
+VOICEOVER (DE):
+„Zum Schluss: PDF per E-Mail, DATEV-Export, Tagesabschluss –
+der Bericht ist bereit für Buchhaltung und Management.
+SUPPIX: vom Papier zur digitalen Identity-Plattform.“
+
+VOICEOVER (EN):
+„Finally: PDF by email, DATEV export, daily close-out –
+the report is ready for accounting and management.
+SUPPIX: from paper to a digital identity platform.“
+
+TEXT-EINBLENDUNG (Ende):
+SUPPIX · Identity · Access · Compliance · Reports
+CTA: Demo buchen · Plattform öffnen
+URL / WhatsApp / E-Mail
+
+═══════════════════════════════════════════════════════════════
+TEIL B – ENTERPRISE-EXTRAS (optional +30–45 Sek.)
+Nach dem Kernfilm anhängen oder als „Extended Cut“
+═══════════════════════════════════════════════════════════════
+
+──────────────────────────────────────
+SZENE 7 · Subunternehmer
+Dauer: +8 Sek.
+──────────────────────────────────────
+BILD: Subunternehmen anlegen / Mitarbeiter zuordnen
+VOICEOVER (DE): „Subunternehmer und Teams bleiben getrennt – ideal für Bauprojekte.“
+VOICEOVER (EN): „Subcontractors and teams stay separated – ideal for construction projects.“
+
+──────────────────────────────────────
+SZENE 8 · Wallet
+Dauer: +8 Sek.
+──────────────────────────────────────
+BILD: Apple/Google Wallet Badge (falls aktiv)
+VOICEOVER (DE): „Optional: der Ausweis wandert in Apple oder Google Wallet.“
+VOICEOVER (EN): „Optional: the badge goes into Apple or Google Wallet.“
+
+──────────────────────────────────────
+SZENE 9 · Unterschrift Ausweisübergabe
+Dauer: +8 Sek.
+──────────────────────────────────────
+BILD: Unterschrift im Admin (Übergabe), nicht auf dem Arbeiter-Handy
+VOICEOVER (DE): „Die Übergabe wird rechtssicher unterschrieben – im Admin, nicht am Arbeiter-Handy.“
+VOICEOVER (EN): „Handover is signed for legal proof – in admin, not on the worker’s phone.“
+
+──────────────────────────────────────
+SZENE 10 · Kameras
+Dauer: +10 Sek.
+──────────────────────────────────────
+BILD: Kamera-Übersicht / Snapshot / Sicherheitsereignis
+VOICEOVER (DE): „Kameras und Ereignisse: das Gelände bleibt unter Kontrolle.“
+VOICEOVER (EN): „Cameras and events: the site stays under control.“
+
+──────────────────────────────────────
+SZENE 11 · Automatisierung + KI
+Dauer: +10 Sek.
+──────────────────────────────────────
+BILD: Regel (Alarm/Sperre/Report) oder Copilot-Hinweis
+VOICEOVER (DE): „Automatisierung und KI: Entscheidungen ohne manuelle Nacharbeit.“
+VOICEOVER (EN): „Automation and AI: decisions without manual follow-up.“
+
+──────────────────────────────────────
+SZENE 12 · Notfall / Roll-Call
+Dauer: +8 Sek.
+──────────────────────────────────────
+BILD: Notfall / Anwesenheitsprüfung
+VOICEOVER (DE): „Im Ernstfall: Notfallruf und Roll-Call für Sicherheit und Behörden.“
+VOICEOVER (EN): „In emergencies: emergency call and roll-call for security and public sector.“
+
+──────────────────────────────────────
+SZENE 13 · White-Label + Rechnungen
+Dauer: +10 Sek.
+──────────────────────────────────────
+BILD: Logo/Farben der Kundenfirma + Rechnungsübersicht
+VOICEOVER (DE): „White-Label und Multi-Firmen-Abrechnung – bereit zum Verkauf als SaaS.“
+VOICEOVER (EN): „White-label and multi-company billing – ready to sell as SaaS.“
+
+═══════════════════════════════════════════════════════════════
+AUFNAHME-CHECKLISTE (vor dem Dreh)
+═══════════════════════════════════════════════════════════════
+[ ] Demo-Firma mit 2–3 Mitarbeitern + 1 Besucher + 1 Sub
+[ ] Gültiges Foto auf dem Ausweis
+[ ] Mindestens ein Check-in-Weg vorbereitet (QR oder NFC oder GPS)
+[ ] Pförtner-/Drehkreuz-Login getestet
+[ ] Ein Dokument mit baldigem Ablaufdatum
+[ ] PDF-Versand oder Export einmal erfolgreich getestet
+[ ] Bildschirm-Aufnahme 1080p oder 1440p, dunkles Theme
+[ ] Mauszeiger groß / Klicks sichtbar
+[ ] Keine echten Kundendaten – nur Demo-Namen
+
+═══════════════════════════════════════════════════════════════
+SCHNITT-EMPFEHLUNG
+═══════════════════════════════════════════════════════════════
+• Tempo: 1 Szene = 1 klare Botschaft
+• Harte Cuts zwischen Admin → Handy → Pförtner
+• Musik: zurückhaltend, tech/premium (leise unter Voiceover)
+• Am Ende 3 Sekunden Logo + CTA halten
+• Website-Hinweis: „Neues Demo-Video“ ersetzen durch fertige Datei
+  → in site-config.js: demoVideoSrc: "assets/suppix-demo.mp4"
+
+═══════════════════════════════════════════════════════════════
+KURZVERSION FÜR SOCIAL (30 Sekunden)
+═══════════════════════════════════════════════════════════════
+0–6s   Digitale Identität (Ausweis + QR)
+6–12s  QR → App
+12–20s Check-in + Pförtner live
+20–26s Ablaufendes Dokument
+26–30s PDF/Report + Logo + CTA
+
+VOICEOVER (DE, 30s):
+„Digitale Identität. Zutritt ohne Papier. Live-Kontrolle. Automatische Compliance.
+SUPPIX – vom Papier zur fertigen Identity-Plattform. Jetzt Demo buchen.“
+
+VOICEOVER (EN, 30s):
+„Digital identity. Access without paper. Live control. Automatic compliance.
+SUPPIX – from paper to a complete identity platform. Book a demo now.“
+
+═══════════════════════════════════════════════════════════════
+CTA-TEXTE (Ende / Website / WhatsApp)
+═══════════════════════════════════════════════════════════════
+DE: „Demo buchen“ · „Plattform öffnen“ · WhatsApp: 017631676589
+EN: „Book a demo“ · „Open platform“
+
+WhatsApp-Text DE:
+Hallo, ich möchte eine SUPPIX Live-Demo – bitte Identität, Zutritt und Report zeigen.
+
+WhatsApp-Text EN:
+Hello, I would like a SUPPIX live demo – please show identity, access and report.

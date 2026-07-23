@@ -1,18 +1,30 @@
 {
-  "name": "Baupass Controll – Baukometra",
-  "short_name": "Baupass",
-  "description": "Digitale Zeiterfassung mit physischen Karten und App",
+  "name": "SUPPIX – Suppix Technologie UG",
+  "short_name": "SUPPIX",
+  "description": "Enterprise Identity, access control and workforce platform",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f1419",
-  "theme_color": "#0f1419",
+  "background_color": "#070b14",
+  "theme_color": "#070b14",
   "lang": "de",
   "icons": [
     {
-      "src": "assets/logo.png",
+      "src": "assets/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
