@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initContactWhatsApp();
   initHeroWhatsApp();
   initBookingLinks();
+  initOutboundThanks();
   initStickyMobileCta();
   initScrollReveal();
   initFooterYear();
@@ -62,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function platformName() {
-    return cfg.platform || "SUPPIX";
+    return cfg.platform || cfg.product || "WorkPass";
   }
 
   function initContactWhatsApp() {
@@ -162,11 +163,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     if (cfg.company && cfg.platform) {
       document.title = document.title
-        .replace(/Baupass Controll|Baukometra|SUPPIX|Suppix AI|Suppix Technologie UG/g, (m) => {
-          if (m === "Baupass Controll" || m === "SUPPIX") return cfg.platform;
-          if (m === "Baukometra" || m === "Suppix AI" || m === "Suppix Technologie UG") return cfg.brand || cfg.company;
-          return m;
-        });
+        .replace(
+          /Baupass Controll|Baukometra|Suppix AI UG|Suppix Technologie UG|Suppix AI|SUPPIX|WorkPass/g,
+          (m) => {
+            if (m === "Baupass Controll" || m === "SUPPIX" || m === "WorkPass") {
+              return cfg.platform || cfg.product || "WorkPass";
+            }
+            if (
+              m === "Baukometra" ||
+              m === "Suppix AI UG" ||
+              m === "Suppix AI" ||
+              m === "Suppix Technologie UG"
+            ) {
+              return cfg.company || cfg.brand || m;
+            }
+            return m;
+          }
+        );
     }
   }
 
@@ -324,69 +337,247 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function thanksTitle() {
+    return t(
+      "Vielen Dank für Ihre Anfrage!",
+      "Thank you for your request!",
+      "شكراً لك على طلبك!"
+    );
+  }
+
+  function thanksBody() {
+    return t(
+      "Ihre Nachricht ist bei uns eingegangen. Wir melden uns so schnell wie möglich bei Ihnen – in der Regel innerhalb kurzer Zeit.",
+      "We have received your message. We will contact you as soon as possible – usually within a short time.",
+      "استلمنا رسالتك وسنتواصل معك في أقرب وقت ممكن."
+    );
+  }
+
+  function thanksOutboundBody() {
+    return t(
+      "Vielen Dank! Bitte senden Sie Ihre Nachricht ab – danach melden wir uns so schnell wie möglich bei Ihnen.",
+      "Thank you! Please send your message – then we will contact you as soon as possible.",
+      "شكراً لك! بعد إرسال رسالتك سنتواصل معك في أقرب وقت ممكن."
+    );
+  }
+
+  function ensureThanksToast() {
+    let toast = document.getElementById("thanksToast");
+    if (toast) return toast;
+    toast = document.createElement("div");
+    toast.id = "thanksToast";
+    toast.className = "thanks-toast";
+    toast.setAttribute("role", "status");
+    toast.setAttribute("aria-live", "polite");
+    toast.hidden = true;
+    document.body.appendChild(toast);
+    return toast;
+  }
+
+  function showThanksToast(message) {
+    const toast = ensureThanksToast();
+    toast.innerHTML = `<strong>${thanksTitle()}</strong><p>${message || thanksOutboundBody()}</p>`;
+    toast.hidden = false;
+    toast.classList.add("is-visible");
+    clearTimeout(showThanksToast._timer);
+    showThanksToast._timer = setTimeout(() => {
+      toast.classList.remove("is-visible");
+      toast.hidden = true;
+    }, 7000);
+  }
+
+  function showContactFormThanks(form, statusEl) {
+    const title = thanksTitle();
+    const body = thanksBody();
+
+    let panel = document.getElementById("contactThanks");
+    if (!panel) {
+      panel = document.createElement("div");
+      panel.id = "contactThanks";
+      panel.className = "contact-thanks";
+      panel.setAttribute("role", "status");
+      panel.setAttribute("aria-live", "polite");
+      form.insertAdjacentElement("beforebegin", panel);
+    }
+
+    panel.innerHTML = `
+      <div class="contact-thanks-icon" aria-hidden="true">✓</div>
+      <h3>${title}</h3>
+      <p>${body}</p>
+      <p class="contact-thanks-note">${t(
+        "Sie können die Seite schließen oder weiter stöbern – wir melden uns bei Ihnen.",
+        "You can close this page or keep browsing – we will get in touch.",
+        "يمكنك إغلاق الصفحة أو متابعة التصفح – سنتواصل معك."
+      )}</p>
+    `;
+    panel.hidden = false;
+    form.hidden = true;
+
+    if (statusEl) {
+      statusEl.className = "form-status success";
+      statusEl.textContent = `${title} ${body}`;
+    }
+
+    panel.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  function initOutboundThanks() {
+    const mark = (el) => {
+      if (!el || el.dataset.thanksBound === "1") return;
+      el.dataset.thanksBound = "1";
+      el.addEventListener("click", () => {
+        showThanksToast(thanksOutboundBody());
+      });
+    };
+
+    [
+      "contactWhatsApp",
+      "heroWhatsApp",
+      "whatsappBtn",
+      "mobileCtaWhatsapp",
+      "thanksWhatsApp",
+    ].forEach((id) => mark(document.getElementById(id)));
+
+    document.querySelectorAll("[data-booking], a[href*='wa.me'], a[href^='mailto:']").forEach(mark);
+  }
+
+  function siteBaseUrl() {
+    const configured = String(cfg.liveUrl || cfg.url || "").replace(/\/$/, "");
+    if (configured) return configured;
+    if (typeof window !== "undefined" && window.location?.origin && window.location.origin !== "null") {
+      return window.location.origin;
+    }
+    return "https://baupass-controll.de";
+  }
+
+  function logoAbsoluteUrl() {
+    return `${siteBaseUrl()}/assets/logo.png`;
+  }
+
+  function thankYouAbsoluteUrl() {
+    const lang = (document.documentElement.lang || "de").toLowerCase();
+    if (lang.startsWith("ar")) return `${siteBaseUrl()}/ar/thanks.html`;
+    if (lang.startsWith("en")) return `${siteBaseUrl()}/en/thanks.html`;
+    return `${siteBaseUrl()}/danke.html`;
+  }
+
+  function ensureHiddenInput(form, name, value) {
+    let input = form.querySelector(`input[type="hidden"][name="${name}"]`);
+    if (!input) {
+      input = document.createElement("input");
+      input.type = "hidden";
+      input.name = name;
+      form.prepend(input);
+    }
+    input.value = value;
+    return input;
+  }
+
+  function buildCustomerAutoresponse(name) {
+    const company = cfg.company || "Suppix AI UG";
+    const platform = platformName();
+    const brand = cfg.brand || "SUPPIX AI";
+    const email = cfg.email || "baupass-control@outlook.de";
+    const phone = cfg.phone || "017631676589";
+    const whatsapp = cfg.whatsapp || cfg.phoneRaw || "4917631676589";
+    const logo = logoAbsoluteUrl();
+    const website = siteBaseUrl();
+    const who = (name || "").trim();
+
+    const greeting = t(
+      who ? `Hallo ${who},` : "Hallo,",
+      who ? `Hello ${who},` : "Hello,",
+      who ? `مرحباً ${who}،` : "مرحباً،"
+    );
+    const thanks = t(
+      `vielen Dank für Ihre Anfrage zu <strong>${platform}</strong>. Wir haben Ihre Nachricht erhalten und melden uns <strong>so schnell wie möglich</strong> bei Ihnen.`,
+      `thank you for your <strong>${platform}</strong> request. We have received your message and will contact you <strong>as soon as possible</strong>.`,
+      `شكراً لطلبك بخصوص <strong>${platform}</strong>. استلمنا رسالتك وسنتواصل معك <strong>في أقرب وقت ممكن</strong>.`
+    );
+    const contactTitle = t("Unsere Kontaktdaten", "Our contact details", "بيانات التواصل الخاصة بنا");
+    const closing = t(
+      `Mit freundlichen Grüßen<br>Ihr Team von ${company}`,
+      `Kind regards<br>Your team at ${company}`,
+      `مع أطيب التحيات<br>فريق ${company}`
+    );
+
+    // HTML confirmation email (logo + contact). FormSubmit delivers this as the autoresponse body.
+    return `
+<div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;color:#0f172a;line-height:1.55">
+  <div style="text-align:center;padding:16px 0 8px">
+    <img src="${logo}" alt="${brand}" width="180" style="max-width:180px;height:auto;border:0" />
+  </div>
+  <p style="font-size:16px;margin:0 0 12px">${greeting}</p>
+  <p style="font-size:15px;margin:0 0 16px">${thanks}</p>
+  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;margin:0 0 16px">
+    <p style="margin:0 0 8px;font-weight:700">${contactTitle}</p>
+    <p style="margin:0">${company} · ${platform}<br>
+    E-Mail: <a href="mailto:${email}">${email}</a><br>
+    Telefon: <a href="tel:+${String(whatsapp).replace(/\D/g, "")}">${phone}</a><br>
+    WhatsApp: <a href="https://wa.me/${whatsapp}">https://wa.me/${whatsapp}</a><br>
+    Web: <a href="${website}">${website}</a></p>
+  </div>
+  <p style="font-size:14px;margin:0;color:#334155">${closing}</p>
+</div>`.trim();
+  }
+
   function initContactForm() {
     const form = document.getElementById("contactForm");
     if (!form) return;
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    const action =
+      cfg.formAction ||
+      (cfg.email ? `https://formsubmit.co/${cfg.email}` : "https://formsubmit.co/baupass-control@outlook.de");
+    form.setAttribute("action", action);
+    form.setAttribute("method", "POST");
+    form.setAttribute("accept-charset", "UTF-8");
+
+    // Autoresponse requires classic POST + captcha (do NOT disable captcha).
+    ensureHiddenInput(form, "_template", "table");
+    ensureHiddenInput(form, "_next", thankYouAbsoluteUrl());
+    ensureHiddenInput(form, "_autoresponse", buildCustomerAutoresponse(""));
+    ensureHiddenInput(
+      form,
+      "_subject",
+      t(`${platformName()} Anfrage`, `${platformName()} request`, `طلب ${platformName()}`)
+    );
+
+    const privacy = form.querySelector("#privacy");
+    if (privacy && !privacy.name) privacy.name = "privacy";
+    if (privacy && !privacy.value) privacy.value = "accepted";
+
+    form.addEventListener("submit", () => {
       const btn = form.querySelector('button[type="submit"]');
+      const name = (document.getElementById("name")?.value || "").trim();
+      const email = (document.getElementById("email")?.value || "").trim();
       const statusEl = document.getElementById("contactStatus");
-      const name = document.getElementById("name").value.trim();
-      const companyEl = document.getElementById("company");
-      const company = companyEl ? companyEl.value.trim() : "";
-      const email = document.getElementById("email").value.trim();
-      const paket = document.getElementById("paket");
-      const paketText = paket ? paket.options[paket.selectedIndex].text : "–";
-      const message = document.getElementById("message").value.trim();
 
-      btn.disabled = true;
-      btn.textContent = t("Wird gesendet…", "Sending…", "جاري الإرسال…");
-
-      const ok = await submitToFormSubmit(
-        {
-          _subject: t(`Demo-Anfrage – ${name}`, `Demo request – ${name}`, `طلب عرض – ${name}`),
-          name,
-          company: company || "–",
-          email,
-          paket: paket ? paketText : "–",
-          message: message || "–",
-        },
-        statusEl
+      ensureHiddenInput(
+        form,
+        "_subject",
+        t(
+          `Demo-Anfrage – ${name || "Kunde"}`,
+          `Demo request – ${name || "Customer"}`,
+          `طلب عرض – ${name || "عميل"}`
+        )
       );
+      ensureHiddenInput(form, "_autoresponse", buildCustomerAutoresponse(name));
+      ensureHiddenInput(form, "_next", thankYouAbsoluteUrl());
+      if (email) ensureHiddenInput(form, "_replyto", email);
 
-      if (ok) {
-        if (statusEl) {
-          statusEl.className = "form-status success";
-          statusEl.textContent = t(
-            "Vielen Dank! Ihre Anfrage wurde gesendet. Wir melden uns in Kürze.",
-            "Thank you! Your request was sent. We will get back to you shortly.",
-            "شكراً! تم إرسال طلبك. سنتواصل معك قريباً."
-          );
-        } else {
-          alert(t("Vielen Dank! Ihre Anfrage wurde gesendet.", "Thank you! Your request was sent.", "شكراً! تم إرسال طلبك."));
-        }
-        form.reset();
-      } else {
-        const subject = encodeURIComponent(
-          t(`Demo-Anfrage ${platformName()} – ${name}`, `${platformName()} demo request – ${name}`, `طلب عرض ${platformName()} – ${name}`)
-        );
-        const body = encodeURIComponent(
-          `Name: ${name}\n${t("Unternehmen", "Company", "الشركة")}: ${company || "–"}\nE-Mail: ${email}\n${t("Paket", "Plan", "الباقة")}: ${paket ? paketText : "–"}\n\n${t("Nachricht", "Message", "الرسالة")}:\n${message || "–"}`
-        );
-        window.location.href = `mailto:${cfg.email || "baupass-control@outlook.de"}?subject=${subject}&body=${body}`;
-        if (statusEl) {
-          statusEl.className = "form-status";
-          statusEl.textContent = t(
-            "E-Mail-Programm geöffnet – bitte Nachricht absenden.",
-            "Email client opened – please send the message.",
-            "تم فتح برنامج البريد – يرجى إرسال الرسالة."
-          );
-        }
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = t("Wird gesendet…", "Sending…", "جاري الإرسال…");
       }
-
-      btn.disabled = false;
-      btn.textContent = t("Nachricht senden", "Send message", "إرسال الرسالة");
+      if (statusEl) {
+        statusEl.className = "form-status success";
+        statusEl.textContent = t(
+          "Einen Moment… Sie erhalten gleich eine Bestätigung per E-Mail.",
+          "One moment… You will receive a confirmation email shortly.",
+          "لحظة… ستصلك رسالة تأكيد على بريدك قريباً."
+        );
+      }
+      // Native FormSubmit POST continues (no preventDefault) → customer autoresponse email.
     });
   }
 

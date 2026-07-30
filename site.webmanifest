@@ -1,7 +1,7 @@
 {
-  "name": "SUPPIX – Suppix Technologie UG",
-  "short_name": "SUPPIX",
-  "description": "Enterprise Identity, access control and workforce platform",
+  "name": "WorkPass – Suppix AI UG",
+  "short_name": "WorkPass",
+  "description": "WorkPass – Enterprise Identity, access control and workforce platform by Suppix AI UG",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#070b14",

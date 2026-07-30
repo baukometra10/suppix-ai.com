@@ -1,7 +1,7 @@
 const SITE_CONFIG = {
-  company: "Suppix Technologie UG",
+  company: "Suppix AI UG",
   brand: "SUPPIX AI",
-  platform: "SUPPIX",
+  platform: "WorkPass",
   product: "WorkPass",
   tagline: "Identität · Zutritt · Team · Sicherheit · White-Label",
   email: "baupass-control@outlook.de",
@@ -52,4 +52,6 @@ const SITE_CONFIG = {
   registerNumber: "[HRB-Nummer]",
 
   formEndpoint: "https://formsubmit.co/ajax/baupass-control@outlook.de",
+  /** Klassisches FormSubmit (nicht AJAX) – nötig für Auto-Antwort an den Kunden. */
+  formAction: "https://formsubmit.co/baupass-control@outlook.de",
 };

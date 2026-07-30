@@ -11,3 +11,8 @@ assets/demo-voice-music*.m4a
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Local deploy packages (duplicates of site root)
+cloudflare-deploy/
+cloudflare-deploy-lite/
+*.zip
