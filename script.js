@@ -232,6 +232,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const url = sitePublicUrl();
       if (url) el.textContent = url.replace(/^https?:\/\//, "");
     });
+    document.querySelectorAll("[data-browser-url]").forEach((el) => {
+      const host = String(cfg.domain || cfg.url || "suppix-ai-workpass.com")
+        .replace(/^https?:\/\//, "")
+        .replace(/\/$/, "");
+      if (host) el.textContent = `🔒 https://${host}`;
+    });
+    document.querySelectorAll("form.contact-form").forEach((form) => {
+      if (cfg.formAction) form.setAttribute("action", cfg.formAction);
+    });
     document.querySelectorAll("[data-address-street]").forEach((el) => {
       if (cfg.address?.street) el.textContent = cfg.address.street;
     });

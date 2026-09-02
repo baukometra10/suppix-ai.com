@@ -124,7 +124,7 @@
   place-items: center;
   background:
     linear-gradient(145deg, rgba(17, 24, 39, 0.98), rgba(5, 8, 15, 1)),
-    url("assets/system-screenshot.png") center / cover no-repeat;
+    url("assets/system-screenshot.png?v=4") center / cover no-repeat;
   position: relative;
 }
 
