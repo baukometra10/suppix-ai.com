@@ -805,18 +805,42 @@
   }
 
   .theme-premium .hero-premium {
-    padding-top: 108px;
-    padding-bottom: 56px;
+    padding-top: 96px;
+    padding-bottom: 40px;
   }
 
   .theme-premium .hero-premium h1 {
     max-width: none;
-    font-size: clamp(1.65rem, 7.5vw, 2.2rem);
+    font-size: clamp(1.55rem, 7.2vw, 2.1rem);
+    margin-bottom: 0.35rem;
+  }
+
+  .theme-premium .hero-ambient {
+    inset: -10% 0 auto;
+    height: 60%;
   }
 
   .theme-premium .logo-img {
     height: 40px;
     max-width: min(148px, 40vw);
     padding: 3px 6px;
+  }
+
+  .theme-premium .demo-video-soon {
+    padding: 1.25rem 1rem;
+    max-width: 100%;
+  }
+
+  .theme-premium .demo-video-soon strong {
+    font-size: 1.35rem;
+  }
+
+  .theme-premium .demo-video-actions {
+    flex-direction: column;
+  }
+
+  .theme-premium .demo-video-actions .btn {
+    width: 100%;
+    min-height: 46px;
   }
 }

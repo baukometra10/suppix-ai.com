@@ -4,11 +4,11 @@ const SITE_CONFIG = {
   platform: "WorkPass",
   product: "WorkPass",
   tagline: "Identität · Zutritt · Team · Sicherheit · White-Label",
-  email: "baupass-control@outlook.de",
+  email: "support@suppix-ai.com",
   phone: "017631676589",
   phoneRaw: "4917631676589",
   whatsapp: "4917631676589",
-  appLoginUrl: "https://suppix-workpass-ai.up.railway.app/",
+  appLoginUrl: "https://suppix-ai-workpass.com",
 
   /**
    * Öffentliche Bewertungs-API (JSON).
@@ -18,7 +18,7 @@ const SITE_CONFIG = {
   reviewsLimit: 6,
 
   /** Später: öffentliche Website-URL (ohne trailing slash). */
-  liveUrl: "",
+  liveUrl: "https://baukometra10.github.io/suppix-ai.com",
 
   /**
    * Demo-Video: z. B. "assets/suppix-demo.mp4"
@@ -37,8 +37,8 @@ const SITE_CONFIG = {
     heroCards: true,
   },
 
-  domain: "baupass-controll.de",
-  url: "https://baupass-controll.de",
+  domain: "suppix-ai-workpass.com",
+  url: "https://suppix-ai-workpass.com",
 
   /** Pflichtangaben Impressum – vor Go-live ersetzen. */
   address: {
@@ -51,7 +51,7 @@ const SITE_CONFIG = {
   registerCourt: "[Amtsgericht]",
   registerNumber: "[HRB-Nummer]",
 
-  formEndpoint: "https://formsubmit.co/ajax/baupass-control@outlook.de",
+  formEndpoint: "https://formsubmit.co/ajax/support@suppix-ai.com",
   /** Klassisches FormSubmit (nicht AJAX) – nötig für Auto-Antwort an den Kunden. */
-  formAction: "https://formsubmit.co/baupass-control@outlook.de",
+  formAction: "https://formsubmit.co/support@suppix-ai.com",
 };
