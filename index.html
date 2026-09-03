@@ -1248,11 +1248,15 @@
         <span class="section-tag">Newsletter</span>
         <h2 style="color: var(--white); font-size: 1.75rem; font-weight: 800; margin-bottom: 0.5rem;">Bleiben Sie informiert</h2>
         <p style="color: var(--gray-500);">Updates zu WorkPass: Identity, Zutritt, Team-Betreuung und Enterprise-Funktionen.</p>
-        <form class="newsletter-form" id="newsletterForm">
-          <input type="email" id="newsletterEmail" placeholder="ihre@email.de" required aria-label="E-Mail für Newsletter">
+        <form class="newsletter-form" id="newsletterForm" method="POST" action="https://formsubmit.co/support@suppix-ai.com" accept-charset="UTF-8">
+          <input type="hidden" name="_subject" value="Newsletter-Anmeldung – WorkPass">
+          <input type="hidden" name="_template" value="table">
+          <input type="text" name="_honey" value="" tabindex="-1" autocomplete="off" aria-hidden="true" class="newsletter-honey">
+          <input type="email" id="newsletterEmail" name="email" placeholder="ihre@email.de" required aria-label="E-Mail für Newsletter">
           <button type="submit" class="btn btn-primary">Anmelden</button>
         </form>
-        <div class="form-status" id="newsletterStatus"></div>
+        <p class="newsletter-privacy">Mit der Anmeldung stimmen Sie dem Erhalt von Produkt-Updates zu. Abmeldung jederzeit möglich.</p>
+        <div class="form-status" id="newsletterStatus" role="status" aria-live="polite"></div>
       </div>
     </div>
   </section>

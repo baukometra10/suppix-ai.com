@@ -609,37 +609,110 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function buildNewsletterAutoresponse() {
+    const company = cfg.company || "Suppix AI UG";
+    const platform = platformName();
+    const brand = cfg.brand || "SUPPIX AI";
+    const email = cfg.email || "support@suppix-ai.com";
+    const website = siteBaseUrl();
+    const logo = logoAbsoluteUrl();
+
+    const title = t("Newsletter bestätigt", "Newsletter confirmed", "تم تأكيد الاشتراك");
+    const hello = t("Hallo,", "Hello,", "مرحباً،");
+    const thanks = t(
+      `vielen Dank für Ihre Anmeldung zum <strong>${platform}</strong>-Newsletter. Wir halten Sie über Produkt-Updates, neue Funktionen und Unternehmens-News auf dem Laufenden.`,
+      `thank you for subscribing to the <strong>${platform}</strong> newsletter. We will keep you updated on product news, new features and company updates.`,
+      `شكراً لاشتراكك في نشرة <strong>${platform}</strong>. سنبقيك على اطلاع بتحديثات المنتج والميزات وأخبار الشركة.`
+    );
+    const closing = t(
+      `Mit freundlichen Grüßen<br>Ihr Team von ${company}`,
+      `Kind regards<br>Your team at ${company}`,
+      `مع أطيب التحيات<br>فريق ${company}`
+    );
+
+    return `
+<div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;color:#0f172a;line-height:1.55">
+  <div style="text-align:center;padding:16px 0 8px">
+    <img src="${logo}" alt="${brand}" width="180" style="max-width:180px;height:auto;border:0" />
+  </div>
+  <p style="font-size:16px;margin:0 0 12px"><strong>${title}</strong></p>
+  <p style="font-size:15px;margin:0 0 12px">${hello}</p>
+  <p style="font-size:15px;margin:0 0 16px">${thanks}</p>
+  <p style="font-size:14px;margin:0 0 16px">Web: <a href="${website}">${website}</a><br>
+  E-Mail: <a href="mailto:${email}">${email}</a></p>
+  <p style="font-size:14px;margin:0;color:#334155">${closing}</p>
+</div>`.trim();
+  }
+
+  function newsletterReturnUrl() {
+    const base = String(window.location.href || "").split("#")[0].split("?")[0];
+    return `${base}?newsletter=ok#newsletter`;
+  }
+
   function initNewsletterForm() {
     const form = document.getElementById("newsletterForm");
     if (!form) return;
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("newsletterEmail").value.trim();
-      const statusEl = document.getElementById("newsletterStatus");
-      const btn = form.querySelector("button");
+    const action =
+      cfg.formAction ||
+      (cfg.email ? `https://formsubmit.co/${cfg.email}` : "https://formsubmit.co/support@suppix-ai.com");
+    form.setAttribute("action", action);
+    form.setAttribute("method", "POST");
+    form.setAttribute("accept-charset", "UTF-8");
 
-      btn.disabled = true;
-      const ok = await submitToFormSubmit(
-        { _subject: "Newsletter-Anmeldung", email, typ: "Newsletter" },
-        statusEl
+    ensureHiddenInput(form, "_template", "table");
+    ensureHiddenInput(form, "_subject", t("Newsletter-Anmeldung – WorkPass", "Newsletter signup – WorkPass", "اشتراك نشرة – WorkPass"));
+    ensureHiddenInput(form, "_autoresponse", buildNewsletterAutoresponse());
+    ensureHiddenInput(form, "_next", newsletterReturnUrl());
+
+    const statusEl = document.getElementById("newsletterStatus");
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("newsletter") === "ok" && statusEl) {
+      statusEl.className = "form-status success";
+      statusEl.textContent = t(
+        `Erfolgreich angemeldet! Sie erhalten ab jetzt Updates zu ${platformName()}.`,
+        `Successfully subscribed! You will now receive updates about ${platformName()}.`,
+        `تم الاشتراك بنجاح! ستصلك من الآن تحديثات ${platformName()}.`
       );
+      // Clean the query from the address bar without reload.
+      try {
+        const clean = `${window.location.pathname}${window.location.hash || "#newsletter"}`;
+        window.history.replaceState({}, "", clean);
+      } catch (_) {
+        /* ignore */
+      }
+    }
 
-      if (ok) {
+    form.addEventListener("submit", () => {
+      const email = (document.getElementById("newsletterEmail")?.value || "").trim();
+      const btn = form.querySelector('button[type="submit"]');
+
+      ensureHiddenInput(form, "_autoresponse", buildNewsletterAutoresponse());
+      ensureHiddenInput(form, "_next", newsletterReturnUrl());
+      ensureHiddenInput(
+        form,
+        "_subject",
+        t(
+          `Newsletter-Anmeldung – ${email || "WorkPass"}`,
+          `Newsletter signup – ${email || "WorkPass"}`,
+          `اشتراك نشرة – ${email || "WorkPass"}`
+        )
+      );
+      if (email) ensureHiddenInput(form, "_replyto", email);
+
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = t("Wird gesendet…", "Sending…", "جاري الإرسال…");
+      }
+      if (statusEl) {
         statusEl.className = "form-status success";
         statusEl.textContent = t(
-          `Erfolgreich angemeldet! Willkommen bei ${platformName()}.`,
-          `Successfully subscribed! Welcome to ${platformName()}.`
-        );
-        form.reset();
-      } else {
-        statusEl.className = "form-status error";
-        statusEl.textContent = t(
-          "Fehler – bitte versuchen Sie es später oder schreiben Sie uns direkt.",
-          "Error – please try again later or email us directly."
+          "Einen Moment… Sie erhalten gleich eine Bestätigung per E-Mail.",
+          "One moment… You will receive a confirmation email shortly.",
+          "لحظة… ستصلك رسالة تأكيد على بريدك قريباً."
         );
       }
-      btn.disabled = false;
+      // Native FormSubmit POST continues (no preventDefault).
     });
   }
 
