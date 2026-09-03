@@ -1,15 +1,11 @@
-Welcome to Baupass Controll – the digital time tracking platform by Baukometra.
+Welcome to WorkPass – the digital identity and workforce platform by Suppix AI UG.
 
-Whether on a construction site, in a factory or in the office: Baupass Controll lets you track working hours simply, reliably and in compliance with regulations.
+From paper and plastic cards to digital identity: access, compliance, live site view and team care in one system.
 
-Every employee receives a personal ID card – physical for scanning or digital in the app. Employees without smartphones use the card. Mobile workers use BauPass or KontrollPass directly on their phone.
+Every employee receives a personal ID card – physical for scanning or digital in the app. Employees without smartphones use the card. Mobile workers use WorkPass directly on their phone.
 
-For construction companies, the pass is called BauPass. For industrial businesses, KontrollPass – available in different designs to match your brand.
+The default name is WorkPass. With your branding, company name, logo and pass name appear everywhere – in the app, on badges and in reports.
 
-The dashboard gives you a real-time overview: attendance, projects, teams and reports – all in one place.
+Deployment plans, chat, calls and alerts keep you close to the team. WorkPass Lohn connects the platform to payroll – from hours to the approved payslip.
 
-The integrated email and document system makes Baupass Controll a complete platform for your company – no extra software required.
-
-Flexible plans from visitor card to enterprise – scalable for teams of any size.
-
-Baupass Controll by Baukometra. Digital. Flexible. For every industry. Discover more at baupass-controll.de.
+WorkPass by Suppix AI UG. Digital. Flexible. For every industry.

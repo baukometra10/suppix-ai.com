@@ -456,7 +456,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (typeof window !== "undefined" && window.location?.origin && window.location.origin !== "null") {
       return window.location.origin;
     }
-    return "https://baupass-controll.de";
+    return "https://baukometra10.github.io/suppix-ai.com";
   }
 
   function logoAbsoluteUrl() {
@@ -486,7 +486,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const company = cfg.company || "Suppix AI UG";
     const platform = platformName();
     const brand = cfg.brand || "SUPPIX AI";
-    const email = cfg.email || "baupass-control@outlook.de";
+    const email = cfg.email || "support@suppix-ai.com";
     const phone = cfg.phone || "017631676589";
     const whatsapp = cfg.whatsapp || cfg.phoneRaw || "4917631676589";
     const logo = logoAbsoluteUrl();
@@ -536,7 +536,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const action =
       cfg.formAction ||
-      (cfg.email ? `https://formsubmit.co/${cfg.email}` : "https://formsubmit.co/baupass-control@outlook.de");
+      (cfg.email ? `https://formsubmit.co/${cfg.email}` : "https://formsubmit.co/support@suppix-ai.com");
     form.setAttribute("action", action);
     form.setAttribute("method", "POST");
     form.setAttribute("accept-charset", "UTF-8");

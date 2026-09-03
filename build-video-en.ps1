@@ -4,7 +4,7 @@ $music = "c:\Users\u4363\Desktop\Baukometra\assets\bg-music-soft.wav"
 $voiceText = "c:\Users\u4363\Desktop\Baukometra\assets\voiceover-text-en.txt"
 $wav = "c:\Users\u4363\Desktop\Baukometra\assets\voiceover-en-raw.wav"
 $audio = "c:\Users\u4363\Desktop\Baukometra\assets\demo-voice-music-en.m4a"
-$final = "c:\Users\u4363\Desktop\Baukometra\assets\baupass-demo-en.mp4"
+$final = "c:\Users\u4363\Desktop\Baukometra\assets\WORKPASS-demo-en.mp4"
 
 Write-Host "1/3 English voice (Windows SAPI)..."
 $text = Get-Content $voiceText -Raw

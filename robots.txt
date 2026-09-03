@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://baupass-controll.de/sitemap.xml
+Sitemap: https://baukometra10.github.io/suppix-ai.com/sitemap.xml
