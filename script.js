@@ -229,8 +229,27 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
     document.querySelectorAll("[data-site-url]").forEach((el) => {
+      const pretty = String(cfg.marketingDisplayHost || "")
+        .replace(/^https?:\/\//, "")
+        .replace(/\/$/, "")
+        .trim();
+      const onFlyer = Boolean(el.closest(".flyer-page, .flyer-body, .flyer-footer"));
+      if (pretty) {
+        el.hidden = false;
+        el.textContent = pretty;
+        return;
+      }
+      if (onFlyer) {
+        // Kein GitHub-Pages-Hostname auf dem Flyer – QR öffnet liveUrl.
+        el.hidden = true;
+        el.textContent = "";
+        return;
+      }
       const url = sitePublicUrl();
-      if (url) el.textContent = url.replace(/^https?:\/\//, "");
+      if (url) {
+        el.hidden = false;
+        el.textContent = url.replace(/^https?:\/\//, "");
+      }
     });
     document.querySelectorAll("[data-browser-url]").forEach((el) => {
       const host = String(cfg.domain || cfg.url || "suppix-ai-workpass.com")
@@ -702,12 +721,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function flyerLandingUrl() {
+    const base = String(sitePublicUrl() || "").replace(/\/$/, "");
+    if (!base) return "";
+    const lang = pageLang();
+    if (lang === "en") return `${base}/en/`;
+    if (lang === "ar") return `${base}/ar/`;
+    return `${base}/`;
+  }
+
+  function flyerQrAssetPath() {
+    const lang = pageLang();
+    const root = document.body?.classList?.contains("flyer-body")
+      ? (lang === "de" ? "assets/" : "../assets/")
+      : "assets/";
+    if (lang === "en") return `${root}flyer-qr-en.png`;
+    if (lang === "ar") return `${root}flyer-qr-ar.png`;
+    return `${root}flyer-qr.png`;
+  }
+
   function initFlyerQr() {
     const img = document.getElementById("flyerQr");
     if (!img) return;
-    const url = sitePublicUrl();
-    if (!url) return;
-    img.src = `https://api.qrserver.com/v1/create-qr-code/?size=176x176&margin=0&data=${encodeURIComponent(url)}`;
+    const url = flyerLandingUrl();
+    const asset = flyerQrAssetPath();
+    img.src = `${asset}?v=2`;
+    img.decoding = "async";
+    if (url) {
+      img.alt = t(
+        `QR-Code zur Website: ${url}`,
+        `QR code to website: ${url}`,
+        `رمز QR للموقع: ${url}`
+      );
+      img.title = url;
+    }
+    img.onerror = () => {
+      if (!url) return;
+      img.onerror = null;
+      img.src = `https://api.qrserver.com/v1/create-qr-code/?size=176x176&margin=0&data=${encodeURIComponent(url)}`;
+    };
   }
 
   function starsFromRating(rating) {

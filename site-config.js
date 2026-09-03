@@ -17,8 +17,15 @@ const SITE_CONFIG = {
   reviewsApiUrl: "https://suppix-workpass-ai.up.railway.app/api/reviews",
   reviewsLimit: 6,
 
-  /** Später: öffentliche Website-URL (ohne trailing slash). */
+  /** Technisch erreichbare Website-URL (QR, Formulare, Danke-Seiten). */
   liveUrl: "https://baukometra10.github.io/suppix-ai.com",
+
+  /**
+   * Sichtbarer Domain-Name auf Flyer/Marketing (ohne https://).
+   * Leer = auf dem Flyer keine Domain anzeigen (nur QR).
+   * Später z. B. "suppix-ai.com" setzen, sobald das Marketing-Domain live ist.
+   */
+  marketingDisplayHost: "",
 
   /**
    * Demo-Video: z. B. "assets/suppix-demo.mp4"
