@@ -89,7 +89,7 @@ draw.rounded_rectangle(
     outline=(94, 184, 232, 80),
     width=1,
 )
-draw.text((48, 30), "Beispiel · Nähe zwischen Mitarbeitern", fill=(232, 238, 247), font=font_title)
+draw.text((48, 30), "Demo · Nähe-Linien \(Beispiel\)", fill=(232, 238, 247), font=font_title)
 draw.rounded_rectangle((W - 140, 30, W - 48, 58), radius=999, fill=(94, 234, 212))
 draw.text((W - 118, 35), "LIVE", fill=(7, 11, 20), font=font_b)
 
@@ -128,3 +128,4 @@ draw.text((580, 265), "Zone B · Tor", fill=(160, 200, 190), font=font_small)
 out = os.path.join("assets", "livemap-proximity-example.jpg")
 img.convert("RGB").save(out, "JPEG", quality=88, optimize=True)
 print("saved", out, os.path.getsize(out))
+
