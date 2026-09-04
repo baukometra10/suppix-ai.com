@@ -2862,14 +2862,26 @@ html[dir="rtl"] .livemap-zone-b {
 
 .livemap-shot {
   margin: 0;
-  border-radius: 18px;
+  border-radius: 20px;
   overflow: hidden;
-  border: 1px solid rgba(94, 184, 232, 0.28);
+  border: 1px solid rgba(94, 184, 232, 0.22);
   background: #070b14;
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.03) inset,
-    0 24px 60px rgba(0, 0, 0, 0.45),
-    0 0 80px rgba(94, 184, 232, 0.1);
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 28px 70px rgba(0, 0, 0, 0.5),
+    0 0 100px rgba(45, 212, 191, 0.08),
+    0 0 60px rgba(94, 184, 232, 0.08);
+  transform: translateZ(0);
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.livemap-shot:hover {
+  border-color: rgba(94, 236, 214, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 32px 80px rgba(0, 0, 0, 0.55),
+    0 0 120px rgba(45, 212, 191, 0.12),
+    0 0 70px rgba(94, 184, 232, 0.1);
 }
 
 .livemap-shot img {
@@ -2880,12 +2892,12 @@ html[dir="rtl"] .livemap-zone-b {
 }
 
 .livemap-shot figcaption {
-  padding: 0.7rem 0.95rem 0.85rem;
+  padding: 0.75rem 1.05rem 0.9rem;
   color: var(--gray-500);
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   line-height: 1.45;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(11, 18, 32, 0.95);
+  background: linear-gradient(180deg, rgba(11, 18, 32, 0.98), rgba(8, 12, 22, 0.98));
 }
 
 .livemap-shot-secondary {
