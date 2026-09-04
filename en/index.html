@@ -371,7 +371,7 @@
         <div class="feature-card"><div class="feature-icon">📅</div><h3>Deployment &amp; daily plan</h3><p>Create a monthly plan and send it to workers (email + push). In the app: daily plan with check-in, checkout and safety check.</p></div>
         <div class="feature-card"><div class="feature-icon">💬</div><h3>Chat · Call · Video</h3><p>Internal communication in the employee app: chat with files and location, voice notes, calls and video conferences.</p></div>
         <div class="feature-card"><div class="feature-icon">🔔</div><h3>Proactive alerts</h3><p>Late-start alerts, expiry warnings, plan delivery and email notifications – the system reports before you have to ask.</p></div>
-        <div class="feature-card"><div class="feature-icon">🗺️</div><h3>Workforce Live Map</h3><p>Who is where – now: locations, geofence zones and status on one map. Rare in the market, instantly clear for leadership and gate.</p></div>
+        <div class="feature-card"><div class="feature-icon">🗺️</div><h3>Workforce Live Map</h3><p>Many sites &amp; employees, proximity lines in meters (Haversine · bounding box · spatial index) – rare in the market, instantly clear.</p></div>
         <div class="feature-card"><div class="feature-icon">🤖</div><h3>Ops · Camera · AI</h3><p>Cameras/RTSP, automation rules, Copilot and emergency/roll-call – decisions without manual chase.</p></div>
       </div>
     </div>
@@ -382,74 +382,68 @@
       <div class="livemap-stage">
         <div class="livemap-copy">
           <span class="section-tag">Workforce Live Map</span>
-          <p class="livemap-kicker">Not Excel. Not phone calls. One map.</p>
-          <h2>See your workforce live – on the map, not in spreadsheets</h2>
+          <p class="livemap-kicker">Sites · employees · proximity in meters</p>
+          <h2>Many sites. Many employees. Lines show who is near whom.</h2>
           <p class="livemap-lead">
-            Most systems only count hours. WorkPass shows <strong>where</strong> your team is right now:
-            sites, plants, zones and status in real time – a live operational view few competitors offer this clearly.
+            On the Live Map you add <strong>as many locations as you need</strong> and see employees in real time.
+            Between employees, <strong>connection lines with distance</strong> appear –
+            e.g. “X is 10&nbsp;m from Y”. Customers instantly see proximity, teams and the live picture – without Excel or phone chase.
           </p>
           <ul class="livemap-points">
             <li>
-              <strong>Who is on site – now</strong>
-              <span>Pins with photo, company and check-in. Instantly visible for leadership and gate.</span>
+              <strong>Unlimited sites &amp; employees</strong>
+              <span>Terminals, construction sites, plants – pins for places and people on one map.</span>
             </li>
             <li>
-              <strong>Geofence &amp; zones</strong>
-              <span>Yards, site sections, warehouses – who is inside, who is missing, who is late.</span>
+              <strong>Proximity lines with meter distance</strong>
+              <span>Who is standing close? Lines connect employees and show the live distance.</span>
             </li>
             <li>
-              <strong>Multiple sites, one view</strong>
-              <span>From one map to all deployments – without WhatsApp chase and paper lists.</span>
+              <strong>Filters: All · Working · Attention</strong>
+              <span>List, legend, density and alerts – a command view instead of chaos.</span>
             </li>
             <li>
-              <strong>From map to action</strong>
-              <span>See status → understand the alert → chat, call or plan in one system.</span>
+              <strong>Fast &amp; scalable</strong>
+              <span>Powered by Haversine, bounding box and spatial index – precise distances even with many pins.</span>
             </li>
           </ul>
           <div class="livemap-actions">
             <a href="#contact" class="btn btn-primary">Show Live Map in a demo</a>
             <a href="#" class="btn btn-outline" data-login>Open platform</a>
           </div>
-          <p class="livemap-note">The hook: control without chaos – and care, because you know where your team is.</p>
+          <p class="livemap-note">The sales hook: not only “who is on site” – but “who is how close to whom”.</p>
         </div>
 
-        <div class="livemap-visual" aria-hidden="true">
-          <div class="livemap-shell">
+        <div class="livemap-visual">
+          <figure class="livemap-shot">
             <div class="livemap-chrome">
               <span></span><span></span><span></span>
               <em>Live · Workforce Map</em>
               <b class="livemap-pulse-dot">LIVE</b>
             </div>
-            <div class="livemap-canvas">
-              <div class="livemap-gridlines"></div>
-              <div class="livemap-zone livemap-zone-a"><i>Zone A · South site</i></div>
-              <div class="livemap-zone livemap-zone-b"><i>Zone B · Gate</i></div>
-              <div class="livemap-pin livemap-pin-1" style="--x:22%; --y:38%;">
-                <span class="livemap-pin-dot"></span>
-                <span class="livemap-pin-card"><strong>A. Miller</strong> on site · 07:52</span>
-              </div>
-              <div class="livemap-pin livemap-pin-2" style="--x:58%; --y:48%;">
-                <span class="livemap-pin-dot"></span>
-                <span class="livemap-pin-card"><strong>Team 3</strong> 4 people</span>
-              </div>
-              <div class="livemap-pin livemap-pin-3" style="--x:72%; --y:28%;">
-                <span class="livemap-pin-dot is-warn"></span>
-                <span class="livemap-pin-card is-warn"><strong>S. Khan</strong> late</span>
-              </div>
-              <div class="livemap-pin livemap-pin-4" style="--x:40%; --y:68%;">
-                <span class="livemap-pin-dot"></span>
-                <span class="livemap-pin-card"><strong>West gate</strong> check-in live</span>
-              </div>
-            </div>
-            <aside class="livemap-side">
-              <div class="livemap-side-title">Active now</div>
-              <div class="livemap-side-row"><span>On site</span><strong>47</strong></div>
-              <div class="livemap-side-row"><span>En route</span><strong>6</strong></div>
-              <div class="livemap-side-row is-warn"><span>Late</span><strong>2</strong></div>
-              <div class="livemap-side-row"><span>Sites</span><strong>3</strong></div>
-            </aside>
-          </div>
+            <img src="../assets/livemap-screenshot-1.jpg?v=1" alt="WorkPass Workforce Live Map with sites on the map" width="1024" height="488" loading="lazy" decoding="async">
+            <figcaption>Real platform view: sites on the map · filters · density · alerts</figcaption>
+          </figure>
+          <figure class="livemap-shot livemap-shot-secondary">
+            <img src="../assets/livemap-screenshot-2.jpg?v=1" alt="WorkPass Live Map – multiple terminals and live view" width="1024" height="492" loading="lazy" decoding="async">
+            <figcaption>Multiple locations at once – scalable for teams and sites</figcaption>
+          </figure>
         </div>
+      </div>
+
+      <div class="livemap-tech">
+        <article>
+          <strong>Haversine</strong>
+          <span>Exact distance between employees in meters</span>
+        </article>
+        <article>
+          <strong>Bounding box</strong>
+          <span>Fast pre-filter of the relevant map region</span>
+        </article>
+        <article>
+          <strong>Spatial index</strong>
+          <span>Proximity search stays smooth – even with many pins</span>
+        </article>
       </div>
     </div>
   </section>

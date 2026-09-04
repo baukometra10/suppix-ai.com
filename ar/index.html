@@ -245,7 +245,7 @@
         <div class="feature-card"><div class="feature-icon">📅</div><h3>خطة عمل ويوميات</h3><p>خطة شهرية وإرسال للموظفين (بريد + Push). في التطبيق: خطة يومية مع تسجيل دخول وخروج وفحص أمان.</p></div>
         <div class="feature-card"><div class="feature-icon">💬</div><h3>شات · اتصال · فيديو</h3><p>تواصل داخلي في تطبيق الموظف: شات مع ملفات وموقع، رسائل صوتية، مكالمات واجتماعات فيديو.</p></div>
         <div class="feature-card"><div class="feature-icon">🔔</div><h3>تنبيهات استباقية</h3><p>تنبيه تأخر، تحذيرات انتهاء وثائق، إرسال الخطة وبريد إلكتروني – النظام يبلّغ قبل أن تسأل.</p></div>
-        <div class="feature-card"><div class="feature-icon">🗺️</div><h3>خريطة القوى العاملة الحية</h3><p>من أين ومن في الموقع الآن: مواقع، مناطق Geofence وحالة على خريطة واحدة. نادر في السوق، واضح فوراً للإدارة والبواب.</p></div>
+        <div class="feature-card"><div class="feature-icon">🗺️</div><h3>خريطة القوى العاملة الحية</h3><p>مواقع وموظفون كثر، خطوط قرب بالمتر (Haversine · Bounding Box · Spatial Index) – نادر في السوق وواضح فوراً.</p></div>
         <div class="feature-card"><div class="feature-icon">🤖</div><h3>تشغيل · كاميرا · ذكاء</h3><p>كاميرات/RTSP، قواعد أتمتة، Copilot ونداء طوارئ/Roll-Call – قرارات بلا مطاردة يدوية.</p></div>
       </div>
     </div>
@@ -256,74 +256,68 @@
       <div class="livemap-stage">
         <div class="livemap-copy">
           <span class="section-tag">Workforce Live Map</span>
-          <p class="livemap-kicker">ليس Excel. ليس مكالمات. خريطة واحدة.</p>
-          <h2>شاهد قواك العاملة مباشرة – على الخريطة، لا في الجداول</h2>
+          <p class="livemap-kicker">مواقع · موظفون · قرب بالمتر</p>
+          <h2>مواقع كثيرة. موظفون كثيرون. خطوط تُظهر من بجوار من.</h2>
           <p class="livemap-lead">
-            معظم الأنظمة تحسب الساعات فقط. WorkPass يُظهر <strong>أين</strong> فريقك الآن:
-            مواقع، مصانع، مناطق وحالة في الوقت الفعلي – صورة تشغيل حية نادراً ما تُقدَّم بهذا الوضوح في السوق.
+            على الخريطة الحية تضيف <strong>أي عدد من المواقع</strong> وترى الموظفين مباشرة.
+            بين الموظفين تظهر <strong>خطوط ربط مع المسافة</strong> –
+            مثلاً: «س يبعد 10 أمتار عن ص». فيرى العميل القرب والفرق والوضع فوراً – بلا Excel وبلا مطاردة هاتفية.
           </p>
           <ul class="livemap-points">
             <li>
-              <strong>من في الموقع – الآن</strong>
-              <span>دبابيس بصورة واسم الشركة وتسجيل الدخول. مرئي فوراً للإدارة والبواب.</span>
+              <strong>مواقع وموظفون بلا حد عملي</strong>
+              <span>طرفيّات، مواقع بناء، مصانع – دبابيس للأماكن والأشخاص على خريطة واحدة.</span>
             </li>
             <li>
-              <strong>Geofence والمناطق</strong>
-              <span>الساحات، أقسام الموقع، المستودعات – من داخل، من غائب، من متأخر.</span>
+              <strong>خطوط القرب مع المسافة بالمتر</strong>
+              <span>من يقف قريباً؟ الخطوط تربط الموظفين وتُظهر المسافة مباشرة.</span>
             </li>
             <li>
-              <strong>مواقع متعددة، نظرة واحدة</strong>
-              <span>من خريطة واحدة إلى كل المهام – بلا مطاردة واتساب وقوائم ورقية.</span>
+              <strong>فلاتر: الكل · يعمل · انتباه</strong>
+              <span>قائمة، أسطورة، كثافة وتنبيهات – غرفة قيادة بدل الفوضى.</span>
             </li>
             <li>
-              <strong>من الخريطة إلى الإجراء</strong>
-              <span>ترى الحالة → تفهم التنبيه → شات أو اتصال أو خطة في نظام واحد.</span>
+              <strong>سريع وقابل للتوسّع</strong>
+              <span>حساب عبر Haversine وBounding Box وSpatial Index – مسافات دقيقة حتى مع كثرة الدبابيس.</span>
             </li>
           </ul>
           <div class="livemap-actions">
             <a href="#contact" class="btn btn-primary">اعرض الخريطة الحية في العرض</a>
             <a href="#" class="btn btn-outline" data-login>افتح المنصة</a>
           </div>
-          <p class="livemap-note">الفكرة التي تلفت العميل: رقابة بلا فوضى – واهتمام لأنك تعرف أين فريقك.</p>
+          <p class="livemap-note">حجة البيع: ليس فقط «من في الموقع» – بل «من يبعد كم عن من».</p>
         </div>
 
-        <div class="livemap-visual" aria-hidden="true">
-          <div class="livemap-shell">
+        <div class="livemap-visual">
+          <figure class="livemap-shot">
             <div class="livemap-chrome">
               <span></span><span></span><span></span>
               <em>مباشر · خريطة القوى العاملة</em>
               <b class="livemap-pulse-dot">LIVE</b>
             </div>
-            <div class="livemap-canvas">
-              <div class="livemap-gridlines"></div>
-              <div class="livemap-zone livemap-zone-a"><i>المنطقة أ · جنوب الموقع</i></div>
-              <div class="livemap-zone livemap-zone-b"><i>المنطقة ب · البوابة</i></div>
-              <div class="livemap-pin livemap-pin-1" style="--x:22%; --y:38%;">
-                <span class="livemap-pin-dot"></span>
-                <span class="livemap-pin-card"><strong>أ. مولر</strong> في الموقع · 07:52</span>
-              </div>
-              <div class="livemap-pin livemap-pin-2" style="--x:58%; --y:48%;">
-                <span class="livemap-pin-dot"></span>
-                <span class="livemap-pin-card"><strong>الفريق 3</strong> 4 أشخاص</span>
-              </div>
-              <div class="livemap-pin livemap-pin-3" style="--x:72%; --y:28%;">
-                <span class="livemap-pin-dot is-warn"></span>
-                <span class="livemap-pin-card is-warn"><strong>س. خان</strong> متأخر</span>
-              </div>
-              <div class="livemap-pin livemap-pin-4" style="--x:40%; --y:68%;">
-                <span class="livemap-pin-dot"></span>
-                <span class="livemap-pin-card"><strong>البوابة الغربية</strong> دخول مباشر</span>
-              </div>
-            </div>
-            <aside class="livemap-side">
-              <div class="livemap-side-title">نشط الآن</div>
-              <div class="livemap-side-row"><span>في الموقع</span><strong>47</strong></div>
-              <div class="livemap-side-row"><span>في الطريق</span><strong>6</strong></div>
-              <div class="livemap-side-row is-warn"><span>متأخر</span><strong>2</strong></div>
-              <div class="livemap-side-row"><span>المواقع</span><strong>3</strong></div>
-            </aside>
-          </div>
+            <img src="../assets/livemap-screenshot-1.jpg?v=1" alt="خريطة WorkPass الحية مع المواقع على الخريطة" width="1024" height="488" loading="lazy" decoding="async">
+            <figcaption>لقطة حقيقية من المنصة: مواقع على الخريطة · فلاتر · كثافة · تنبيهات</figcaption>
+          </figure>
+          <figure class="livemap-shot livemap-shot-secondary">
+            <img src="../assets/livemap-screenshot-2.jpg?v=1" alt="خريطة WorkPass الحية – عدة طرفيّات وعرض مباشر" width="1024" height="492" loading="lazy" decoding="async">
+            <figcaption>عدة مواقع في آن واحد – قابلة للتوسّع للفرق ومواقع العمل</figcaption>
+          </figure>
         </div>
+      </div>
+
+      <div class="livemap-tech">
+        <article>
+          <strong>Haversine</strong>
+          <span>مسافة دقيقة بين الموظفين بالمتر</span>
+        </article>
+        <article>
+          <strong>Bounding Box</strong>
+          <span>تصفية سريعة لمنطقة الخريطة ذات الصلة</span>
+        </article>
+        <article>
+          <strong>Spatial Index</strong>
+          <span>بحث القرب يبقى سلساً – حتى مع كثرة الدبابيس</span>
+        </article>
       </div>
     </div>
   </section>
