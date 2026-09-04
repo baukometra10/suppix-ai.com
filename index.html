@@ -71,6 +71,7 @@
 
       <nav class="nav-desktop" aria-label="Hauptnavigation">
         <a href="#funktionen">Funktionen</a>
+        <a href="#live-map">Live Map</a>
         <a href="#ablauf">Ablauf</a>
         <a href="#betreuung">Betreuung</a>
         <a href="#lohn">Lohn</a>
@@ -100,6 +101,7 @@
     <nav class="mobile-nav" id="mobileNav" aria-label="Mobile Navigation">
       <ul>
         <li><a href="#funktionen">Funktionen</a></li>
+        <li><a href="#live-map">Live Map</a></li>
         <li><a href="#wandel">Vorher / Nachher</a></li>
         <li><a href="#rollen">Rollen</a></li>
         <li><a href="#ablauf">Ablauf</a></li>
@@ -164,8 +166,8 @@
         <div class="stat-label">Zutritt ohne Papier</div>
       </div>
       <div>
-        <div class="stat-number">Live</div>
-        <div class="stat-label">Wer ist auf dem Gelände</div>
+        <div class="stat-number">Live Map</div>
+        <div class="stat-label">Wer ist wo – jetzt</div>
       </div>
       <div>
         <div class="stat-number">SaaS</div>
@@ -673,9 +675,92 @@
           <p>Verspätungs-Alarm, Ablaufwarnungen, Plan-Versand und E-Mail-Benachrichtigungen – das System meldet, bevor Sie nachfragen müssen.</p>
         </div>
         <div class="feature-card">
+          <div class="feature-icon">🗺️</div>
+          <h3>Workforce Live Map</h3>
+          <p>Wer ist wo – jetzt: Standorte, Geofence-Zonen und Status auf einer Karte. Selten am Markt, sofort greifbar für Leitung und Pförtner.</p>
+        </div>
+        <div class="feature-card">
           <div class="feature-icon">🤖</div>
           <h3>Ops · Kamera · KI</h3>
           <p>Kameras/RTSP, Automatisierungsregeln, Copilot und Notfall/Roll-Call – Entscheidungen ohne manuelle Nacharbeit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Workforce Live Map -->
+  <section class="livemap-section reveal" id="live-map">
+    <div class="container">
+      <div class="livemap-stage">
+        <div class="livemap-copy">
+          <span class="section-tag">Workforce Live Map</span>
+          <p class="livemap-kicker">Nicht Excel. Nicht Anrufe. Eine Karte.</p>
+          <h2>Sehen Sie Ihre Belegschaft live – auf der Karte, nicht in Tabellen</h2>
+          <p class="livemap-lead">
+            Die meisten Systeme zählen Stunden. WorkPass zeigt <strong>wo</strong> Ihr Team gerade ist:
+            Baustellen, Werke, Zonen und Status in Echtzeit – eine Live-Lage, die am Markt kaum jemand so klar anbietet.
+          </p>
+          <ul class="livemap-points">
+            <li>
+              <strong>Wer ist vor Ort – jetzt</strong>
+              <span>Pins mit Foto, Firma und Check-in. Sofort sichtbar für Leitung und Pförtner.</span>
+            </li>
+            <li>
+              <strong>Geofence &amp; Zonen</strong>
+              <span>Gelände, Baustellenabschnitte, Lager – wer drinnen ist, wer fehlt, wer zu spät kommt.</span>
+            </li>
+            <li>
+              <strong>Mehrere Standorte, ein Blick</strong>
+              <span>Von einer Karte zu allen Einsätzen – ohne WhatsApp-Jagd und Papierlisten.</span>
+            </li>
+            <li>
+              <strong>Von der Karte zum Handeln</strong>
+              <span>Status sehen → Alarm verstehen → Chat, Anruf oder Plan in einem System.</span>
+            </li>
+          </ul>
+          <div class="livemap-actions">
+            <a href="#kontakt" class="btn btn-primary">Live Map in der Demo zeigen</a>
+            <a href="#" class="btn btn-outline" data-login>Plattform öffnen</a>
+          </div>
+          <p class="livemap-note">Das Interesse-Argument: Kontrolle ohne Chaos – und Fürsorge, weil Sie wissen, wo Ihr Team ist.</p>
+        </div>
+
+        <div class="livemap-visual" aria-hidden="true">
+          <div class="livemap-shell">
+            <div class="livemap-chrome">
+              <span></span><span></span><span></span>
+              <em>Live · Workforce Map</em>
+              <b class="livemap-pulse-dot">LIVE</b>
+            </div>
+            <div class="livemap-canvas">
+              <div class="livemap-gridlines"></div>
+              <div class="livemap-zone livemap-zone-a"><i>Zone A · Bau Süd</i></div>
+              <div class="livemap-zone livemap-zone-b"><i>Zone B · Tor</i></div>
+              <div class="livemap-pin livemap-pin-1" style="--x:22%; --y:38%;">
+                <span class="livemap-pin-dot"></span>
+                <span class="livemap-pin-card"><strong>A. Müller</strong> vor Ort · 07:52</span>
+              </div>
+              <div class="livemap-pin livemap-pin-2" style="--x:58%; --y:48%;">
+                <span class="livemap-pin-dot"></span>
+                <span class="livemap-pin-card"><strong>Team 3</strong> 4 Personen</span>
+              </div>
+              <div class="livemap-pin livemap-pin-3" style="--x:72%; --y:28%;">
+                <span class="livemap-pin-dot is-warn"></span>
+                <span class="livemap-pin-card is-warn"><strong>S. Khan</strong> verspätet</span>
+              </div>
+              <div class="livemap-pin livemap-pin-4" style="--x:40%; --y:68%;">
+                <span class="livemap-pin-dot"></span>
+                <span class="livemap-pin-card"><strong>Tor West</strong> Check-in live</span>
+              </div>
+            </div>
+            <aside class="livemap-side">
+              <div class="livemap-side-title">Jetzt aktiv</div>
+              <div class="livemap-side-row"><span>Vor Ort</span><strong>47</strong></div>
+              <div class="livemap-side-row"><span>Unterwegs</span><strong>6</strong></div>
+              <div class="livemap-side-row is-warn"><span>Verspätet</span><strong>2</strong></div>
+              <div class="livemap-side-row"><span>Standorte</span><strong>3</strong></div>
+            </aside>
+          </div>
         </div>
       </div>
     </div>
@@ -1371,6 +1456,7 @@
           <h4>Produkt</h4>
           <ul>
             <li><a href="#funktionen">Funktionen</a></li>
+            <li><a href="#live-map">Live Map</a></li>
             <li><a href="#wandel">Vorher / Nachher</a></li>
             <li><a href="#rollen">Rollen</a></li>
             <li><a href="#ablauf">Ablauf</a></li>

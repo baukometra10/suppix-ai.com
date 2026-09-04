@@ -46,6 +46,7 @@
       </a>
       <nav class="nav-desktop" aria-label="Main navigation">
         <a href="#features">Features</a>
+        <a href="#live-map">Live Map</a>
         <a href="#start">Start</a>
         <a href="#care">Care</a>
         <a href="#lohn">Payroll</a>
@@ -69,6 +70,7 @@
     <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
       <ul>
         <li><a href="#features">Features</a></li>
+        <li><a href="#live-map">Live Map</a></li>
         <li><a href="#shift">Before / After</a></li>
         <li><a href="#roles">Roles</a></li>
         <li><a href="#start">Start</a></li>
@@ -123,7 +125,7 @@
     <div class="container stats-grid">
       <div><div class="stat-number">1</div><div class="stat-label">Platform instead of 5 tools</div></div>
       <div><div class="stat-number">QR·NFC·GPS</div><div class="stat-label">Access without paper</div></div>
-      <div><div class="stat-number">Live</div><div class="stat-label">Who is on site now</div></div>
+      <div><div class="stat-number">Live Map</div><div class="stat-label">Who is where – now</div></div>
       <div><div class="stat-number">SaaS</div><div class="stat-label">Multi-company &amp; white-label</div></div>
     </div>
   </div>
@@ -369,7 +371,85 @@
         <div class="feature-card"><div class="feature-icon">📅</div><h3>Deployment &amp; daily plan</h3><p>Create a monthly plan and send it to workers (email + push). In the app: daily plan with check-in, checkout and safety check.</p></div>
         <div class="feature-card"><div class="feature-icon">💬</div><h3>Chat · Call · Video</h3><p>Internal communication in the employee app: chat with files and location, voice notes, calls and video conferences.</p></div>
         <div class="feature-card"><div class="feature-icon">🔔</div><h3>Proactive alerts</h3><p>Late-start alerts, expiry warnings, plan delivery and email notifications – the system reports before you have to ask.</p></div>
+        <div class="feature-card"><div class="feature-icon">🗺️</div><h3>Workforce Live Map</h3><p>Who is where – now: locations, geofence zones and status on one map. Rare in the market, instantly clear for leadership and gate.</p></div>
         <div class="feature-card"><div class="feature-icon">🤖</div><h3>Ops · Camera · AI</h3><p>Cameras/RTSP, automation rules, Copilot and emergency/roll-call – decisions without manual chase.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="livemap-section reveal" id="live-map">
+    <div class="container">
+      <div class="livemap-stage">
+        <div class="livemap-copy">
+          <span class="section-tag">Workforce Live Map</span>
+          <p class="livemap-kicker">Not Excel. Not phone calls. One map.</p>
+          <h2>See your workforce live – on the map, not in spreadsheets</h2>
+          <p class="livemap-lead">
+            Most systems only count hours. WorkPass shows <strong>where</strong> your team is right now:
+            sites, plants, zones and status in real time – a live operational view few competitors offer this clearly.
+          </p>
+          <ul class="livemap-points">
+            <li>
+              <strong>Who is on site – now</strong>
+              <span>Pins with photo, company and check-in. Instantly visible for leadership and gate.</span>
+            </li>
+            <li>
+              <strong>Geofence &amp; zones</strong>
+              <span>Yards, site sections, warehouses – who is inside, who is missing, who is late.</span>
+            </li>
+            <li>
+              <strong>Multiple sites, one view</strong>
+              <span>From one map to all deployments – without WhatsApp chase and paper lists.</span>
+            </li>
+            <li>
+              <strong>From map to action</strong>
+              <span>See status → understand the alert → chat, call or plan in one system.</span>
+            </li>
+          </ul>
+          <div class="livemap-actions">
+            <a href="#contact" class="btn btn-primary">Show Live Map in a demo</a>
+            <a href="#" class="btn btn-outline" data-login>Open platform</a>
+          </div>
+          <p class="livemap-note">The hook: control without chaos – and care, because you know where your team is.</p>
+        </div>
+
+        <div class="livemap-visual" aria-hidden="true">
+          <div class="livemap-shell">
+            <div class="livemap-chrome">
+              <span></span><span></span><span></span>
+              <em>Live · Workforce Map</em>
+              <b class="livemap-pulse-dot">LIVE</b>
+            </div>
+            <div class="livemap-canvas">
+              <div class="livemap-gridlines"></div>
+              <div class="livemap-zone livemap-zone-a"><i>Zone A · South site</i></div>
+              <div class="livemap-zone livemap-zone-b"><i>Zone B · Gate</i></div>
+              <div class="livemap-pin livemap-pin-1" style="--x:22%; --y:38%;">
+                <span class="livemap-pin-dot"></span>
+                <span class="livemap-pin-card"><strong>A. Miller</strong> on site · 07:52</span>
+              </div>
+              <div class="livemap-pin livemap-pin-2" style="--x:58%; --y:48%;">
+                <span class="livemap-pin-dot"></span>
+                <span class="livemap-pin-card"><strong>Team 3</strong> 4 people</span>
+              </div>
+              <div class="livemap-pin livemap-pin-3" style="--x:72%; --y:28%;">
+                <span class="livemap-pin-dot is-warn"></span>
+                <span class="livemap-pin-card is-warn"><strong>S. Khan</strong> late</span>
+              </div>
+              <div class="livemap-pin livemap-pin-4" style="--x:40%; --y:68%;">
+                <span class="livemap-pin-dot"></span>
+                <span class="livemap-pin-card"><strong>West gate</strong> check-in live</span>
+              </div>
+            </div>
+            <aside class="livemap-side">
+              <div class="livemap-side-title">Active now</div>
+              <div class="livemap-side-row"><span>On site</span><strong>47</strong></div>
+              <div class="livemap-side-row"><span>En route</span><strong>6</strong></div>
+              <div class="livemap-side-row is-warn"><span>Late</span><strong>2</strong></div>
+              <div class="livemap-side-row"><span>Sites</span><strong>3</strong></div>
+            </aside>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -795,7 +875,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand"><a href="index.html" class="logo"><img src="../assets/logo.png" alt="SUPPIX AI – Suppix AI UG" class="logo-img"></a><p>Enterprise Identity, access control and workforce – flexible for construction, industry and every sector.</p></div>
-        <div class="footer-col"><h4>Product</h4><ul><li><a href="#features">Features</a></li><li><a href="#shift">Before / After</a></li><li><a href="#roles">Roles</a></li><li><a href="#start">Start</a></li><li><a href="#care">Care</a></li><li><a href="#lohn">WorkPass Lohn</a></li><li><a href="#branding">Branding</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#faq">FAQ</a></li><li><a href="#" data-login>Open portal</a></li></ul></div>
+        <div class="footer-col"><h4>Product</h4><ul><li><a href="#features">Features</a></li><li><a href="#live-map">Live Map</a></li><li><a href="#shift">Before / After</a></li><li><a href="#roles">Roles</a></li><li><a href="#start">Start</a></li><li><a href="#care">Care</a></li><li><a href="#lohn">WorkPass Lohn</a></li><li><a href="#branding">Branding</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#faq">FAQ</a></li><li><a href="#" data-login>Open portal</a></li></ul></div>
         <div class="footer-col"><h4>Company</h4><ul><li><a href="../ueber-uns.html">About</a></li><li><a href="../bau.html">Construction</a></li><li><a href="../industrie.html">Industry</a></li><li><a href="flyer.html">Flyer (PDF)</a></li><li><a href="../index.html">Deutsch</a></li><li><a href="../ar/index.html">العربية</a></li></ul></div>
         <div class="footer-col"><h4>Legal</h4><ul><li><a href="../impressum.html">Imprint</a></li><li><a href="../datenschutz.html">Privacy</a></li><li><a href="../agb.html">Terms</a></li></ul></div>
       </div>
