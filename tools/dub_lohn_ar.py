@@ -1,4 +1,4 @@
-"""Arabic Lohn dub v5: two clearly distinct male voices (deep platform + neutral payroll)."""
+"""Arabic Lohn dub v6: male platform + female accounting (Ghizlane-like), clear MSA."""
 from __future__ import annotations
 
 import asyncio
@@ -17,42 +17,43 @@ FF = imageio_ffmpeg.get_ffmpeg_exe()
 DURATION = 161.5
 SR = 24000
 
-# A = المنصة يطلب (نبرة عميقة ≈ Mazen)
-# B = المحاسبة تنفّذ (نبرة محايدة ≈ Mo)
+# A = المنصة (مذكّر يطلب) | B = المحاسبة/الضرائب (مؤنث تنفّذ)
+# جمل قصيرة + فصحى واضحة لمخارج أفضل
 SEGMENTS = [
     (0.0, 5.5, "A", "النظام متصل. أنا المنصة."),
-    (5.5, 12.0, "B", "وأنا نظام المحاسبة. وورك باس لون جاهز."),
-    (12.0, 17.0, "A", "حسنًا. اسمع طلبي."),
-    (17.0, 24.0, "A", "أرسل لك ساعات العمل والعقود والمناوبات."),
-    (24.0, 30.0, "B", "تم. استلمت البيانات."),
-    (30.0, 37.0, "A", "الآن انتظر يوم نهاية الشهر."),
-    (37.0, 45.0, "B", "مفهوم. أنتظر أمر التشغيل."),
-    (45.0, 53.0, "A", "اليوم الثامن والعشرون. افتح الجسر."),
-    (53.0, 61.0, "B", "تم. الجسر مفتوح. آمن ومشفّر."),
-    (61.0, 70.0, "A", "سلّم البيانات الآن إلى المحاسبة."),
-    (70.0, 78.0, "B", "تم التسليم. أبدأ الحساب."),
-    (78.0, 90.0, "B", "أحسب الرواتب والتقارير وكشف الحساب وتصدير داتيف."),
-    (90.0, 100.0, "A", "بعد الحساب، أرجع النتائج إلى المنصة."),
-    (100.0, 110.0, "B", "تم. النتائج عادت بأمان."),
-    (110.0, 122.0, "B", "النتيجة جاهزة. متوافقة مع القانون. وآمنة."),
-    (122.0, 135.0, "A", "أحسنت. الطلب نُفّذ."),
-    (135.0, 150.0, "B", "نظامان. دورة واحدة. الاتصال قائم."),
+    (5.5, 12.5, "B", "وأنا المحاسبة. وورك باس لون جاهزة."),
+    (12.5, 17.5, "A", "حسنًا. اسمعي طلبي."),
+    (17.5, 25.0, "A", "أرسل لك ساعات العمل والعقود والمناوبات."),
+    (25.0, 31.0, "B", "تم. استلمتُ البيانات."),
+    (31.0, 38.0, "A", "الآن انتظري يوم نهاية الشهر."),
+    (38.0, 46.0, "B", "مفهوم. أنتظر أمر التشغيل."),
+    (46.0, 54.0, "A", "اليوم الثامن والعشرون. افتحي الجسر."),
+    (54.0, 62.0, "B", "تم. الجسر مفتوح. آمن ومشفّر."),
+    (62.0, 71.0, "A", "سلّمي البيانات الآن إلى الحساب."),
+    (71.0, 79.0, "B", "تم التسليم. أبدأ الحساب."),
+    (79.0, 92.0, "B", "أحسب الرواتب. والتقارير. وكشف الحساب. وتصدير داتيف."),
+    (92.0, 102.0, "A", "بعد الحساب، أرجعي النتائج إلى المنصة."),
+    (102.0, 112.0, "B", "تم. النتائج عادت بأمان."),
+    (112.0, 124.0, "B", "النتيجة جاهزة. متوافقة مع القانون. وآمنة."),
+    (124.0, 136.0, "A", "أحسنتِ. الطلب نُفّذ."),
+    (136.0, 150.0, "B", "نظامان. دورة واحدة. الاتصال قائم."),
     (150.0, 158.0, "A", "انتهى. العمل مكتمل."),
 ]
 
-# صوتان مختلفان تمامًا + إعدادات نبرة منفصلة
+# مذكّر عميق للمنصة | أنثوي هادئ مميّز للمحاسبة (قريب من Ghizlane المغربي)
 VOICE_CFG = {
-    "A": {  # deep & professional (Mazen-like)
+    "A": {
         "voice": "ar-SA-HamedNeural",
-        "rate": "-18%",
-        "pitch": "-10Hz",
-        "eq": "bass=g=5:f=120,treble=g=-2",
+        "rate": "-16%",
+        "pitch": "-8Hz",
+        "eq": "bass=g=4:f=110,treble=g=-1",
     },
-    "B": {  # neutral & professional (Mo-like)
-        "voice": "ar-IQ-BasselNeural",
-        "rate": "-8%",
-        "pitch": "+4Hz",
-        "eq": "bass=g=-3:f=120,treble=g=3,highpass=f=90",
+    "B": {
+        # Mouna = مغربية، هادئة وواضحة — أقرب نبرة لـ Ghizlane
+        "voice": "ar-MA-MounaNeural",
+        "rate": "-14%",
+        "pitch": "-1Hz",
+        "eq": "highpass=f=80,treble=g=2,bass=g=-1",
     },
 }
 
@@ -78,7 +79,6 @@ async def synth(text: str, speaker: str, out_mp3: Path, out_wav: Path) -> None:
     await edge_tts.Communicate(
         text, cfg["voice"], rate=cfg["rate"], pitch=cfg["pitch"]
     ).save(str(out_mp3))
-    # Convert + EQ so the two speakers stay clearly separable
     run([
         FF, "-y", "-i", str(out_mp3),
         "-ac", "1", "-ar", str(SR),
@@ -90,17 +90,17 @@ async def synth(text: str, speaker: str, out_mp3: Path, out_wav: Path) -> None:
 async def main() -> None:
     if not MASTER.exists():
         raise SystemExit(f"missing master: {MASTER}")
-    lang_dir = DUB / "ar-v5"
+    lang_dir = DUB / "ar-v6"
     lang_dir.mkdir(parents=True, exist_ok=True)
     track = np.zeros(int(DURATION * SR) + SR, dtype=np.float32)
 
-    print("A voice:", VOICE_CFG["A"]["voice"], VOICE_CFG["A"]["pitch"])
-    print("B voice:", VOICE_CFG["B"]["voice"], VOICE_CFG["B"]["pitch"])
+    print("A platform:", VOICE_CFG["A"]["voice"])
+    print("B accounting:", VOICE_CFG["B"]["voice"], "(Ghizlane-like)")
 
     for i, (start, end, speaker, text) in enumerate(SEGMENTS):
         raw = lang_dir / f"seg_{i:02d}_{speaker}.mp3"
         wav = lang_dir / f"seg_{i:02d}_{speaker}.wav"
-        print(f"[{i+1}/{len(SEGMENTS)}] speaker={speaker} voice={VOICE_CFG[speaker]['voice']}")
+        print(f"[{i+1}/{len(SEGMENTS)}] {speaker}")
         await synth(text, speaker, raw, wav)
         with wave.open(str(wav), "rb") as wf:
             audio = np.frombuffer(wf.readframes(wf.getnframes()), dtype=np.int16).astype(np.float32) / 32768.0
@@ -108,7 +108,7 @@ async def main() -> None:
         slot = max(0.5, end - start - 0.25)
         max_samples = int(slot * SR)
         if len(audio) > max_samples:
-            factor = min(max(len(audio) / max_samples, 1.01), 1.22)
+            factor = min(max(len(audio) / max_samples, 1.01), 1.2)
             sped = lang_dir / f"seg_{i:02d}_{speaker}_sped.wav"
             run([FF, "-y", "-i", str(wav), "-filter:a", f"atempo={factor:.3f}", str(sped)])
             with wave.open(str(sped), "rb") as wf:
