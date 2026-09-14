@@ -1,4 +1,4 @@
-"""Arabic Lohn dub v4: male-only, clear MSA, request/execute dialogue."""
+"""Arabic Lohn dub v5: two clearly distinct male voices (deep platform + neutral payroll)."""
 from __future__ import annotations
 
 import asyncio
@@ -17,8 +17,8 @@ FF = imageio_ffmpeg.get_ffmpeg_exe()
 DURATION = 161.5
 SR = 24000
 
-# A = المنصة (يطلب) | B = المحاسبة (ينفّذ)
-# فصحى مبسّطة، مخاطبة مذكّر فقط (أنت / نفّذ / أرسل)
+# A = المنصة يطلب (نبرة عميقة ≈ Mazen)
+# B = المحاسبة تنفّذ (نبرة محايدة ≈ Mo)
 SEGMENTS = [
     (0.0, 5.5, "A", "النظام متصل. أنا المنصة."),
     (5.5, 12.0, "B", "وأنا نظام المحاسبة. وورك باس لون جاهز."),
@@ -40,10 +40,20 @@ SEGMENTS = [
     (150.0, 158.0, "A", "انتهى. العمل مكتمل."),
 ]
 
-# صوتان ذكوريان فقط — عميق للمنصة، واضح للمحاسبة
-VOICES = {
-    "A": "ar-SA-HamedNeural",
-    "B": "ar-EG-ShakirNeural",
+# صوتان مختلفان تمامًا + إعدادات نبرة منفصلة
+VOICE_CFG = {
+    "A": {  # deep & professional (Mazen-like)
+        "voice": "ar-SA-HamedNeural",
+        "rate": "-18%",
+        "pitch": "-10Hz",
+        "eq": "bass=g=5:f=120,treble=g=-2",
+    },
+    "B": {  # neutral & professional (Mo-like)
+        "voice": "ar-IQ-BasselNeural",
+        "rate": "-8%",
+        "pitch": "+4Hz",
+        "eq": "bass=g=-3:f=120,treble=g=3,highpass=f=90",
+    },
 }
 
 
@@ -63,24 +73,35 @@ def write_wav(path: Path, samples: np.ndarray) -> None:
         wf.writeframes(pcm.tobytes())
 
 
-async def synth(text: str, voice: str, out: Path) -> None:
-    # أبطأ قليلًا + فواصل أوضح لمخارج أفضل
-    await edge_tts.Communicate(text, voice, rate="-20%", pitch="-2Hz").save(str(out))
+async def synth(text: str, speaker: str, out_mp3: Path, out_wav: Path) -> None:
+    cfg = VOICE_CFG[speaker]
+    await edge_tts.Communicate(
+        text, cfg["voice"], rate=cfg["rate"], pitch=cfg["pitch"]
+    ).save(str(out_mp3))
+    # Convert + EQ so the two speakers stay clearly separable
+    run([
+        FF, "-y", "-i", str(out_mp3),
+        "-ac", "1", "-ar", str(SR),
+        "-af", cfg["eq"],
+        str(out_wav),
+    ])
 
 
 async def main() -> None:
     if not MASTER.exists():
         raise SystemExit(f"missing master: {MASTER}")
-    lang_dir = DUB / "ar-v4"
+    lang_dir = DUB / "ar-v5"
     lang_dir.mkdir(parents=True, exist_ok=True)
     track = np.zeros(int(DURATION * SR) + SR, dtype=np.float32)
 
+    print("A voice:", VOICE_CFG["A"]["voice"], VOICE_CFG["A"]["pitch"])
+    print("B voice:", VOICE_CFG["B"]["voice"], VOICE_CFG["B"]["pitch"])
+
     for i, (start, end, speaker, text) in enumerate(SEGMENTS):
-        raw = lang_dir / f"seg_{i:02d}.mp3"
-        wav = lang_dir / f"seg_{i:02d}.wav"
-        print(f"[{i+1}/{len(SEGMENTS)}] {speaker} {start}-{end}")
-        await synth(text, VOICES[speaker], raw)
-        run([FF, "-y", "-i", str(raw), "-ac", "1", "-ar", str(SR), str(wav)])
+        raw = lang_dir / f"seg_{i:02d}_{speaker}.mp3"
+        wav = lang_dir / f"seg_{i:02d}_{speaker}.wav"
+        print(f"[{i+1}/{len(SEGMENTS)}] speaker={speaker} voice={VOICE_CFG[speaker]['voice']}")
+        await synth(text, speaker, raw, wav)
         with wave.open(str(wav), "rb") as wf:
             audio = np.frombuffer(wf.readframes(wf.getnframes()), dtype=np.int16).astype(np.float32) / 32768.0
 
@@ -88,7 +109,7 @@ async def main() -> None:
         max_samples = int(slot * SR)
         if len(audio) > max_samples:
             factor = min(max(len(audio) / max_samples, 1.01), 1.22)
-            sped = lang_dir / f"seg_{i:02d}_sped.wav"
+            sped = lang_dir / f"seg_{i:02d}_{speaker}_sped.wav"
             run([FF, "-y", "-i", str(wav), "-filter:a", f"atempo={factor:.3f}", str(sped)])
             with wave.open(str(sped), "rb") as wf:
                 audio = np.frombuffer(wf.readframes(wf.getnframes()), dtype=np.int16).astype(np.float32) / 32768.0
