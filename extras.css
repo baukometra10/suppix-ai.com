@@ -2360,15 +2360,16 @@ body.nav-open {
 .lohn-video-frame {
   position: relative;
   aspect-ratio: 16 / 9;
-  background: #000;
+  background: #0a101c;
 }
 
 .lohn-video-frame video {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  background: #000;
+  object-fit: contain;
+  object-position: center center;
+  background: #0a101c;
 }
 
 .lohn-media figcaption {
