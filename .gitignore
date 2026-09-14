@@ -7,6 +7,8 @@ assets/workpass-demo.mp4
 assets/voiceover-*.wav
 assets/voiceover-raw.mp3
 assets/demo-voice-music*.m4a
+assets/lohn-dub/
+tools/.ffmpeg-shim/
 
 # OS / editor
 .DS_Store
