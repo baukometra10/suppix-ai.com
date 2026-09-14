@@ -119,47 +119,18 @@ def ensure_master() -> Path:
 
 
 def build_clean_video() -> Path:
-    """Remove early top letterbox by zoom-filling first part, keep rest, concat."""
+    """Return full-frame master (no zoom). Early letterbox stays so all content remains visible."""
     master = ensure_master()
-    part1 = DUB / "video-part1.mp4"
-    part2 = DUB / "video-part2.mp4"
     cleaned = DUB / "video-clean.mp4"
-    content_h = 720 - TOP_CROP
-    content_h -= content_h % 2
-    # Zoom early letterboxed scenes to fill frame (no black bar)
-    vf1 = (
-        f"crop=1280:{content_h}:0:{TOP_CROP},"
-        f"scale=1280:720:force_original_aspect_ratio=increase,"
-        f"crop=1280:720,setsar=1"
-    )
+    # Copy/re-encode master 16:9 as-is — do NOT crop/zoom early scenes.
     run([
         FF, "-y", "-i", str(master),
-        "-t", str(SPLIT_AT),
-        "-vf", vf1,
         "-an",
         "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p",
-        str(part1),
-    ])
-    # Later scenes: mild top trim
-    vf2 = "crop=1280:680:0:40,scale=1280:720,setsar=1"
-    run([
-        FF, "-y", "-ss", str(SPLIT_AT), "-i", str(master),
-        "-vf", vf2,
-        "-an",
-        "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p",
-        str(part2),
-    ])
-    lst = DUB / "concat.txt"
-    lst.write_text(
-        f"file '{part1.resolve().as_posix()}'\nfile '{part2.resolve().as_posix()}'\n",
-        encoding="utf-8",
-    )
-    run([
-        FF, "-y", "-f", "concat", "-safe", "0", "-i", str(lst),
-        "-c", "copy",
+        "-movflags", "+faststart",
         str(cleaned),
     ])
-    print("clean video", cleaned)
+    print("clean video (full frame, no zoom)", cleaned)
     return cleaned
 
 
