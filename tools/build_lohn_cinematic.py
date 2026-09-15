@@ -122,34 +122,22 @@ def ensure_master() -> Path:
 
 
 def build_hq_video() -> Path:
-    """Early: crop black letterbox then fill 16:9. Late: keep full frame. HQ encode."""
+    """Full original frame — no letterbox crop, no stretch, no zoom."""
     master = ensure_master()
-    part1 = DUB / "v2-part1.mp4"
-    part2 = DUB / "v2-part2.mp4"
     out = DUB / "video-hq-v2.mp4"
-    ch = 720 - TOP
-    ch -= ch % 2
-
-    common = [
-        "-an", "-c:v", "libx264", "-preset", "slow", "-crf", "16",
-        "-profile:v", "high", "-pix_fmt", "yuv420p", "-movflags", "+faststart",
-    ]
-    # Remove black bar; fill frame so top UI text is visible (no empty red zone)
-    vf1 = f"crop=1280:{ch}:0:{TOP},scale=1280:720:flags=lanczos,setsar=1"
-    run([FF, "-y", "-i", str(master), "-t", str(SPLIT), "-vf", vf1, *common, str(part1)])
-    run([FF, "-y", "-ss", str(SPLIT), "-i", str(master), "-vf", "setsar=1", *common, str(part2)])
-    lst = DUB / "v2-concat.txt"
-    lst.write_text(
-        f"file '{part1.resolve().as_posix()}'\nfile '{part2.resolve().as_posix()}'\n",
-        encoding="utf-8",
-    )
     run([
-        FF, "-y", "-f", "concat", "-safe", "0", "-i", str(lst),
-        "-c:v", "libx264", "-preset", "slow", "-crf", "16",
-        "-pix_fmt", "yuv420p", "-movflags", "+faststart",
+        FF, "-y", "-i", str(master),
+        "-an",
+        "-vf", "setsar=1",
+        "-c:v", "libx264",
+        "-preset", "slow",
+        "-crf", "16",
+        "-profile:v", "high",
+        "-pix_fmt", "yuv420p",
+        "-movflags", "+faststart",
         str(out),
     ])
-    print("HQ video", round(out.stat().st_size / 1e6, 2), "MB")
+    print("HQ video (no zoom)", round(out.stat().st_size / 1e6, 2), "MB")
     return out
 
 

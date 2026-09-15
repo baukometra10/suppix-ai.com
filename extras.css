@@ -2371,6 +2371,8 @@ body.nav-open {
   object-fit: contain;
   object-position: center center;
   background: #000;
+  /* never cover/zoom — show full authored frame */
+  transform: none;
 }
 
 .lohn-media figcaption {
