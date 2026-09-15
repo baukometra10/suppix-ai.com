@@ -1,6 +1,6 @@
 """
 Lohn cinematic v2:
-- Remove early letterbox (crop black only) then fill 16:9 without side-crop zoom
+- Remove early letterbox via blur-fill (no stretch / no side-crop zoom)
 - Continuous AR/EN dialogue: correct WorkPass Lohn name, country-based tax,
   verification (geo/contracts/sites), goodbye until next month
 """
@@ -122,22 +122,45 @@ def ensure_master() -> Path:
 
 
 def build_hq_video() -> Path:
-    """Full original frame — no letterbox crop, no stretch, no zoom."""
+    """Crop authored letterbox; mild height fit + bright blur fill (no side crop)."""
     master = ensure_master()
     out = DUB / "video-hq-v2.mp4"
-    run([
-        FF, "-y", "-i", str(master),
-        "-an",
-        "-vf", "setsar=1",
-        "-c:v", "libx264",
-        "-preset", "slow",
-        "-crf", "16",
-        "-profile:v", "high",
-        "-pix_fmt", "yuv420p",
-        "-movflags", "+faststart",
-        str(out),
-    ])
-    print("HQ video (no zoom)", round(out.stat().st_size / 1e6, 2), "MB")
+    part1 = DUB / "hq-part1.mp4"
+    part2 = DUB / "hq-part2.mp4"
+
+    def encode(out_path: Path, top: int, duration: float | None, ss: float | None) -> None:
+        ch = 720 - top
+        ch -= ch % 2
+        fg_h = 640
+        fc = (
+            f"[0:v]crop=1280:{ch}:0:{top},split=2[fg][bg];"
+            f"[bg]scale=1280:720,gblur=sigma=28,"
+            f"eq=brightness=0.14:saturation=1.15:contrast=1.05[bg2];"
+            f"[fg]scale=1280:{fg_h}[fg2];"
+            f"[bg2][fg2]overlay=(W-w)/2:(H-h)/2,setsar=1"
+        )
+        cmd = [FF, "-y"]
+        if ss is not None:
+            cmd += ["-ss", str(ss)]
+        cmd += ["-i", str(master)]
+        if duration is not None:
+            cmd += ["-t", str(duration)]
+        cmd += [
+            "-filter_complex", fc, "-an",
+            "-c:v", "libx264", "-preset", "slow", "-crf", "16",
+            "-profile:v", "high", "-pix_fmt", "yuv420p", str(out_path),
+        ]
+        run(cmd)
+
+    encode(part1, top=TOP, duration=SPLIT, ss=None)
+    encode(part2, top=40, duration=None, ss=SPLIT)
+    lst = DUB / "hq-concat.txt"
+    lst.write_text(
+        f"file '{part1.resolve().as_posix()}'\nfile '{part2.resolve().as_posix()}'\n",
+        encoding="utf-8",
+    )
+    run([FF, "-y", "-f", "concat", "-safe", "0", "-i", str(lst), "-c", "copy", str(out)])
+    print("HQ video (blur-fill)", round(out.stat().st_size / 1e6, 2), "MB")
     return out
 
 
