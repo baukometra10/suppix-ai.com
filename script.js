@@ -122,7 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function initImpressumPending() {
     const pending = document.getElementById("impressumPending");
-    if (!pending) return;
     const incomplete =
       isPlaceholderValue(cfg.address?.street) ||
       isPlaceholderValue(cfg.address?.city) ||
@@ -130,7 +129,26 @@ document.addEventListener("DOMContentLoaded", () => {
       isPlaceholderValue(cfg.vatId) ||
       isPlaceholderValue(cfg.registerCourt) ||
       isPlaceholderValue(cfg.registerNumber);
-    pending.hidden = !incomplete;
+    if (pending) pending.hidden = !incomplete;
+
+    // Hide legal blocks that still contain bracket placeholders
+    document.querySelectorAll("[data-legal-section]").forEach((section) => {
+      const fields = section.querySelectorAll("[data-legal-field]");
+      if (!fields.length) return;
+      const allEmpty = [...fields].every((el) =>
+        isPlaceholderValue(el.textContent) || isPlaceholderValue(el.getAttribute("data-raw"))
+      );
+      // After applyConfig fills text; re-check content
+      const stillPlaceholder = [...fields].every((el) => isPlaceholderValue(el.textContent));
+      section.hidden = stillPlaceholder;
+    });
+
+    // Clear visible "[...]" leftovers in address lines when incomplete
+    if (incomplete) {
+      document.querySelectorAll("[data-address-street], [data-address-city], [data-ceo], [data-vat], [data-register-court], [data-register-number]").forEach((el) => {
+        if (isPlaceholderValue(el.textContent)) el.textContent = "";
+      });
+    }
   }
 
   function initHeroWhatsApp() {
@@ -564,15 +582,41 @@ document.addEventListener("DOMContentLoaded", () => {
     ensureHiddenInput(form, "_template", "table");
     ensureHiddenInput(form, "_next", thankYouAbsoluteUrl());
     ensureHiddenInput(form, "_autoresponse", buildCustomerAutoresponse(""));
+    // Keep FormSubmit captcha enabled so customer autoresponse works.
     ensureHiddenInput(
       form,
       "_subject",
       t(`${platformName()} Anfrage`, `${platformName()} request`, `طلب ${platformName()}`)
     );
 
+    // FormSubmit honeypot (official field name)
+    let gotcha = form.querySelector('input[name="_gotcha"]');
+    if (!gotcha) {
+      gotcha = document.createElement("input");
+      gotcha.type = "text";
+      gotcha.name = "_gotcha";
+      gotcha.tabIndex = -1;
+      gotcha.autocomplete = "off";
+      gotcha.setAttribute("aria-hidden", "true");
+      gotcha.style.cssText = "display:none !important";
+      form.appendChild(gotcha);
+    }
+    const legacyHoney = form.querySelector('input[name="_honey"]');
+    if (legacyHoney) legacyHoney.remove();
+
     const privacy = form.querySelector("#privacy");
     if (privacy && !privacy.name) privacy.name = "privacy";
     if (privacy && !privacy.value) privacy.value = "accepted";
+
+    const hint = document.getElementById("formSubmitHint");
+    if (hint) {
+      hint.hidden = false;
+      hint.textContent = t(
+        "Hinweis: Beim ersten Absenden bestätigt FormSubmit die Ziel-E-Mail (support@…). Danach landen Anfragen zuverlässig im Posteingang.",
+        "Note: The first submit asks FormSubmit to confirm the inbox (support@…). After that, leads arrive reliably.",
+        "ملاحظة: أول إرسال يطلب FormSubmit تأكيد البريد (support@…). بعدها تصل الطلبات بشكل موثوق."
+      );
+    }
 
     form.addEventListener("submit", () => {
       const btn = form.querySelector('button[type="submit"]');

@@ -22,10 +22,10 @@ const SITE_CONFIG = {
 
   /**
    * Sichtbarer Domain-Name auf Flyer/Marketing (ohne https://).
-   * Leer = auf dem Flyer keine Domain anzeigen (nur QR).
-   * Später z. B. "suppix-ai.com" setzen, sobald das Marketing-Domain live ist.
+   * Produkt-Domain der Plattform (Login). Marketing-Website bleibt liveUrl (GitHub Pages),
+   * bis eine eigene Domain (z. B. suppix-ai.com) verdrahtet ist.
    */
-  marketingDisplayHost: "",
+  marketingDisplayHost: "suppix-ai-workpass.com",
 
   /**
    * Demo-Video: z. B. "assets/suppix-demo.mp4"
@@ -47,7 +47,13 @@ const SITE_CONFIG = {
   domain: "suppix-ai-workpass.com",
   url: "https://suppix-ai-workpass.com",
 
-  /** Pflichtangaben Impressum – vor Go-live ersetzen. */
+  /**
+   * Pflichtangaben Impressum (§ 5 TMG) – echte Werte eintragen, z. B.:
+   * street: "Musterstraße 1", city: "12345 Berlin",
+   * ceo: "Max Mustermann", vatId: "DE…",
+   * registerCourt: "Amtsgericht …", registerNumber: "HRB …"
+   * Solange Klammern [] stehen, bleiben diese Blöcke auf der Impressum-Seite verborgen.
+   */
   address: {
     street: "[Straße und Hausnummer]",
     city: "[PLZ Ort]",

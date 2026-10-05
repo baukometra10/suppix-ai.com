@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Impressum – Suppix AI UG · SUPPIX">
+  <meta name="description" content="Impressum – Suppix AI UG · WorkPass">
   <link rel="icon" href="assets/logo.png" type="image/png">
   <title>Impressum | Suppix AI UG</title>
   <link rel="stylesheet" href="styles.css">
@@ -15,8 +15,8 @@
       <a href="index.html" class="logo">
         <img src="assets/logo.png" alt="Suppix AI UG" class="logo-img">
         <div class="logo-text">
-          <span class="logo-platform">SUPPIX</span>
-          <span class="logo-sub">Digitale Zeiterfassung</span>
+          <span class="logo-platform">SUPPIX AI</span>
+          <span class="logo-sub">WorkPass</span>
         </div>
       </a>
       <nav class="nav-desktop">
@@ -31,18 +31,20 @@
       <span class="section-tag">Rechtliches</span>
       <h1>Impressum</h1>
       <p class="legal-intro">Angaben gemäß § 5 TMG</p>
+
       <div class="legal-pending" id="impressumPending" hidden>
-        <strong>Hinweis vor Go-live:</strong>
-        Straße, Geschäftsführer, USt-IdNr. und Handelsregister werden ergänzt, sobald die finalen Firmendaten vorliegen. Kontakt (E-Mail/Telefon) ist bereits aktiv.
+        <strong>Pflichtangaben unvollständig:</strong>
+        Bitte Adresse, Geschäftsführer, USt-IdNr. und Handelsregister in
+        <code>site-config.js</code> eintragen. Kontakt (E-Mail/Telefon) ist bereits aktiv.
       </div>
 
       <section>
         <h2>Anbieter</h2>
         <p>
-          <strong>Suppix AI UG</strong><br>
-          SUPPIX – Digitale Baustellenkontrolle<br>
-          <span data-address-street>[Straße und Hausnummer]</span><br>
-          <span data-address-city>[PLZ Ort]</span><br>
+          <strong data-brand-company>Suppix AI UG</strong><br>
+          WorkPass – Identity · Zutritt · Team · Lohn<br>
+          <span data-address-street data-legal-field></span><br>
+          <span data-address-city data-legal-field></span><br>
           Deutschland
         </p>
       </section>
@@ -51,36 +53,48 @@
         <h2>Kontakt</h2>
         <p>
           E-Mail: <a href="mailto:support@suppix-ai.com" data-email>support@suppix-ai.com</a><br>
-          Telefon: <a href="tel:+4917631676589" data-phone-link>017631676589</a>
+          Telefon: <a href="tel:+4917631676589" data-phone-link>017631676589</a><br>
+          WhatsApp: <a href="https://wa.me/4917631676589" data-whatsapp>Chat öffnen</a><br>
+          Plattform: <a href="https://suppix-ai-workpass.com" target="_blank" rel="noopener noreferrer">suppix-ai-workpass.com</a><br>
+          Marketing-Website: <a href="https://baukometra10.github.io/suppix-ai.com/" target="_blank" rel="noopener noreferrer">baukometra10.github.io/suppix-ai.com</a>
         </p>
       </section>
 
-      <section>
+      <section id="impressumCeo" data-legal-section>
         <h2>Vertretungsberechtigt</h2>
-        <p><span data-ceo>[Name des Geschäftsführers / Inhabers]</span></p>
+        <p><span data-ceo data-legal-field></span></p>
       </section>
 
-      <section>
+      <section id="impressumVat" data-legal-section>
         <h2>Umsatzsteuer-ID</h2>
-        <p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:<br><span data-vat>[USt-IdNr., falls vorhanden]</span></p>
+        <p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:<br><span data-vat data-legal-field></span></p>
       </section>
 
-      <section>
+      <section id="impressumRegister" data-legal-section>
         <h2>Registereintrag</h2>
         <p>
-          Registergericht: <span data-register-court>[Amtsgericht]</span><br>
-          Registernummer: <span data-register-number>[HRB-Nummer]</span>
+          Registergericht: <span data-register-court data-legal-field></span><br>
+          Registernummer: <span data-register-number data-legal-field></span>
+        </p>
+      </section>
+
+      <section id="impressumContent" data-legal-section>
+        <h2>Verantwortlich für den Inhalt</h2>
+        <p>
+          <span data-ceo data-legal-field></span><br>
+          <span data-address-street data-legal-field></span><br>
+          <span data-address-city data-legal-field></span>
         </p>
       </section>
 
       <section>
-        <h2>Verantwortlich für den Inhalt</h2>
+        <h2>Streitschlichtung</h2>
         <p>
-          <span data-ceo>[Name des Geschäftsführers / Inhabers]</span><br>
-          <span data-address-street>[Straße und Hausnummer]</span><br>
-          <span data-address-city>[PLZ Ort]</span>
+          Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:
+          <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr</a>.
+          Wir sind nicht verpflichtet und nicht bereit, an Streitbeilegungsverfahren vor einer
+          Verbraucherschlichtungsstelle teilzunehmen.
         </p>
-        <p class="legal-note">Adresse und weitere Pflichtangaben werden in Kürze ergänzt.</p>
       </section>
 
       <section>

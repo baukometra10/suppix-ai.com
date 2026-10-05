@@ -3016,9 +3016,16 @@ html[dir="rtl"] .livemap-zone-b {
   width: 100%;
   height: auto;
   vertical-align: middle;
-  aspect-ratio: 1024 / 486;
+  aspect-ratio: 1024 / 401;
   object-fit: cover;
-  object-position: center top;
+  object-position: center center;
+}
+
+.form-hint {
+  margin: 0.75rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--gray-500);
 }
 
 .livemap-shot figcaption {
