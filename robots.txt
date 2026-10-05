@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://baukometra10.github.io/suppix-ai.com/sitemap.xml
+Sitemap: https://suppix-ai.com/sitemap.xml

@@ -493,7 +493,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (typeof window !== "undefined" && window.location?.origin && window.location.origin !== "null") {
       return window.location.origin;
     }
-    return "https://baukometra10.github.io/suppix-ai.com";
+    return "https://suppix-ai.com";
   }
 
   function logoAbsoluteUrl() {

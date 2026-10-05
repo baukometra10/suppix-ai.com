@@ -17,15 +17,14 @@ const SITE_CONFIG = {
   reviewsApiUrl: "https://suppix-workpass-ai.up.railway.app/api/reviews",
   reviewsLimit: 6,
 
-  /** Technisch erreichbare Website-URL (QR, Formulare, Danke-Seiten). */
-  liveUrl: "https://baukometra10.github.io/suppix-ai.com",
+  /** Öffentliche Marketing-Website (eigene Domain). */
+  liveUrl: "https://suppix-ai.com",
 
   /**
    * Sichtbarer Domain-Name auf Flyer/Marketing (ohne https://).
-   * Produkt-Domain der Plattform (Login). Marketing-Website bleibt liveUrl (GitHub Pages),
-   * bis eine eigene Domain (z. B. suppix-ai.com) verdrahtet ist.
+   * Marketing: suppix-ai.com · Plattform-Login bleibt appLoginUrl.
    */
-  marketingDisplayHost: "suppix-ai-workpass.com",
+  marketingDisplayHost: "suppix-ai.com",
 
   /**
    * Demo-Video: z. B. "assets/suppix-demo.mp4"
@@ -44,6 +43,7 @@ const SITE_CONFIG = {
     heroCards: true,
   },
 
+  /** Plattform-Login-Domain (App), nicht die Marketing-Website. */
   domain: "suppix-ai-workpass.com",
   url: "https://suppix-ai-workpass.com",
 
