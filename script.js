@@ -612,9 +612,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (hint) {
       hint.hidden = false;
       hint.textContent = t(
-        "Hinweis: Beim ersten Absenden bestätigt FormSubmit die Ziel-E-Mail (support@…). Danach landen Anfragen zuverlässig im Posteingang.",
-        "Note: The first submit asks FormSubmit to confirm the inbox (support@…). After that, leads arrive reliably.",
-        "ملاحظة: أول إرسال يطلب FormSubmit تأكيد البريد (support@…). بعدها تصل الطلبات بشكل موثوق."
+        "Hinweis: Beim ersten Absenden bestätigt FormSubmit die Ziel-E-Mail (info@…). Danach landen Anfragen zuverlässig im Posteingang.",
+        "Note: The first submit asks FormSubmit to confirm the inbox (info@…). After that, leads arrive reliably.",
+        "ملاحظة: أول إرسال يطلب FormSubmit تأكيد البريد (info@…). بعدها تصل الطلبات بشكل موثوق."
       );
     }
 
