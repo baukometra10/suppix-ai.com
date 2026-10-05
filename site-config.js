@@ -4,7 +4,7 @@ const SITE_CONFIG = {
   platform: "WorkPass",
   product: "WorkPass",
   tagline: "Identität · Zutritt · Team · Sicherheit · White-Label",
-  email: "support@suppix-ai.com",
+  email: "info@suppix-ai.com",
   phone: "017631676589",
   phoneRaw: "4917631676589",
   whatsapp: "4917631676589",
@@ -64,7 +64,7 @@ const SITE_CONFIG = {
   registerCourt: "[Amtsgericht]",
   registerNumber: "[HRB-Nummer]",
 
-  formEndpoint: "https://formsubmit.co/ajax/support@suppix-ai.com",
+  formEndpoint: "https://formsubmit.co/ajax/info@suppix-ai.com",
   /** Klassisches FormSubmit (nicht AJAX) – nötig für Auto-Antwort an den Kunden. */
-  formAction: "https://formsubmit.co/support@suppix-ai.com",
+  formAction: "https://formsubmit.co/info@suppix-ai.com",
 };
