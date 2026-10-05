@@ -502,7 +502,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (typeof window !== "undefined" && window.location?.origin && window.location.origin !== "null") {
       return window.location.origin;
     }
-    return "https://suppix-ai.com";
+    return "https://suppix-ai.de";
   }
 
   function logoAbsoluteUrl() {

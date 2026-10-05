@@ -18,13 +18,13 @@ const SITE_CONFIG = {
   reviewsLimit: 6,
 
   /** Öffentliche Marketing-Website (eigene Domain). */
-  liveUrl: "https://suppix-ai.com",
+  liveUrl: "https://suppix-ai.de",
 
   /**
    * Sichtbarer Domain-Name auf Flyer/Marketing (ohne https://).
-   * Marketing: suppix-ai.com · Plattform-Login bleibt appLoginUrl.
+   * Marketing: suppix-ai.de · Plattform-Login bleibt appLoginUrl.
    */
-  marketingDisplayHost: "suppix-ai.com",
+  marketingDisplayHost: "suppix-ai.de",
 
   /**
    * Demo-Video: z. B. "assets/suppix-demo.mp4"
