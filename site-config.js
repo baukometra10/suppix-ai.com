@@ -48,21 +48,18 @@ const SITE_CONFIG = {
   url: "https://suppix-ai-workpass.com",
 
   /**
-   * Pflichtangaben Impressum (§ 5 TMG) – echte Werte eintragen, z. B.:
-   * street: "Musterstraße 1", city: "12345 Berlin",
-   * ceo: "Max Mustermann", vatId: "DE…",
-   * registerCourt: "Amtsgericht …", registerNumber: "HRB …"
-   * Solange Klammern [] stehen, bleiben diese Blöcke auf der Impressum-Seite verborgen.
+   * Pflichtangaben Impressum (§ 5 TMG) – VORLÄUFIG, später korrigieren.
+   * (Keine Klammern [] verwenden, sonst bleiben die Blöcke verborgen.)
    */
   address: {
-    street: "[Straße und Hausnummer]",
-    city: "[PLZ Ort]",
+    street: "Anschrift folgt (vorläufig)",
+    city: "Deutschland",
     country: "Deutschland",
   },
-  ceo: "[Name des Geschäftsführers]",
-  vatId: "[USt-IdNr.]",
-  registerCourt: "[Amtsgericht]",
-  registerNumber: "[HRB-Nummer]",
+  ceo: "Geschäftsführung – Angaben folgen",
+  vatId: "USt-IdNr. folgt",
+  registerCourt: "Amtsgericht – Angaben folgen",
+  registerNumber: "HRB – Angaben folgen",
 
   formEndpoint: "https://formsubmit.co/ajax/info@suppix-ai.com",
   /** Klassisches FormSubmit (nicht AJAX) – nötig für Auto-Antwort an den Kunden. */

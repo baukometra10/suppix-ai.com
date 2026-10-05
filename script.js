@@ -117,37 +117,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function isPlaceholderValue(value) {
     const v = String(value || "").trim();
-    return !v || v.includes("[") || v.includes("]");
+    if (!v) return true;
+    if (v.includes("[") || v.includes("]")) return true;
+    // Vorläufige Texte sollen sichtbar bleiben, aber den Hinweis-Banner auslösen
+    const provisional = /folgt|vorläufig|Angaben folgen/i.test(v);
+    return provisional ? "provisional" : false;
   }
 
   function initImpressumPending() {
     const pending = document.getElementById("impressumPending");
-    const incomplete =
-      isPlaceholderValue(cfg.address?.street) ||
-      isPlaceholderValue(cfg.address?.city) ||
-      isPlaceholderValue(cfg.ceo) ||
-      isPlaceholderValue(cfg.vatId) ||
-      isPlaceholderValue(cfg.registerCourt) ||
-      isPlaceholderValue(cfg.registerNumber);
-    if (pending) pending.hidden = !incomplete;
+    const fields = [
+      cfg.address?.street,
+      cfg.address?.city,
+      cfg.ceo,
+      cfg.vatId,
+      cfg.registerCourt,
+      cfg.registerNumber,
+    ];
+    const states = fields.map(isPlaceholderValue);
+    const hasBrackets = states.some((s) => s === true);
+    const hasProvisional = states.some((s) => s === "provisional");
+    if (pending) pending.hidden = !(hasBrackets || hasProvisional);
 
-    // Hide legal blocks that still contain bracket placeholders
     document.querySelectorAll("[data-legal-section]").forEach((section) => {
-      const fields = section.querySelectorAll("[data-legal-field]");
-      if (!fields.length) return;
-      const allEmpty = [...fields].every((el) =>
-        isPlaceholderValue(el.textContent) || isPlaceholderValue(el.getAttribute("data-raw"))
-      );
-      // After applyConfig fills text; re-check content
-      const stillPlaceholder = [...fields].every((el) => isPlaceholderValue(el.textContent));
-      section.hidden = stillPlaceholder;
+      const els = section.querySelectorAll("[data-legal-field]");
+      if (!els.length) return;
+      const stillEmpty = [...els].every((el) => {
+        const st = isPlaceholderValue(el.textContent);
+        return st === true; // only hide pure empty/[brackets], keep provisional text
+      });
+      section.hidden = stillEmpty;
     });
 
-    // Clear visible "[...]" leftovers in address lines when incomplete
-    if (incomplete) {
-      document.querySelectorAll("[data-address-street], [data-address-city], [data-ceo], [data-vat], [data-register-court], [data-register-number]").forEach((el) => {
-        if (isPlaceholderValue(el.textContent)) el.textContent = "";
-      });
+    if (hasBrackets) {
+      document
+        .querySelectorAll(
+          "[data-address-street], [data-address-city], [data-ceo], [data-vat], [data-register-court], [data-register-number]"
+        )
+        .forEach((el) => {
+          if (isPlaceholderValue(el.textContent) === true) el.textContent = "";
+        });
     }
   }
 
