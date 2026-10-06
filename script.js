@@ -587,8 +587,10 @@ document.addEventListener("DOMContentLoaded", () => {
     form.setAttribute("method", "POST");
     form.setAttribute("accept-charset", "UTF-8");
 
+    // Captcha muss an bleiben: sonst sendet FormSubmit keine Kunden-Bestätigung (_autoresponse).
     ensureHiddenInput(form, "_template", "table");
-    ensureHiddenInput(form, "_captcha", "false");
+    const captchaOff = form.querySelector('input[name="_captcha"]');
+    if (captchaOff) captchaOff.remove();
     ensureHiddenInput(form, "_next", thankYouAbsoluteUrl());
     ensureHiddenInput(form, "_autoresponse", buildCustomerAutoresponse(""));
     ensureHiddenInput(
@@ -620,9 +622,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (hint) {
       hint.hidden = false;
       hint.textContent = t(
-        "Nach dem Absenden gelangen Sie auf unsere Bestätigungsseite. Die Anfrage geht an info@suppixai.com.",
-        "After sending you will reach our confirmation page. The request goes to info@suppixai.com.",
-        "بعد الإرسال ستصل إلى صفحة التأكيد. يذهب الطلب إلى info@suppixai.com."
+        "Nach dem Absenden erscheint ggf. kurz eine Sicherheitsprüfung (Captcha). Danach Bestätigungsseite und E-Mail an Sie.",
+        "After sending, a short security check (captcha) may appear. Then you get our confirmation page and an email.",
+        "بعد الإرسال قد تظهر تحقق أمني قصير. بعدها صفحة التأكيد ورسالة إلى بريدك."
       );
     }
 
@@ -713,7 +715,8 @@ document.addEventListener("DOMContentLoaded", () => {
     form.setAttribute("accept-charset", "UTF-8");
 
     ensureHiddenInput(form, "_template", "table");
-    ensureHiddenInput(form, "_captcha", "false");
+    const captchaOff = form.querySelector('input[name="_captcha"]');
+    if (captchaOff) captchaOff.remove();
     ensureHiddenInput(form, "_subject", t("Newsletter-Anmeldung – WorkPass", "Newsletter signup – WorkPass", "اشتراك نشرة – WorkPass"));
     ensureHiddenInput(form, "_autoresponse", buildNewsletterAutoresponse());
     ensureHiddenInput(form, "_next", newsletterReturnUrl());
