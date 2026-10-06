@@ -66,7 +66,7 @@ const SITE_CONFIG = {
    * Leer = Fallback auf FormSubmit.
    * Beispiel: "https://suppixai-contact.XXXX.workers.dev"
    */
-  formApiUrl: "",
+  formApiUrl: "https://suppixai-contact.suppix-ai.workers.dev",
 
   formEndpoint: "https://formsubmit.co/ajax/e007ddb21463c6f3cc39a02e5fc908d9",
   /** Klassisches FormSubmit (Fallback, wenn formApiUrl leer). */
