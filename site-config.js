@@ -61,7 +61,7 @@ const SITE_CONFIG = {
   registerCourt: "Amtsgericht – Angaben folgen",
   registerNumber: "HRB – Angaben folgen",
 
-  formEndpoint: "https://formsubmit.co/ajax/info@suppixai.com",
+  formEndpoint: "https://formsubmit.co/ajax/e007ddb21463c6f3cc39a02e5fc908d9",
   /** Klassisches FormSubmit (nicht AJAX) – nötig für Auto-Antwort an den Kunden. */
-  formAction: "https://formsubmit.co/info@suppixai.com",
+  formAction: "https://formsubmit.co/e007ddb21463c6f3cc39a02e5fc908d9",
 };

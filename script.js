@@ -587,11 +587,10 @@ document.addEventListener("DOMContentLoaded", () => {
     form.setAttribute("method", "POST");
     form.setAttribute("accept-charset", "UTF-8");
 
-    // Autoresponse requires classic POST + captcha (do NOT disable captcha).
     ensureHiddenInput(form, "_template", "table");
+    ensureHiddenInput(form, "_captcha", "false");
     ensureHiddenInput(form, "_next", thankYouAbsoluteUrl());
     ensureHiddenInput(form, "_autoresponse", buildCustomerAutoresponse(""));
-    // Keep FormSubmit captcha enabled so customer autoresponse works.
     ensureHiddenInput(
       form,
       "_subject",
@@ -621,9 +620,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (hint) {
       hint.hidden = false;
       hint.textContent = t(
-        "Hinweis: Beim ersten Absenden bestätigt FormSubmit die Ziel-E-Mail (info@…). Danach landen Anfragen zuverlässig im Posteingang.",
-        "Note: The first submit asks FormSubmit to confirm the inbox (info@…). After that, leads arrive reliably.",
-        "ملاحظة: أول إرسال يطلب FormSubmit تأكيد البريد (info@…). بعدها تصل الطلبات بشكل موثوق."
+        "Nach dem Absenden gelangen Sie auf unsere Bestätigungsseite. Die Anfrage geht an info@suppixai.com.",
+        "After sending you will reach our confirmation page. The request goes to info@suppixai.com.",
+        "بعد الإرسال ستصل إلى صفحة التأكيد. يذهب الطلب إلى info@suppixai.com."
       );
     }
 
@@ -714,6 +713,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.setAttribute("accept-charset", "UTF-8");
 
     ensureHiddenInput(form, "_template", "table");
+    ensureHiddenInput(form, "_captcha", "false");
     ensureHiddenInput(form, "_subject", t("Newsletter-Anmeldung – WorkPass", "Newsletter signup – WorkPass", "اشتراك نشرة – WorkPass"));
     ensureHiddenInput(form, "_autoresponse", buildNewsletterAutoresponse());
     ensureHiddenInput(form, "_next", newsletterReturnUrl());
