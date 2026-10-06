@@ -61,7 +61,14 @@ const SITE_CONFIG = {
   registerCourt: "Amtsgericht – Angaben folgen",
   registerNumber: "HRB – Angaben folgen",
 
+  /**
+   * Kontaktformular über Resend (eigene Domain) – Cloudflare Worker URL.
+   * Leer = Fallback auf FormSubmit.
+   * Beispiel: "https://suppixai-contact.XXXX.workers.dev"
+   */
+  formApiUrl: "",
+
   formEndpoint: "https://formsubmit.co/ajax/e007ddb21463c6f3cc39a02e5fc908d9",
-  /** Klassisches FormSubmit (nicht AJAX) – nötig für Auto-Antwort an den Kunden. */
+  /** Klassisches FormSubmit (Fallback, wenn formApiUrl leer). */
   formAction: "https://formsubmit.co/e007ddb21463c6f3cc39a02e5fc908d9",
 };

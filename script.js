@@ -617,9 +617,32 @@ document.addEventListener("DOMContentLoaded", () => {
 </table>`.trim();
   }
 
+  function pageLang() {
+    return (document.documentElement.lang || "de").toLowerCase();
+  }
+
+  async function postContactApi(payload) {
+    const endpoint = String(cfg.formApiUrl || "").trim();
+    if (!endpoint) return { ok: false, skipped: true };
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(payload),
+    });
+    let data = {};
+    try {
+      data = await res.json();
+    } catch (_) {
+      /* ignore */
+    }
+    return { ok: res.ok && data.ok !== false, status: res.status, data };
+  }
+
   function initContactForm() {
     const form = document.getElementById("contactForm");
     if (!form) return;
+
+    const useApi = Boolean(String(cfg.formApiUrl || "").trim());
 
     const action =
       cfg.formAction ||
@@ -628,7 +651,6 @@ document.addEventListener("DOMContentLoaded", () => {
     form.setAttribute("method", "POST");
     form.setAttribute("accept-charset", "UTF-8");
 
-    // Captcha muss an bleiben: sonst sendet FormSubmit keine Kunden-Bestätigung (_autoresponse).
     ensureHiddenInput(form, "_template", "table");
     const captchaOff = form.querySelector('input[name="_captcha"]');
     if (captchaOff) captchaOff.remove();
@@ -640,7 +662,6 @@ document.addEventListener("DOMContentLoaded", () => {
       t(`${platformName()} Anfrage`, `${platformName()} request`, `طلب ${platformName()}`)
     );
 
-    // FormSubmit honeypot (official field name)
     let gotcha = form.querySelector('input[name="_gotcha"]');
     if (!gotcha) {
       gotcha = document.createElement("input");
@@ -662,45 +683,95 @@ document.addEventListener("DOMContentLoaded", () => {
     const hint = document.getElementById("formSubmitHint");
     if (hint) {
       hint.hidden = false;
-      hint.textContent = t(
-        "Nach dem Absenden erscheint ggf. kurz eine Sicherheitsprüfung (Captcha). Danach Bestätigungsseite und E-Mail an Sie.",
-        "After sending, a short security check (captcha) may appear. Then you get our confirmation page and an email.",
-        "بعد الإرسال قد تظهر تحقق أمني قصير. بعدها صفحة التأكيد ورسالة إلى بريدك."
-      );
+      hint.textContent = useApi
+        ? t(
+            "Ihre Anfrage geht an info@suppixai.com. Sie erhalten eine Bestätigung von unserer Domain.",
+            "Your request goes to info@suppixai.com. You will get a confirmation from our domain.",
+            "يذهب طلبك إلى info@suppixai.com. ستصلك رسالة تأكيد من نطاقنا."
+          )
+        : t(
+            "Nach dem Absenden erscheint ggf. kurz eine Sicherheitsprüfung (Captcha). Danach Bestätigungsseite und E-Mail an Sie.",
+            "After sending, a short security check (captcha) may appear. Then you get our confirmation page and an email.",
+            "بعد الإرسال قد تظهر تحقق أمني قصير. بعدها صفحة التأكيد ورسالة إلى بريدك."
+          );
     }
 
-    form.addEventListener("submit", () => {
+    form.addEventListener("submit", async (e) => {
       const btn = form.querySelector('button[type="submit"]');
       const name = (document.getElementById("name")?.value || "").trim();
       const email = (document.getElementById("email")?.value || "").trim();
+      const company = (document.getElementById("company")?.value || "").trim();
+      const paket = (document.getElementById("paket")?.value || "").trim();
+      const message = (document.getElementById("message")?.value || "").trim();
       const statusEl = document.getElementById("contactStatus");
+      const honey = (form.querySelector('input[name="_gotcha"]')?.value || "").trim();
 
-      ensureHiddenInput(
-        form,
-        "_subject",
-        t(
-          `Demo-Anfrage – ${name || "Kunde"}`,
-          `Demo request – ${name || "Customer"}`,
-          `طلب عرض – ${name || "عميل"}`
-        )
-      );
-      ensureHiddenInput(form, "_autoresponse", buildCustomerAutoresponse(name));
-      ensureHiddenInput(form, "_next", thankYouAbsoluteUrl());
-      if (email) ensureHiddenInput(form, "_replyto", email);
+      if (!useApi) {
+        ensureHiddenInput(
+          form,
+          "_subject",
+          t(
+            `Demo-Anfrage – ${name || "Kunde"}`,
+            `Demo request – ${name || "Customer"}`,
+            `طلب عرض – ${name || "عميل"}`
+          )
+        );
+        ensureHiddenInput(form, "_autoresponse", buildCustomerAutoresponse(name));
+        ensureHiddenInput(form, "_next", thankYouAbsoluteUrl());
+        if (email) ensureHiddenInput(form, "_replyto", email);
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = t("Wird gesendet…", "Sending…", "جاري الإرسال…");
+        }
+        if (statusEl) {
+          statusEl.className = "form-status success";
+          statusEl.textContent = t(
+            "Einen Moment… Sie erhalten gleich eine Bestätigung per E-Mail.",
+            "One moment… You will receive a confirmation email shortly.",
+            "لحظة… ستصلك رسالة تأكيد على بريدك قريباً."
+          );
+        }
+        return;
+      }
 
+      e.preventDefault();
       if (btn) {
         btn.disabled = true;
         btn.textContent = t("Wird gesendet…", "Sending…", "جاري الإرسال…");
       }
       if (statusEl) {
         statusEl.className = "form-status success";
-        statusEl.textContent = t(
-          "Einen Moment… Sie erhalten gleich eine Bestätigung per E-Mail.",
-          "One moment… You will receive a confirmation email shortly.",
-          "لحظة… ستصلك رسالة تأكيد على بريدك قريباً."
-        );
+        statusEl.textContent = t("Einen Moment…", "One moment…", "لحظة…");
       }
-      // Native FormSubmit POST continues (no preventDefault) → customer autoresponse email.
+
+      try {
+        const result = await postContactApi({
+          formType: "contact",
+          name,
+          email,
+          company,
+          paket,
+          message,
+          privacy: privacy?.checked ? "accepted" : "",
+          lang: pageLang(),
+          _gotcha: honey,
+        });
+        if (!result.ok) throw new Error(result.data?.error || "send failed");
+        window.location.href = thankYouAbsoluteUrl();
+      } catch (_) {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = t("Nachricht senden", "Send message", "إرسال الرسالة");
+        }
+        if (statusEl) {
+          statusEl.className = "form-status error";
+          statusEl.textContent = t(
+            "Senden fehlgeschlagen. Bitte E-Mail an info@suppixai.com oder später erneut versuchen.",
+            "Sending failed. Please email info@suppixai.com or try again later.",
+            "فشل الإرسال. راسل info@suppixai.com أو أعد المحاولة لاحقاً."
+          );
+        }
+      }
     });
   }
 
@@ -760,6 +831,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("newsletterForm");
     if (!form) return;
 
+    const useApi = Boolean(String(cfg.formApiUrl || "").trim());
     const action =
       cfg.formAction ||
       (cfg.email ? `https://formsubmit.co/${cfg.email}` : "https://formsubmit.co/info@suppixai.com");
@@ -783,7 +855,6 @@ document.addEventListener("DOMContentLoaded", () => {
         `Successfully subscribed! You will now receive updates about ${platformName()}.`,
         `تم الاشتراك بنجاح! ستصلك من الآن تحديثات ${platformName()}.`
       );
-      // Clean the query from the address bar without reload.
       try {
         const clean = `${window.location.pathname}${window.location.hash || "#newsletter"}`;
         window.history.replaceState({}, "", clean);
@@ -792,36 +863,79 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    form.addEventListener("submit", () => {
+    form.addEventListener("submit", async (e) => {
       const email = (document.getElementById("newsletterEmail")?.value || "").trim();
       const btn = form.querySelector('button[type="submit"]');
+      const honey = (form.querySelector('input[name="_gotcha"], input[name="_honey"]')?.value || "").trim();
 
-      ensureHiddenInput(form, "_autoresponse", buildNewsletterAutoresponse());
-      ensureHiddenInput(form, "_next", newsletterReturnUrl());
-      ensureHiddenInput(
-        form,
-        "_subject",
-        t(
-          `Newsletter-Anmeldung – ${email || "WorkPass"}`,
-          `Newsletter signup – ${email || "WorkPass"}`,
-          `اشتراك نشرة – ${email || "WorkPass"}`
-        )
-      );
-      if (email) ensureHiddenInput(form, "_replyto", email);
+      if (!useApi) {
+        ensureHiddenInput(form, "_autoresponse", buildNewsletterAutoresponse());
+        ensureHiddenInput(form, "_next", newsletterReturnUrl());
+        ensureHiddenInput(
+          form,
+          "_subject",
+          t(
+            `Newsletter-Anmeldung – ${email || "WorkPass"}`,
+            `Newsletter signup – ${email || "WorkPass"}`,
+            `اشتراك نشرة – ${email || "WorkPass"}`
+          )
+        );
+        if (email) ensureHiddenInput(form, "_replyto", email);
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = t("Wird gesendet…", "Sending…", "جاري الإرسال…");
+        }
+        if (statusEl) {
+          statusEl.className = "form-status success";
+          statusEl.textContent = t(
+            "Einen Moment… Sie erhalten gleich eine Bestätigung per E-Mail.",
+            "One moment… You will receive a confirmation email shortly.",
+            "لحظة… ستصلك رسالة تأكيد على بريدك قريباً."
+          );
+        }
+        return;
+      }
 
+      e.preventDefault();
       if (btn) {
         btn.disabled = true;
         btn.textContent = t("Wird gesendet…", "Sending…", "جاري الإرسال…");
       }
-      if (statusEl) {
-        statusEl.className = "form-status success";
-        statusEl.textContent = t(
-          "Einen Moment… Sie erhalten gleich eine Bestätigung per E-Mail.",
-          "One moment… You will receive a confirmation email shortly.",
-          "لحظة… ستصلك رسالة تأكيد على بريدك قريباً."
-        );
+      try {
+        const result = await postContactApi({
+          formType: "newsletter",
+          email,
+          lang: pageLang(),
+          _gotcha: honey,
+        });
+        if (!result.ok) throw new Error("send failed");
+        if (statusEl) {
+          statusEl.className = "form-status success";
+          statusEl.textContent = t(
+            `Erfolgreich angemeldet! Sie erhalten ab jetzt Updates zu ${platformName()}.`,
+            `Successfully subscribed! You will now receive updates about ${platformName()}.`,
+            `تم الاشتراك بنجاح! ستصلك من الآن تحديثات ${platformName()}.`
+          );
+        }
+        form.reset();
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = t("Anmelden", "Subscribe", "اشترك");
+        }
+      } catch (_) {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = t("Anmelden", "Subscribe", "اشترك");
+        }
+        if (statusEl) {
+          statusEl.className = "form-status error";
+          statusEl.textContent = t(
+            "Anmeldung fehlgeschlagen. Bitte später erneut versuchen.",
+            "Signup failed. Please try again later.",
+            "فشل الاشتراك. حاول لاحقاً."
+          );
+        }
       }
-      // Native FormSubmit POST continues (no preventDefault).
     });
   }
 

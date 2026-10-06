@@ -1,0 +1,20 @@
+name = "suppixai-contact"
+main = "contact-form.js"
+compatibility_date = "2026-03-01"
+workers_dev = true
+
+# Nach dem Deploy: URL in site-config.js als formApiUrl eintragen.
+# Secrets:
+#   npx wrangler secret put RESEND_API_KEY
+#
+# Optional vars (Dashboard oder hier):
+[vars]
+TO_EMAIL = "info@suppixai.com"
+FROM_EMAIL = "WorkPass <info@suppixai.com>"
+ALLOWED_ORIGINS = "https://suppixai.com,https://www.suppixai.com,http://localhost:5500,http://127.0.0.1:5500"
+BRAND_COMPANY = "Suppix AI UG"
+PLATFORM = "WorkPass"
+PHONE = "017631676589"
+WHATSAPP = "4917631676589"
+WEBSITE = "https://suppixai.com"
+LOGO_URL = "https://suppixai.com/assets/logo.png"
