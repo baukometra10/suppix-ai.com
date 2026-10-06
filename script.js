@@ -538,42 +538,83 @@ document.addEventListener("DOMContentLoaded", () => {
     const logo = logoAbsoluteUrl();
     const website = siteBaseUrl();
     const who = (name || "").trim();
+    const wa = String(whatsapp).replace(/\D/g, "");
 
     const greeting = t(
       who ? `Hallo ${who},` : "Hallo,",
       who ? `Hello ${who},` : "Hello,",
       who ? `مرحباً ${who}،` : "مرحباً،"
     );
+    const title = t("Anfrage erhalten", "Request received", "تم استلام الطلب");
     const thanks = t(
-      `vielen Dank für Ihre Anfrage zu <strong>${platform}</strong>. Wir haben Ihre Nachricht erhalten und melden uns <strong>so schnell wie möglich</strong> bei Ihnen.`,
-      `thank you for your <strong>${platform}</strong> request. We have received your message and will contact you <strong>as soon as possible</strong>.`,
-      `شكراً لطلبك بخصوص <strong>${platform}</strong>. استلمنا رسالتك وسنتواصل معك <strong>في أقرب وقت ممكن</strong>.`
+      `vielen Dank für Ihre Nachricht zu <strong style="color:#0f172a">${platform}</strong>. Wir haben Ihre Anfrage erhalten und melden uns so schnell wie möglich bei Ihnen.`,
+      `thank you for your message about <strong style="color:#0f172a">${platform}</strong>. We have received your request and will get back to you as soon as possible.`,
+      `شكراً لرسالتك حول <strong style="color:#0f172a">${platform}</strong>. استلمنا طلبك وسنتواصل معك في أقرب وقت ممكن.`
     );
-    const contactTitle = t("Unsere Kontaktdaten", "Our contact details", "بيانات التواصل الخاصة بنا");
+    const nextTitle = t("Was als Nächstes passiert", "What happens next", "ما الذي يحدث بعد ذلك");
+    const nextBody = t(
+      "Unser Team prüft Ihre Anfrage und meldet sich mit einer Demo oder den nächsten Schritten.",
+      "Our team will review your request and follow up with a demo or next steps.",
+      "سيراجع فريقنا طلبك ويتواصل معك لعرض تجريبي أو الخطوات التالية."
+    );
+    const contactTitle = t("Direkt kontaktieren", "Contact us directly", "تواصل معنا مباشرة");
     const closing = t(
-      `Mit freundlichen Grüßen<br>Ihr Team von ${company}`,
-      `Kind regards<br>Your team at ${company}`,
-      `مع أطيب التحيات<br>فريق ${company}`
+      `Mit freundlichen Grüßen<br><strong>Ihr Team von ${company}</strong>`,
+      `Kind regards<br><strong>Your team at ${company}</strong>`,
+      `مع أطيب التحيات<br><strong>فريق ${company}</strong>`
+    );
+    const cta = t("Website öffnen", "Open website", "فتح الموقع");
+    const replyHint = t(
+      "Sie können auf diese E-Mail antworten – die Nachricht geht an unser Team.",
+      "You can reply to this email – it reaches our team.",
+      "يمكنك الرد على هذه الرسالة – ستصل إلى فريقنا."
     );
 
-    // HTML confirmation email (logo + contact). FormSubmit delivers this as the autoresponse body.
     return `
-<div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;color:#0f172a;line-height:1.55">
-  <div style="text-align:center;padding:16px 0 8px">
-    <img src="${logo}" alt="${brand}" width="180" style="max-width:180px;height:auto;border:0" />
-  </div>
-  <p style="font-size:16px;margin:0 0 12px">${greeting}</p>
-  <p style="font-size:15px;margin:0 0 16px">${thanks}</p>
-  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;margin:0 0 16px">
-    <p style="margin:0 0 8px;font-weight:700">${contactTitle}</p>
-    <p style="margin:0">${company} · ${platform}<br>
-    E-Mail: <a href="mailto:${email}">${email}</a><br>
-    Telefon: <a href="tel:+${String(whatsapp).replace(/\D/g, "")}">${phone}</a><br>
-    WhatsApp: <a href="https://wa.me/${whatsapp}">https://wa.me/${whatsapp}</a><br>
-    Web: <a href="${website}">${website}</a></p>
-  </div>
-  <p style="font-size:14px;margin:0;color:#334155">${closing}</p>
-</div>`.trim();
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#eef2f7;margin:0;padding:24px 12px;font-family:Arial,Helvetica,sans-serif">
+  <tr><td align="center">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="560" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e2e8f0">
+      <tr>
+        <td style="background:linear-gradient(135deg,#0b1220 0%,#152238 100%);padding:28px 28px 22px;text-align:center">
+          <img src="${logo}" alt="${brand}" width="168" style="max-width:168px;height:auto;border:0;display:inline-block" />
+          <p style="margin:14px 0 0;color:#94a3b8;font-size:13px;letter-spacing:0.04em">${platform} · ${company}</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:28px 28px 8px;color:#0f172a">
+          <p style="margin:0 0 6px;font-size:13px;font-weight:700;color:#2563eb;text-transform:uppercase;letter-spacing:0.06em">${title}</p>
+          <p style="margin:0 0 14px;font-size:20px;font-weight:700;line-height:1.35">${greeting}</p>
+          <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:#334155">${thanks}</p>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;margin:0 0 18px">
+            <tr><td style="padding:14px 16px">
+              <p style="margin:0 0 6px;font-size:14px;font-weight:700;color:#0f172a">${nextTitle}</p>
+              <p style="margin:0;font-size:14px;line-height:1.55;color:#475569">${nextBody}</p>
+            </td></tr>
+          </table>
+          <p style="margin:0 0 8px;font-size:14px;font-weight:700;color:#0f172a">${contactTitle}</p>
+          <p style="margin:0 0 18px;font-size:14px;line-height:1.7;color:#334155">
+            ${company}<br>
+            <a href="mailto:${email}" style="color:#2563eb;text-decoration:none">${email}</a><br>
+            <a href="tel:+${wa}" style="color:#2563eb;text-decoration:none">${phone}</a><br>
+            <a href="https://wa.me/${wa}" style="color:#2563eb;text-decoration:none">WhatsApp</a>
+          </p>
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 18px"><tr>
+            <td style="background:#2563eb;border-radius:10px">
+              <a href="${website}" style="display:inline-block;padding:12px 22px;color:#ffffff;font-size:14px;font-weight:700;text-decoration:none">${cta}</a>
+            </td>
+          </tr></table>
+          <p style="margin:0 0 8px;font-size:13px;color:#64748b">${replyHint}</p>
+          <p style="margin:0;font-size:14px;line-height:1.55;color:#334155">${closing}</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:16px 28px 24px;border-top:1px solid #e2e8f0;text-align:center">
+          <p style="margin:0;font-size:12px;color:#94a3b8"><a href="${website}" style="color:#64748b;text-decoration:none">${website.replace(/^https?:\/\//, "")}</a></p>
+        </td>
+      </tr>
+    </table>
+  </td></tr>
+</table>`.trim();
   }
 
   function initContactForm() {
@@ -685,17 +726,29 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     return `
-<div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;color:#0f172a;line-height:1.55">
-  <div style="text-align:center;padding:16px 0 8px">
-    <img src="${logo}" alt="${brand}" width="180" style="max-width:180px;height:auto;border:0" />
-  </div>
-  <p style="font-size:16px;margin:0 0 12px"><strong>${title}</strong></p>
-  <p style="font-size:15px;margin:0 0 12px">${hello}</p>
-  <p style="font-size:15px;margin:0 0 16px">${thanks}</p>
-  <p style="font-size:14px;margin:0 0 16px">Web: <a href="${website}">${website}</a><br>
-  E-Mail: <a href="mailto:${email}">${email}</a></p>
-  <p style="font-size:14px;margin:0;color:#334155">${closing}</p>
-</div>`.trim();
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#eef2f7;margin:0;padding:24px 12px;font-family:Arial,Helvetica,sans-serif">
+  <tr><td align="center">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="560" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e2e8f0">
+      <tr>
+        <td style="background:#0b1220;padding:26px;text-align:center">
+          <img src="${logo}" alt="${brand}" width="160" style="max-width:160px;height:auto;border:0" />
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:26px;color:#0f172a">
+          <p style="margin:0 0 10px;font-size:18px;font-weight:700">${title}</p>
+          <p style="margin:0 0 10px;font-size:15px">${hello}</p>
+          <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#334155">${thanks}</p>
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.7;color:#334155">
+            Web: <a href="${website}" style="color:#2563eb;text-decoration:none">${website}</a><br>
+            E-Mail: <a href="mailto:${email}" style="color:#2563eb;text-decoration:none">${email}</a>
+          </p>
+          <p style="margin:0;font-size:14px;color:#334155">${closing}</p>
+        </td>
+      </tr>
+    </table>
+  </td></tr>
+</table>`.trim();
   }
 
   function newsletterReturnUrl() {
