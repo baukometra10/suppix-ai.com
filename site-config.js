@@ -4,7 +4,7 @@ const SITE_CONFIG = {
   platform: "WorkPass",
   product: "WorkPass",
   tagline: "Identität · Zutritt · Team · Sicherheit · White-Label",
-  email: "info@suppix-ai.com",
+  email: "info@suppixai.com",
   phone: "017631676589",
   phoneRaw: "4917631676589",
   whatsapp: "4917631676589",
@@ -18,13 +18,13 @@ const SITE_CONFIG = {
   reviewsLimit: 6,
 
   /** Öffentliche Marketing-Website (eigene Domain). */
-  liveUrl: "https://suppix-ai.de",
+  liveUrl: "https://suppixai.com",
 
   /**
    * Sichtbarer Domain-Name auf Flyer/Marketing (ohne https://).
-   * Marketing: suppix-ai.de · Plattform-Login bleibt appLoginUrl.
+   * Marketing: suppixai.com · Plattform-Login bleibt appLoginUrl.
    */
-  marketingDisplayHost: "suppix-ai.de",
+  marketingDisplayHost: "suppixai.com",
 
   /**
    * Demo-Video: z. B. "assets/suppix-demo.mp4"
@@ -61,7 +61,7 @@ const SITE_CONFIG = {
   registerCourt: "Amtsgericht – Angaben folgen",
   registerNumber: "HRB – Angaben folgen",
 
-  formEndpoint: "https://formsubmit.co/ajax/info@suppix-ai.com",
+  formEndpoint: "https://formsubmit.co/ajax/info@suppixai.com",
   /** Klassisches FormSubmit (nicht AJAX) – nötig für Auto-Antwort an den Kunden. */
-  formAction: "https://formsubmit.co/info@suppix-ai.com",
+  formAction: "https://formsubmit.co/info@suppixai.com",
 };
