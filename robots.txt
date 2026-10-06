@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
 
+Sitemap: https://suppixai.com/pages-sitemap.xml
+Sitemap: https://suppixai.com/sitemap.txt
 Sitemap: https://suppixai.com/sitemap.xml
