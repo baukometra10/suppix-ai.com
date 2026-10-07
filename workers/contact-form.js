@@ -282,6 +282,13 @@ export default {
 
     const toEmail = env.TO_EMAIL || "info@suppixai.com";
     const fromEmail = env.FROM_EMAIL || "WorkPass <info@suppixai.com>";
+    // Owner-Mail bewusst NICHT von info@ → info@ (Porkbun-Forward/Gmail droppt das oft still).
+    const notifyFrom =
+      env.NOTIFY_FROM_EMAIL || "WorkPass Anfragen <noreply@suppixai.com>";
+    const ownerRecipients = String(env.TO_EMAIL || "info@suppixai.com")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
     const brandCompany = env.BRAND_COMPANY || "Suppix AI UG";
     const platform = env.PLATFORM || "WorkPass";
     const phone = env.PHONE || "017631676589";
@@ -292,8 +299,8 @@ export default {
     try {
       if (formType === "newsletter") {
         await sendResend(env, {
-          from: fromEmail,
-          to: [toEmail],
+          from: notifyFrom,
+          to: ownerRecipients,
           reply_to: email,
           subject: `Newsletter-Anmeldung – ${email}`,
           html: ownerEmailHtml({
@@ -328,8 +335,8 @@ export default {
         });
       } else {
         await sendResend(env, {
-          from: fromEmail,
-          to: [toEmail],
+          from: notifyFrom,
+          to: ownerRecipients,
           reply_to: email,
           subject: `Demo-Anfrage – ${name || "Kunde"}`,
           html: ownerEmailHtml({
