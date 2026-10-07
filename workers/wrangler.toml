@@ -10,9 +10,8 @@ workers_dev = true
 # Optional vars (Dashboard oder hier):
 [vars]
 TO_EMAIL = "info@suppixai.com"
-# Optional: private Inbox (Gmail/iCloud), Komma-getrennt – umgeht Porkbun-Forward/Spam.
-# Beispiel: OWNER_EMAIL = "dein.name@gmail.com"
-OWNER_EMAIL = ""
+# Private Inbox direkt (ohne Porkbun-Forward) – sonst landen Leads oft im Nichts/Junk.
+OWNER_EMAIL = "mahmodscharif12345@gmail.com"
 # Kunden-Bestätigung (Absender sichtbar für Kunden)
 FROM_EMAIL = "WorkPass <info@suppixai.com>"
 # Lead an dich: anderer Absender als Empfänger
