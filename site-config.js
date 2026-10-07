@@ -1,4 +1,5 @@
-const SITE_CONFIG = {
+// Muss an window hängen – script.js liest window.SITE_CONFIG (const allein reicht nicht).
+window.SITE_CONFIG = {
   company: "Suppix AI UG",
   brand: "SUPPIX AI",
   platform: "WorkPass",

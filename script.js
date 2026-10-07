@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const cfg = window.SITE_CONFIG || {};
+  const cfg = window.SITE_CONFIG || globalThis.SITE_CONFIG || {};
 
   applySiteConfig();
   initDemoVideo();
