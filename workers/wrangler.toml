@@ -10,9 +10,12 @@ workers_dev = true
 # Optional vars (Dashboard oder hier):
 [vars]
 TO_EMAIL = "info@suppixai.com"
+# Optional: private Inbox (Gmail/iCloud), Komma-getrennt – umgeht Porkbun-Forward/Spam.
+# Beispiel: OWNER_EMAIL = "dein.name@gmail.com"
+OWNER_EMAIL = ""
 # Kunden-Bestätigung (Absender sichtbar für Kunden)
 FROM_EMAIL = "WorkPass <info@suppixai.com>"
-# Lead an dich: anderer Absender, sonst droppen Forwarder oft From=To (info→info)
+# Lead an dich: anderer Absender als Empfänger
 NOTIFY_FROM_EMAIL = "WorkPass Anfragen <anfragen@suppixai.com>"
 ALLOWED_ORIGINS = "https://suppixai.com,https://www.suppixai.com,http://localhost:5500,http://127.0.0.1:5500"
 BRAND_COMPANY = "Suppix AI UG"

@@ -46,57 +46,46 @@ function escapeHtml(s) {
 }
 
 /** Helles, Dark-Mode-sicheres Shell (keine Gradients – die brechen in Mail-Apps). */
-function emailShell({ logo, company, platform, website, titleBadge, bodyHtml, footerNote, dir }) {
+/**
+ * logoSrc: externe URL oder "cid:logo" (mit Resend-Attachment).
+ * useImage: false = nur Text-Branding (besser für Owner-Mails / Spam / Dark Mode).
+ */
+function emailShell({ logoSrc, company, platform, website, titleBadge, bodyHtml, footerNote, dir, useImage }) {
   const rtl = dir === "rtl";
   const host = escapeHtml((website || "").replace(/^https?:\/\//, ""));
+  const brandBlock = useImage
+    ? `<img src="${escapeHtml(logoSrc)}" alt="SUPPIX AI" width="148" style="display:block;margin:0 auto 10px;border:0;max-width:148px;height:auto"/>
+<p style="margin:0;font-size:20px;font-weight:700;color:#0b1220;letter-spacing:0.02em">SUPPIX AI</p>
+<p style="margin:6px 0 0;font-size:13px;color:#64748b">${escapeHtml(platform)} · ${escapeHtml(company)}</p>`
+    : `<p style="margin:0;font-size:22px;font-weight:700;color:#0b1220;letter-spacing:0.04em">SUPPIX AI</p>
+<p style="margin:6px 0 0;font-size:13px;color:#64748b">${escapeHtml(platform)} · ${escapeHtml(company)}</p>`;
+
   return `<!DOCTYPE html>
 <html lang="${rtl ? "ar" : "de"}" dir="${rtl ? "rtl" : "ltr"}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light only">
+<meta name="color-scheme" content="light">
 <meta name="supported-color-schemes" content="light">
-<style type="text/css">
-  :root { color-scheme: light only; }
-  @media (prefers-color-scheme: dark) {
-    .em-body, .em-card, .em-pad, .em-field { background-color: #ffffff !important; color: #0f172a !important; }
-    .em-muted { color: #64748b !important; }
-    .em-label { color: #64748b !important; }
-    .em-value { color: #0f172a !important; }
-  }
-</style>
-<!--[if mso]><style>body,table,td{font-family:Arial,Helvetica,sans-serif!important}</style><![endif]-->
 </head>
-<body class="em-body" bgcolor="#eef3f9" style="margin:0;padding:0;background-color:#eef3f9;font-family:Arial,Helvetica,sans-serif">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#eef3f9" style="background-color:#eef3f9">
-<tr><td align="center" style="padding:28px 12px">
-<table role="presentation" class="em-card" width="560" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="max-width:560px;width:100%;background-color:#ffffff;border:1px solid #d8e0ea;border-radius:16px">
+<body bgcolor="#f4f7fb" style="margin:0;padding:0;background-color:#f4f7fb;font-family:Arial,Helvetica,sans-serif">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f4f7fb">
+<tr><td align="center" style="padding:24px 12px">
+<table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="max-width:560px;width:100%;background-color:#ffffff;border:1px solid #dbe3ee">
 <tr>
-  <td bgcolor="#0b1220" style="background-color:#0b1220;padding:22px 24px;text-align:center">
-    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" bgcolor="#ffffff" style="background-color:#ffffff;border-radius:12px">
-      <tr><td style="padding:10px 16px">
-        <img src="${escapeHtml(logo)}" alt="SUPPIX AI" width="150" height="auto" style="display:block;margin:0 auto;border:0;outline:none;max-width:150px;height:auto"/>
-      </td></tr>
-    </table>
-    <p style="margin:14px 0 0;font-size:18px;font-weight:700;color:#ffffff;letter-spacing:0.02em">SUPPIX AI</p>
-    <p style="margin:4px 0 0;font-size:13px;color:#9fb0c7">${escapeHtml(platform)} · ${escapeHtml(company)}</p>
+  <td bgcolor="#ffffff" style="background-color:#ffffff;padding:22px 24px;text-align:center;border-bottom:3px solid #5eb8e8">
+    ${brandBlock}
   </td>
 </tr>
-<tr><td bgcolor="#5eb8e8" height="4" style="background-color:#5eb8e8;font-size:0;line-height:0;height:4px">&nbsp;</td></tr>
 <tr>
-  <td class="em-pad" bgcolor="#ffffff" style="background-color:#ffffff;padding:26px 24px 8px">
-    <span style="display:inline-block;background-color:#e7f6fd;color:#1a6f93;font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;padding:6px 11px;border-radius:6px">${titleBadge}</span>
-    <div style="height:16px;line-height:16px;font-size:0">&nbsp;</div>
+  <td bgcolor="#ffffff" style="background-color:#ffffff;padding:22px 24px">
+    <p style="margin:0 0 14px;font-size:12px;font-weight:700;color:#1a6f93;text-transform:uppercase;letter-spacing:0.04em">${titleBadge}</p>
     ${bodyHtml}
   </td>
 </tr>
 <tr>
-  <td class="em-pad" bgcolor="#ffffff" style="background-color:#ffffff;padding:8px 24px 24px">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f5f8fc" style="background-color:#f5f8fc;border:1px solid #e2e8f0;border-radius:10px">
-      <tr><td style="padding:12px 14px;font-size:12px;line-height:1.5;color:#64748b;text-align:center">
-        ${footerNote || ""}<a href="${escapeHtml(website)}" style="color:#2b8fc0;text-decoration:none;font-weight:700">${host}</a>
-      </td></tr>
-    </table>
+  <td bgcolor="#f8fafc" style="background-color:#f8fafc;padding:14px 24px;border-top:1px solid #e2e8f0;font-size:12px;line-height:1.5;color:#64748b;text-align:center">
+    ${footerNote || ""}<a href="${escapeHtml(website)}" style="color:#2b8fc0;text-decoration:none;font-weight:700">${host}</a>
   </td>
 </tr>
 </table>
@@ -176,7 +165,7 @@ ${ctaButton(website, cta)}
 
   return {
     html: emailShell({
-      logo,
+      logoSrc: "cid:suppix-logo",
       company,
       platform,
       website,
@@ -184,6 +173,7 @@ ${ctaButton(website, cta)}
       bodyHtml,
       footerNote: `${escapeHtml(company)} · `,
       dir: ar ? "rtl" : "ltr",
+      useImage: true,
     }),
     text: [
       title,
@@ -200,31 +190,28 @@ ${ctaButton(website, cta)}
   };
 }
 
-function ownerEmailHtml({ fields, logo, company, platform, website, replyEmail }) {
+/** Owner-Mail ohne Bilder – externe Logos + Forwarding landen sonst oft in Spam. */
+function ownerEmailHtml({ fields, company, platform, website, replyEmail }) {
   const host = (website || "").replace(/^https?:\/\//, "");
-  const fieldBlocks = Object.entries(fields)
+  const rows = Object.entries(fields)
     .filter(([, v]) => v != null && String(v).trim() !== "")
     .map(([k, v]) => {
-      const isMsg = /nachricht|message/i.test(k);
-      return `<table role="presentation" class="em-field" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f8fafc" style="background-color:#f8fafc;border:1px solid #e6edf5;border-radius:10px;margin:0 0 10px">
-  <tr><td style="padding:12px 14px">
-    <p class="em-label" style="margin:0 0 4px;font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.04em">${escapeHtml(k)}</p>
-    <p class="em-value" style="margin:0;font-size:${isMsg ? "14" : "15"}px;font-weight:${isMsg ? "400" : "600"};color:#0f172a;line-height:1.55;white-space:pre-wrap;word-break:break-word">${escapeHtml(v)}</p>
-  </td></tr>
-</table>`;
+      return `<tr>
+  <td style="padding:10px 0;border-bottom:1px solid #e8eef5;font-size:12px;color:#64748b;width:120px;vertical-align:top">${escapeHtml(k)}</td>
+  <td style="padding:10px 0;border-bottom:1px solid #e8eef5;font-size:15px;color:#0f172a;font-weight:600;vertical-align:top;word-break:break-word">${escapeHtml(v)}</td>
+</tr>`;
     })
     .join("");
 
   const mail = replyEmail || "";
   const bodyHtml = `
-<p class="em-value" style="margin:0 0 6px;font-size:22px;font-weight:700;color:#0f172a">Neue Demo-Anfrage</p>
-<p class="em-muted" style="margin:0 0 18px;font-size:14px;line-height:1.55;color:#64748b">Kontaktformular · ${escapeHtml(host)}</p>
-${fieldBlocks}
+<p style="margin:0 0 6px;font-size:20px;font-weight:700;color:#0f172a">Neue Demo-Anfrage</p>
+<p style="margin:0 0 16px;font-size:14px;color:#64748b">Kontaktformular auf ${escapeHtml(host)}</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 18px">${rows}</table>
 ${
   mail
-    ? `<div style="height:8px;line-height:8px;font-size:0">&nbsp;</div>
-${ctaButton(`mailto:${mail}`, "Kunde antworten")}
-<p class="em-muted" style="margin:0;font-size:12px;color:#94a3b8">Antwort geht an ${escapeHtml(mail)}</p>`
+    ? `${ctaButton(`mailto:${mail}?subject=${encodeURIComponent("Re: WorkPass Anfrage")}`, "Kunde antworten")}
+<p style="margin:0;font-size:12px;color:#94a3b8">Antwort an ${escapeHtml(mail)}</p>`
     : ""
 }`;
 
@@ -234,7 +221,7 @@ ${ctaButton(`mailto:${mail}`, "Kunde antworten")}
 
   return {
     html: emailShell({
-      logo,
+      logoSrc: "",
       company,
       platform,
       website,
@@ -242,10 +229,23 @@ ${ctaButton(`mailto:${mail}`, "Kunde antworten")}
       bodyHtml,
       footerNote: "Interne Benachrichtigung · ",
       dir: "ltr",
+      useImage: false,
     }),
-    text: ["Neue Demo-Anfrage – WorkPass", `Website: ${host}`, "", ...textLines, mail ? `\nAntwort: ${mail}` : ""].join(
-      "\n"
-    ),
+    text: [
+      "SUPPIX AI / WorkPass – Neue Demo-Anfrage",
+      `Website: ${host}`,
+      "",
+      ...textLines,
+      mail ? `\nKunde antworten: ${mail}` : "",
+    ].join("\n"),
+  };
+}
+
+function logoAttachment(logoUrl) {
+  return {
+    path: logoUrl,
+    filename: "logo.png",
+    content_id: "suppix-logo",
   };
 }
 
@@ -331,7 +331,9 @@ export default {
     // Owner-Mail bewusst NICHT von info@ → info@ (Porkbun-Forward/Gmail droppt das oft still).
     const notifyFrom =
       env.NOTIFY_FROM_EMAIL || "WorkPass Anfragen <anfragen@suppixai.com>";
-    const ownerRecipients = String(env.TO_EMAIL || "info@suppixai.com")
+    // OWNER_EMAIL = private Inbox (Gmail/iCloud) – umgeht Porkbun-Forward → weniger Spam.
+    // Sonst TO_EMAIL (info@), oft weitergeleitet und dann Junk.
+    const ownerRecipients = String(env.OWNER_EMAIL || env.TO_EMAIL || "info@suppixai.com")
       .split(",")
       .map((s) => s.trim())
       .filter(Boolean);
@@ -341,12 +343,12 @@ export default {
     const whatsapp = env.WHATSAPP || "4917631676589";
     const website = env.WEBSITE || "https://suppixai.com";
     const logo = env.LOGO_URL || "https://suppixai.com/assets/logo.png";
+    const logoAtt = [logoAttachment(logo)];
 
     try {
       if (formType === "newsletter") {
         const ownerMail = ownerEmailHtml({
           fields: { Typ: "Newsletter", EMail: email, Sprache: lang },
-          logo,
           company: brandCompany,
           platform,
           website,
@@ -382,6 +384,7 @@ export default {
               : "Newsletter bestätigt – WorkPass",
           html: customerMail.html,
           text: customerMail.text,
+          attachments: logoAtt,
         });
       } else {
         const ownerMail = ownerEmailHtml({
@@ -393,7 +396,6 @@ export default {
             Nachricht: message,
             Sprache: lang,
           },
-          logo,
           company: brandCompany,
           platform,
           website,
@@ -429,6 +431,7 @@ export default {
               : "Wir haben Ihre WorkPass-Anfrage erhalten",
           html: customerMail.html,
           text: customerMail.text,
+          attachments: logoAtt,
         });
       }
 
