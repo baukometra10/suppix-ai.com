@@ -11,7 +11,7 @@ workers_dev = true
 [vars]
 TO_EMAIL = "info@suppixai.com"
 # Private Inbox direkt (ohne Porkbun-Forward) – sonst landen Leads oft im Nichts/Junk.
-OWNER_EMAIL = "mahmodscharif12345@gmail.com"
+OWNER_EMAIL = "suppix.workpass.ai@gmail.com"
 # Kunden-Bestätigung (Absender sichtbar für Kunden)
 FROM_EMAIL = "WorkPass <info@suppixai.com>"
 # Lead an dich: anderer Absender als Empfänger
