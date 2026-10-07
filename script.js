@@ -644,23 +644,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const useApi = Boolean(String(cfg.formApiUrl || "").trim());
 
-    const action =
-      cfg.formAction ||
-      (cfg.email ? `https://formsubmit.co/${cfg.email}` : "https://formsubmit.co/info@suppixai.com");
-    form.setAttribute("action", action);
     form.setAttribute("method", "POST");
     form.setAttribute("accept-charset", "UTF-8");
-
-    ensureHiddenInput(form, "_template", "table");
-    const captchaOff = form.querySelector('input[name="_captcha"]');
-    if (captchaOff) captchaOff.remove();
-    ensureHiddenInput(form, "_next", thankYouAbsoluteUrl());
-    ensureHiddenInput(form, "_autoresponse", buildCustomerAutoresponse(""));
-    ensureHiddenInput(
-      form,
-      "_subject",
-      t(`${platformName()} Anfrage`, `${platformName()} request`, `طلب ${platformName()}`)
-    );
+    if (useApi) {
+      // Kein FormSubmit-Fallback: sonst landet HTML-Bestätigung als Klartext / Spam.
+      form.setAttribute("action", "#");
+      ["_template", "_next", "_autoresponse", "_subject", "_replyto", "_cc", "_honey"].forEach((n) => {
+        form.querySelectorAll(`input[name="${n}"]`).forEach((el) => el.remove());
+      });
+    } else {
+      const action =
+        cfg.formAction ||
+        (cfg.email ? `https://formsubmit.co/${cfg.email}` : "https://formsubmit.co/info@suppixai.com");
+      form.setAttribute("action", action);
+      ensureHiddenInput(form, "_template", "table");
+      const captchaOff = form.querySelector('input[name="_captcha"]');
+      if (captchaOff) captchaOff.remove();
+      ensureHiddenInput(form, "_next", thankYouAbsoluteUrl());
+      ensureHiddenInput(form, "_autoresponse", buildCustomerAutoresponse(""));
+      ensureHiddenInput(
+        form,
+        "_subject",
+        t(`${platformName()} Anfrage`, `${platformName()} request`, `طلب ${platformName()}`)
+      );
+    }
 
     let gotcha = form.querySelector('input[name="_gotcha"]');
     if (!gotcha) {
@@ -832,19 +839,29 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!form) return;
 
     const useApi = Boolean(String(cfg.formApiUrl || "").trim());
-    const action =
-      cfg.formAction ||
-      (cfg.email ? `https://formsubmit.co/${cfg.email}` : "https://formsubmit.co/info@suppixai.com");
-    form.setAttribute("action", action);
     form.setAttribute("method", "POST");
     form.setAttribute("accept-charset", "UTF-8");
-
-    ensureHiddenInput(form, "_template", "table");
-    const captchaOff = form.querySelector('input[name="_captcha"]');
-    if (captchaOff) captchaOff.remove();
-    ensureHiddenInput(form, "_subject", t("Newsletter-Anmeldung – WorkPass", "Newsletter signup – WorkPass", "اشتراك نشرة – WorkPass"));
-    ensureHiddenInput(form, "_autoresponse", buildNewsletterAutoresponse());
-    ensureHiddenInput(form, "_next", newsletterReturnUrl());
+    if (useApi) {
+      form.setAttribute("action", "#");
+      ["_template", "_next", "_autoresponse", "_subject", "_replyto", "_cc", "_honey"].forEach((n) => {
+        form.querySelectorAll(`input[name="${n}"]`).forEach((el) => el.remove());
+      });
+    } else {
+      const action =
+        cfg.formAction ||
+        (cfg.email ? `https://formsubmit.co/${cfg.email}` : "https://formsubmit.co/info@suppixai.com");
+      form.setAttribute("action", action);
+      ensureHiddenInput(form, "_template", "table");
+      const captchaOff = form.querySelector('input[name="_captcha"]');
+      if (captchaOff) captchaOff.remove();
+      ensureHiddenInput(
+        form,
+        "_subject",
+        t("Newsletter-Anmeldung – WorkPass", "Newsletter signup – WorkPass", "اشتراك نشرة – WorkPass")
+      );
+      ensureHiddenInput(form, "_autoresponse", buildNewsletterAutoresponse());
+      ensureHiddenInput(form, "_next", newsletterReturnUrl());
+    }
 
     const statusEl = document.getElementById("newsletterStatus");
     const params = new URLSearchParams(window.location.search);
