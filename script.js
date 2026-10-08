@@ -86,8 +86,10 @@ document.addEventListener("DOMContentLoaded", () => {
         el.hidden = false;
         el.target = "_blank";
         el.rel = "noopener noreferrer";
-        if (!el.textContent.trim()) {
-          el.textContent = t("Termin online buchen", "Book a time online", "احجز موعداً أونلاين");
+        if (el.dataset.bookingLabel === "auto" || !el.textContent.trim()) {
+          el.textContent = /wa\.me/i.test(booking)
+            ? t("Demo-Termin per WhatsApp", "Demo time via WhatsApp", "موعد عرض عبر واتساب")
+            : t("Termin online buchen", "Book a time online", "احجز موعداً أونلاين");
         }
       } else {
         // Fallback: WhatsApp demo request
@@ -210,15 +212,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function resolveAssetPath(path) {
+    const raw = String(path || "").trim();
+    if (!raw || /^https?:\/\//i.test(raw) || raw.startsWith("data:")) return raw;
+    const clean = raw.replace(/^\.\//, "").replace(/^\//, "");
+    const inSubdir = /\/(en|ar|pl)(\/|$)/i.test(window.location.pathname);
+    if (clean.startsWith("assets/") && inSubdir) return `../${clean}`;
+    return clean;
+  }
+
   function initDemoVideo() {
     const video = document.getElementById("demoVideo");
     const stage = document.getElementById("demoVideoStage");
     const soon = document.getElementById("demoVideoSoon");
-    const src = cfg.demoVideoSrc || "";
     if (!video || !stage) return;
+    const lang = pageLang();
+    const byLang = cfg.demoVideoByLang || {};
+    const src = resolveAssetPath(byLang[lang] || byLang.de || cfg.demoVideoSrc || "");
     if (src) {
       stage.classList.remove("is-soon");
-      video.querySelector("source")?.setAttribute("src", src);
+      const source = video.querySelector("source");
+      if (source) source.setAttribute("src", src);
+      else {
+        const s = document.createElement("source");
+        s.src = src;
+        s.type = "video/mp4";
+        video.appendChild(s);
+      }
       video.load();
       if (soon) soon.hidden = true;
       video.hidden = false;
@@ -284,8 +304,12 @@ document.addEventListener("DOMContentLoaded", () => {
         .replace(/\/$/, "");
       if (host) el.textContent = `🔒 https://${host}`;
     });
-    document.querySelectorAll("form.contact-form").forEach((form) => {
-      if (cfg.formAction) form.setAttribute("action", cfg.formAction);
+    document.querySelectorAll("form.contact-form, form.newsletter-form").forEach((form) => {
+      if (String(cfg.formApiUrl || "").trim()) {
+        form.setAttribute("action", "#");
+      } else if (cfg.formAction) {
+        form.setAttribute("action", cfg.formAction);
+      }
     });
     document.querySelectorAll("[data-address-street]").forEach((el) => {
       if (cfg.address?.street) el.textContent = cfg.address.street;
@@ -768,7 +792,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (_) {
         if (btn) {
           btn.disabled = false;
-          btn.textContent = t("Nachricht senden", "Send message", "إرسال الرسالة");
+          btn.textContent = t("Demo anfragen", "Request demo", "اطلب عرضاً");
         }
         if (statusEl) {
           statusEl.className = "form-status error";

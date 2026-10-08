@@ -104,8 +104,7 @@
         </p>
         <div class="hero-actions">
           <a href="#contact" class="btn btn-primary btn-glow">Book live demo</a>
-          <a href="#start" class="btn btn-outline">Start in 4 steps</a>
-          <a href="#contact" class="btn btn-outline">Request account activation</a>
+          <a href="#video" class="btn btn-outline">Watch product video</a>
         </div>
         <div class="hero-quick-contact">
           <a href="tel:+4917631676589" class="hero-quick-link" data-phone-link>📞 Call us</a>
@@ -290,9 +289,9 @@
   <section class="video-section reveal" id="video">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Demo story</span>
-        <h2>WorkPass in 75 seconds</h2>
-        <p>This is how the product video tells the platform – scene by scene. The finished film is coming; until then, the core story is here.</p>
+        <span class="section-tag">Product video</span>
+        <h2>See WorkPass – don’t just read about it</h2>
+        <p>Short product film (WorkPass Lohn bridge) plus the core story scene by scene. Then book a demo.</p>
       </div>
 
       <ol class="storyboard-grid">
@@ -335,22 +334,20 @@
       </ol>
 
       <div class="video-showcase storyboard-player">
-        <div class="video-wrapper video-wrapper-real demo-video-stage is-soon" id="demoVideoStage">
-          <div class="demo-video-soon" id="demoVideoSoon">
-            <span class="demo-video-soon-label">Film in production</span>
-            <strong>Demo video coming</strong>
-            <p>Core story: identity → access → live view → document → report. Until then: book a live demo, request account activation, or watch the WorkPass Lohn bridge video.</p>
+        <div class="video-wrapper video-wrapper-real demo-video-stage" id="demoVideoStage">
+          <div class="demo-video-soon" id="demoVideoSoon" hidden>
+            <span class="demo-video-soon-label">Video</span>
+            <strong>Loading product video…</strong>
+            <p>If no video appears, book a live demo – we will show WorkPass with you.</p>
             <div class="demo-video-actions">
               <a href="#contact" class="btn btn-primary btn-sm">Book live demo</a>
-              <a href="#lohn" class="btn btn-outline btn-sm">WorkPass Lohn video</a>
-              <a href="#contact" class="btn btn-outline btn-sm">Request account activation</a>
             </div>
           </div>
-          <video id="demoVideo" controls playsinline preload="none" poster="../assets/video-poster.jpg" hidden>
-            <source src="" type="video/mp4">
+          <video id="demoVideo" controls playsinline preload="metadata" poster="../assets/video-poster.jpg">
+            <source src="../assets/workpass-lohn-bridge-en.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="preview-note">Script: <code>assets/video-script-suppix.txt</code> · Enterprise extras: camera · AI · Wallet · white-label</p>
+        <p class="preview-note">Product video · core story above · Enterprise: camera · AI · Wallet · white-label</p>
       </div>
     </div>
   </section>
@@ -826,8 +823,8 @@
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Contact</span>
-        <h2>Get in touch</h2>
-        <p>Questions about WorkPass? We are happy to advise you and set up a demo.</p>
+        <h2>Request a live demo</h2>
+        <p>One form is enough – we reply with a time or next step. WhatsApp optional.</p>
       </div>
       <div class="contact-grid">
         <div class="contact-info">
@@ -836,7 +833,7 @@
           <div class="contact-item"><div class="contact-item-icon">📧</div><div><strong style="color: var(--white);">Email</strong><br><a href="mailto:info@suppixai.com" style="color: var(--primary);" data-email>info@suppixai.com</a></div></div>
           <div class="contact-item"><div class="contact-item-icon">📞</div><div><strong style="color: var(--white);">Phone</strong><br><a href="tel:+4917631676589" style="color: var(--gray-500);" data-phone-link>017631676589</a></div></div>
           <div class="contact-item"><div class="contact-item-icon">💬</div><div><strong style="color: var(--white);">WhatsApp</strong><br><a href="https://wa.me/4917631676589?text=Hello%2C%20I%20am%20interested%20in%20WorkPass." id="contactWhatsApp" style="color: var(--primary);">Request demo via WhatsApp</a></div></div>
-          <div class="contact-item"><div class="contact-item-icon">📅</div><div><strong style="color: var(--white);">Appointment</strong><br><a href="#contact" data-booking data-booking-label="auto" style="color: var(--primary);">Request a time via WhatsApp</a></div></div>
+          <div class="contact-item"><div class="contact-item-icon">📅</div><div><strong style="color: var(--white);">Appointment</strong><br><a href="https://wa.me/4917631676589?text=Hello%2C%20I%20would%20like%20to%20schedule%20a%20WorkPass%20demo." data-booking data-booking-label="auto" style="color: var(--primary);">Demo time via WhatsApp</a></div></div>
         </div>
         <form class="contact-form" id="contactForm" method="POST" action="#" accept-charset="UTF-8">
           <input type="hidden" name="_template" value="table">
@@ -856,7 +853,7 @@
           </div>
           <div class="form-group"><label for="message">Message</label><textarea id="message" name="message" placeholder="Tell us about your team and requirements…"></textarea></div>
           <div class="form-group form-checkbox"><label class="checkbox-label"><input type="checkbox" id="privacy" name="privacy" value="accepted" required><span>I agree to the <a href="../datenschutz.html">privacy policy</a>. *</span></label></div>
-          <button type="submit" class="btn btn-primary" style="width:100%">Send message</button>
+          <button type="submit" class="btn btn-primary" style="width:100%">Request demo</button>
           <p class="form-hint" id="formSubmitHint" hidden></p>
           <div class="form-status" id="contactStatus"></div>
         </form>

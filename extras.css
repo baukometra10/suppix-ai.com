@@ -1745,6 +1745,12 @@ html[dir="rtl"] .flyer-list {
   margin: 0.15rem 0;
   color: #374151;
 }
+.flyer-wa {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 
 .flyer-qr-placeholder {
   text-align: center;

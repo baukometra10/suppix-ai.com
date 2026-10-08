@@ -59,8 +59,21 @@
       "name": "Suppix AI UG",
       "url": "https://suppixai.com",
       "email": "info@suppixai.com",
-      "logo": "https://suppixai.com/assets/logo.png"
-    }
+      "telephone": "+4917631676589",
+      "logo": "https://suppixai.com/assets/logo.png",
+      "sameAs": ["https://suppix-ai-workpass.com"]
+    },
+    "url": "https://suppixai.com"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "WorkPass – Suppix AI",
+    "url": "https://suppixai.com",
+    "inLanguage": ["de", "en", "ar", "pl"],
+    "publisher": { "@type": "Organization", "name": "Suppix AI UG" }
   }
   </script>
 </head>
@@ -145,8 +158,7 @@
         </p>
         <div class="hero-actions">
           <a href="#kontakt" class="btn btn-primary btn-glow">Live-Demo buchen</a>
-          <a href="#ablauf" class="btn btn-outline">In 4 Schritten starten</a>
-          <a href="#kontakt" class="btn btn-outline">Zugang anfragen</a>
+          <a href="#video" class="btn btn-outline">Produktvideo ansehen</a>
         </div>
         <div class="hero-quick-contact">
           <a href="tel:+4917631676589" class="hero-quick-link" data-phone-link>📞 017631676589</a>
@@ -397,7 +409,7 @@
       </ol>
       <div class="start-cta">
         <a href="#kontakt" class="btn btn-primary btn-glow">Jetzt Demo buchen</a>
-        <a href="#kontakt" class="btn btn-outline">Zugang anfragen</a>
+        <a href="https://wa.me/4917631676589?text=Hallo%2C%20ich%20m%C3%B6chte%20eine%20WorkPass-Demo." class="btn btn-outline" id="midWhatsAppCta">Per WhatsApp</a>
       </div>
     </div>
   </section>
@@ -563,9 +575,9 @@
   <section class="video-section reveal" id="video">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Demo-Story</span>
-        <h2>WorkPass in 75 Sekunden</h2>
-        <p>So erzählt das Produktvideo die Plattform – Szene für Szene. Das fertige Film folgt; bis dahin zeigen wir die Kernstory hier.</p>
+        <span class="section-tag">Produktvideo</span>
+        <h2>WorkPass sehen – nicht nur lesen</h2>
+        <p>Kurzfilm zur Plattform (WorkPass Lohn-Bridge) und die Kernstory Szene für Szene. Danach Demo buchen.</p>
       </div>
 
       <ol class="storyboard-grid">
@@ -608,23 +620,21 @@
       </ol>
 
       <div class="video-showcase storyboard-player">
-        <div class="video-wrapper video-wrapper-real demo-video-stage is-soon" id="demoVideoStage">
-          <div class="demo-video-soon" id="demoVideoSoon">
-            <span class="demo-video-soon-label">Film in Produktion</span>
-            <strong>Demo-Video folgt</strong>
-            <p>Kernstory: Identität → Zutritt → Live-Lage → Dokument → Report. Bis dahin: Live-Demo buchen, Zugang anfragen oder das Bridge-Video unter WorkPass Lohn ansehen.</p>
+        <div class="video-wrapper video-wrapper-real demo-video-stage" id="demoVideoStage">
+          <div class="demo-video-soon" id="demoVideoSoon" hidden>
+            <span class="demo-video-soon-label">Video</span>
+            <strong>Produktvideo wird geladen…</strong>
+            <p>Falls kein Video erscheint: Live-Demo buchen – wir zeigen WorkPass live.</p>
             <div class="demo-video-actions">
               <a href="#kontakt" class="btn btn-primary btn-sm">Live-Demo buchen</a>
-              <a href="#lohn" class="btn btn-outline btn-sm">WorkPass Lohn Video</a>
-              <a href="#kontakt" class="btn btn-outline btn-sm">Zugang anfragen</a>
             </div>
           </div>
-          <video id="demoVideo" controls playsinline preload="none" poster="assets/video-poster.jpg" hidden>
-            <source src="" type="video/mp4">
+          <video id="demoVideo" controls playsinline preload="metadata" poster="assets/video-poster.jpg">
+            <source src="assets/workpass-lohn-bridge-de.mp4" type="video/mp4">
             Ihr Browser unterstützt kein Video.
           </video>
         </div>
-        <p class="preview-note">Drehbuch: <code>assets/video-script-suppix.txt</code> · Enterprise-Extras: Kamera · KI · Wallet · White-Label</p>
+        <p class="preview-note">Produktvideo · Kernstory darunter · Enterprise: Kamera · KI · Wallet · White-Label</p>
       </div>
     </div>
   </section>
@@ -1331,7 +1341,7 @@
       <p>Live-Demo: Identität → Zutritt → Lagebild → Compliance → PDF-Bericht. Oder fragen Sie die Freischaltung Ihres Firmenzugangs an.</p>
       <div class="cta-actions">
         <a href="#kontakt" class="btn btn-accent">Jetzt Demo vereinbaren</a>
-        <a href="#kontakt" class="btn btn-outline">Zugang anfragen</a>
+        <a href="https://wa.me/4917631676589?text=Hallo%2C%20ich%20m%C3%B6chte%20eine%20WorkPass-Demo." class="btn btn-outline">Per WhatsApp</a>
         <a href="#preise" class="btn btn-outline">Pakete vergleichen</a>
       </div>
     </div>
@@ -1362,8 +1372,8 @@
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Kontakt</span>
-        <h2>Sprechen Sie mit uns</h2>
-        <p>Fragen zu WorkPass? Wir beraten Sie gerne und richten eine Demo für Ihr Unternehmen ein.</p>
+        <h2>Live-Demo anfragen</h2>
+        <p>Ein Formular reicht: Wir melden uns mit Termin oder nächstem Schritt. Optional per WhatsApp.</p>
       </div>
 
       <div class="contact-grid">
@@ -1398,7 +1408,7 @@
             <div class="contact-item-icon">📅</div>
             <div>
               <strong style="color: var(--white);">Termin</strong><br>
-              <a href="#kontakt" data-booking data-booking-label="auto" style="color: var(--primary);">Termin per WhatsApp anfragen</a>
+              <a href="https://wa.me/4917631676589?text=Hallo%2C%20ich%20m%C3%B6chte%20einen%20Demo-Termin%20f%C3%BCr%20WorkPass%20vereinbaren." data-booking data-booking-label="auto" style="color: var(--primary);">Demo-Termin per WhatsApp</a>
             </div>
           </div>
           <div class="contact-item">
@@ -1446,7 +1456,7 @@
               <span>Ich habe die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu. *</span>
             </label>
           </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%;">Nachricht senden</button>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Demo anfragen</button>
           <p class="form-hint" id="formSubmitHint" hidden></p>
           <div class="form-status" id="contactStatus"></div>
         </form>

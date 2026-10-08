@@ -29,16 +29,21 @@ window.SITE_CONFIG = {
   marketingDisplayHost: "suppixai.com",
 
   /**
-   * Demo-Video: z. B. "assets/suppix-demo.mp4"
-   * Leer = Platzhalter „Demo-Video folgt“.
+   * Demo-/Produktvideo (Fallback). Sprachvarianten: demoVideoByLang.
    */
-  demoVideoSrc: "",
+  demoVideoSrc: "assets/workpass-lohn-bridge-de.mp4",
+  demoVideoByLang: {
+    de: "assets/workpass-lohn-bridge-de.mp4",
+    en: "assets/workpass-lohn-bridge-en.mp4",
+    ar: "assets/workpass-lohn-bridge-ar.mp4",
+  },
 
   /**
-   * Terminbuchung (Calendly / Cal.com / eigener Link).
-   * Leer = WhatsApp/Telefon als Buchungsweg.
+   * Terminbuchung: WhatsApp-Deep-Link (später Calendly/Cal.com möglich).
    */
-  bookingUrl: "",
+  bookingUrl:
+    "https://wa.me/4917631676589?text=" +
+    encodeURIComponent("Hallo, ich möchte einen Demo-Termin für WorkPass vereinbaren."),
 
   media: {
     demoPoster: "assets/video-poster.jpg",
