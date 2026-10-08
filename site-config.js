@@ -12,11 +12,12 @@ window.SITE_CONFIG = {
   appLoginUrl: "https://suppix-ai-workpass.com",
 
   /**
-   * Öffentliche Bewertungs-API (JSON).
-   * Leer lassen oder korrigieren, sobald die API öffentlich/CORS-fähig ist.
+   * Öffentliche Bewertungs-API (JSON, ohne Login).
+   * Erwartet Array oder { reviews: [...] } mit name/text/rating (oder Aliase).
+   * CORS muss https://suppixai.com erlauben.
    */
-  reviewsApiUrl: "https://suppix-workpass-ai.up.railway.app/api/reviews",
-  reviewsLimit: 6,
+  reviewsApiUrl: "https://suppix-ai-workpass.com/api/public/reviews?limit=12&min_stars=4",
+  reviewsLimit: 12,
 
   /** Öffentliche Marketing-Website (eigene Domain). */
   liveUrl: "https://suppixai.com",
