@@ -1166,13 +1166,23 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       const reviews = normalizeReviews(data);
-      if (!reviews.length) throw new Error("empty");
+      if (!reviews.length) {
+        if (note) {
+          note.textContent = t(
+            "Noch keine öffentlichen Plattform-Bewertungen – Platzhalter bleiben, bis Kunden Feedback freigeben.",
+            "No public platform reviews yet – placeholders stay until customers publish feedback.",
+            "لا توجد تقييمات عامة بعد – تبقى العناصر المؤقتة حتى ينشر العملاء ملاحظات."
+          );
+        }
+        return;
+      }
       renderReviews(reviews);
     } catch {
       if (note) {
         note.textContent = t(
-          "Live-Bewertungen werden verbunden, sobald die öffentliche Reviews-API freigeschaltet ist. Bis dahin Platzhalter.",
-          "Live reviews will appear once the public reviews API is enabled. Placeholders for now."
+          "Live-Bewertungen vorübergehend nicht erreichbar. Platzhalter bleiben sichtbar.",
+          "Live reviews temporarily unavailable. Placeholders stay visible.",
+          "التقييمات المباشرة غير متاحة مؤقتاً. تبقى العناصر المؤقتة."
         );
       }
     } finally {
