@@ -1752,6 +1752,19 @@ html[dir="rtl"] .flyer-list {
   text-underline-offset: 2px;
 }
 
+.seo-breadcrumb {
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+  color: var(--gray-500, #94a3b8);
+}
+.seo-breadcrumb a {
+  color: var(--primary, #5eb8e8);
+  text-decoration: none;
+}
+.seo-breadcrumb a:hover {
+  text-decoration: underline;
+}
+
 .flyer-qr-placeholder {
   text-align: center;
   font-size: 0.75rem;
