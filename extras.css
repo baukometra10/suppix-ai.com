@@ -864,6 +864,56 @@ html[dir="rtl"] .feature-card p {
   }
 }
 
+/* ── Site notice: Firma/Website in Bearbeitung ── */
+.site-notice {
+  position: relative;
+  z-index: 1002;
+  background: linear-gradient(90deg, #0f2744 0%, #163a5c 50%, #0f2744 100%);
+  border-bottom: 1px solid rgba(94, 184, 232, 0.35);
+  color: #e8f4fc;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+.site-notice-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0.65rem 1.1rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.site-notice-inner p {
+  margin: 0;
+  flex: 1;
+}
+.site-notice-close {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.site-notice-close:hover {
+  background: rgba(255, 255, 232, 0.18);
+}
+body.has-site-notice {
+  scroll-padding-top: 7.5rem;
+}
+@media (max-width: 640px) {
+  .site-notice {
+    font-size: 0.82rem;
+  }
+  .site-notice-inner {
+    padding: 0.55rem 0.85rem;
+  }
+}
+
 /* ── Cookie Banner ── */
 .cookie-banner {
   position: fixed;

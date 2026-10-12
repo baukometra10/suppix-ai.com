@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cfg = window.SITE_CONFIG || globalThis.SITE_CONFIG || {};
 
   applySiteConfig();
+  initSiteNotice();
   initDemoVideo();
   initHeader();
   initSmoothScroll();
@@ -210,6 +211,40 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         );
     }
+  }
+
+  function initSiteNotice() {
+    const notice = cfg.siteNotice;
+    if (!notice || notice.enabled === false) return;
+    if (document.body.classList.contains("flyer-body")) return;
+    if (notice.dismissible !== false && sessionStorage.getItem("siteNoticeDismissed") === "1") return;
+    if (document.getElementById("siteNotice")) return;
+
+    const bar = document.createElement("div");
+    bar.id = "siteNotice";
+    bar.className = "site-notice";
+    bar.setAttribute("role", "status");
+    const text = t(
+      "Hinweis: Firma und Website sind noch in Bearbeitung. Inhalte, Impressum und Angebote werden laufend ergänzt – Demo und Kontakt funktionieren bereits.",
+      "Note: Company and website are still being finalized. Content, legal pages and offers are updated ongoing – demos and contact already work.",
+      "تنويه: الشركة والموقع ما زالا قيد الإعداد. يتم استكمال المحتوى والصفحات القانونية والعروض باستمرار – العرض التوضيحي والتواصل يعملان بالفعل."
+    );
+    bar.innerHTML = `<div class="site-notice-inner"><p>${text}</p></div>`;
+    if (notice.dismissible !== false) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "site-notice-close";
+      btn.setAttribute("aria-label", t("Hinweis schließen", "Dismiss notice", "إغلاق التنويه"));
+      btn.textContent = "×";
+      btn.addEventListener("click", () => {
+        sessionStorage.setItem("siteNoticeDismissed", "1");
+        bar.remove();
+        document.body.classList.remove("has-site-notice");
+      });
+      bar.querySelector(".site-notice-inner")?.appendChild(btn);
+    }
+    document.body.insertBefore(bar, document.body.firstChild);
+    document.body.classList.add("has-site-notice");
   }
 
   function resolveAssetPath(path) {

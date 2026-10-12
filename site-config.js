@@ -23,6 +23,15 @@ window.SITE_CONFIG = {
   liveUrl: "https://suppixai.com",
 
   /**
+   * Hinweisleiste „Firma/Website in Bearbeitung“.
+   * enabled: false → Banner ausblenden (wenn alles final ist).
+   */
+  siteNotice: {
+    enabled: true,
+    dismissible: true,
+  },
+
+  /**
    * Sichtbarer Domain-Name auf Flyer/Marketing (ohne https://).
    * Marketing: suppixai.com · Plattform-Login bleibt appLoginUrl.
    */
