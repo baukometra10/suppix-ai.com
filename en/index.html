@@ -56,7 +56,7 @@
         <a href="#faq">FAQ</a>
         <div class="nav-actions">
           <a href="#" class="btn-login" data-login>Portal</a>
-          <a href="#contact" class="btn btn-primary btn-nav">Demo</a>
+          <a href="#calendlySection" class="btn btn-primary btn-nav" data-booking>Demo</a>
         </div>
       </nav>
       <div class="header-tools">
@@ -88,7 +88,7 @@
           <a href="index.html" class="lang-switch is-active" hreflang="en" aria-current="page">EN</a>
           <a href="../ar/index.html" class="lang-switch" hreflang="ar">AR</a>
         </li>
-        <li><a href="#contact" class="mobile-nav-cta">Request Demo</a></li>
+        <li><a href="#calendlySection" class="mobile-nav-cta" data-booking>Pick a demo time</a></li>
       </ul>
     </nav>
   </header>
@@ -103,7 +103,7 @@
           <strong data-brand-platform>WorkPass</strong> runs the full site cycle: identity · access · compliance · reports – and stays close to the team: deployment plan, chat, calls, video meetings, safety and proactive emails. With <strong>your branding</strong> – company name and logo instead of only the default platform name.
         </p>
         <div class="hero-actions">
-          <a href="#contact" class="btn btn-primary btn-glow">Book live demo</a>
+          <a href="#calendlySection" class="btn btn-primary btn-glow" data-booking>Book live demo</a>
           <a href="#video" class="btn btn-outline">Watch product video</a>
         </div>
         <div class="hero-quick-contact">
@@ -225,7 +225,7 @@
         <li class="start-step"><span class="start-num">4</span><div><h3>Go-live at the gate</h3><p>First check-in, gate live view, plan delivery and alerts – operations without Excel chase.</p></div></li>
       </ol>
       <div class="start-cta">
-        <a href="#contact" class="btn btn-primary btn-glow">Book a demo now</a>
+        <a href="#calendlySection" class="btn btn-primary btn-glow" data-booking>Book a demo now</a>
         <a href="#contact" class="btn btn-outline">Request account activation</a>
       </div>
     </div>
@@ -793,7 +793,7 @@
       <h2>Ready for enterprise identity?</h2>
       <p>Discover WorkPass in a free live demo – or request activation for your company account (we enable access manually).</p>
       <div class="cta-actions">
-        <a href="#contact" class="btn btn-accent">Schedule Demo</a>
+        <a href="#calendlySection" class="btn btn-accent" data-booking>Schedule Demo</a>
         <a href="#contact" class="btn btn-outline">Request account activation</a>
         <a href="#compare" class="btn btn-outline">Compare plans</a>
       </div>
@@ -819,12 +819,35 @@
     </div>
   </section>
 
+  <section id="calendlySection" class="calendly-section reveal" hidden>
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Booking</span>
+        <h2>Pick a demo time online</h2>
+        <p>30-minute live demo – choose a slot and get email confirmation.</p>
+      </div>
+      <ul class="calendly-perks">
+        <li>30 minutes</li>
+        <li>Online video call</li>
+        <li>Instant confirmation</li>
+      </ul>
+      <div id="calendlyEmbed" class="calendly-embed" data-booking-only></div>
+      <p class="calendly-note">
+        Or use
+        <a href="https://wa.me/4917631676589?text=Hello%2C%20WorkPass%20demo%20please" id="calendlyWhatsAppAlt">WhatsApp</a>,
+        the <a href="#contact">contact form</a>,
+        or
+        <a href="https://calendly.com/suppix-workpass-ai/30min" id="calendlyOpenExternal" data-booking-external target="_blank" rel="noopener noreferrer">open calendar in a new tab</a>.
+      </p>
+    </div>
+  </section>
+
   <section id="contact" class="reveal">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Contact</span>
-        <h2>Request a live demo</h2>
-        <p>One form is enough – we reply with a time or next step. WhatsApp optional.</p>
+        <h2>Write to us</h2>
+        <p>Prefer a form? We reply with the next step – or <a href="#calendlySection" data-booking>pick a demo time directly</a>.</p>
       </div>
       <div class="contact-grid">
         <div class="contact-info">
@@ -853,26 +876,11 @@
           </div>
           <div class="form-group"><label for="message">Message</label><textarea id="message" name="message" placeholder="Tell us about your team and requirements…"></textarea></div>
           <div class="form-group form-checkbox"><label class="checkbox-label"><input type="checkbox" id="privacy" name="privacy" value="accepted" required><span>I agree to the <a href="../datenschutz.html">privacy policy</a>. *</span></label></div>
-          <button type="submit" class="btn btn-primary" style="width:100%">Request demo</button>
+          <button type="submit" class="btn btn-primary" style="width:100%">Send message</button>
           <p class="form-hint" id="formSubmitHint" hidden></p>
           <div class="form-status" id="contactStatus"></div>
         </form>
       </div>
-    </div>
-  </section>
-
-  <section id="calendlySection" class="calendly-section reveal" hidden>
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Booking</span>
-        <h2>Pick a demo time online</h2>
-        <p>Choose an open slot – you get a confirmation by email (Calendly).</p>
-      </div>
-      <div id="calendlyEmbed" class="calendly-embed" data-booking-only></div>
-      <p class="calendly-note">
-        Or use <a href="https://wa.me/4917631676589?text=Hello%2C%20WorkPass%20demo%20please">WhatsApp</a>
-        or the <a href="#contact">contact form</a>.
-      </p>
     </div>
   </section>
 
@@ -889,7 +897,7 @@
   </footer>
 
   <div class="mobile-cta-bar" id="mobileCtaBar" aria-hidden="true">
-    <a href="#contact" class="btn btn-primary">Request Demo</a>
+    <a href="#calendlySection" class="btn btn-primary" data-booking>Pick a time</a>
     <a href="https://wa.me/4917631676589?text=Hello%2C%20I%20would%20like%20to%20book%20a%20WorkPass%20demo." class="btn btn-outline" id="mobileCtaWhatsapp">WhatsApp</a>
   </div>
 

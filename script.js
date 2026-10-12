@@ -84,21 +84,63 @@ document.addEventListener("DOMContentLoaded", () => {
     return /calendly\.com/i.test(String(url || ""));
   }
 
+  function bookingSectionId() {
+    return document.getElementById("calendlySection") ? "calendlySection" : "";
+  }
+
+  function buildCalendlyEmbedUrl(raw) {
+    let u;
+    try {
+      u = new URL(String(raw).trim());
+    } catch {
+      return String(raw || "").trim();
+    }
+    u.searchParams.set("hide_gdpr_banner", "1");
+    u.searchParams.set("hide_event_type_details", "1");
+    u.searchParams.set("background_color", "ffffff");
+    u.searchParams.set("text_color", "0f172a");
+    u.searchParams.set("primary_color", "5eb8e8");
+    if (typeof location !== "undefined" && location.hostname) {
+      u.searchParams.set("embed_domain", location.hostname);
+      u.searchParams.set("embed_type", "Inline");
+    }
+    const lang = pageLang();
+    if (lang === "de" || lang === "en" || lang === "fr" || lang === "es" || lang === "it" || lang === "nl" || lang === "pt") {
+      u.searchParams.set("locale", lang);
+    }
+    return u.toString();
+  }
+
+  function scrollToBooking() {
+    const section = document.getElementById("calendlySection");
+    if (!section || section.hidden) return false;
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+    return true;
+  }
+
   function initBookingLinks() {
     const booking = String(cfg.bookingUrl || "").trim();
     const useCalendly = Boolean(booking) && isCalendlyUrl(booking);
+    const sectionHash = bookingSectionId() ? `#${bookingSectionId()}` : "#kontakt";
 
     document.querySelectorAll("[data-booking]").forEach((el) => {
       if (useCalendly) {
-        el.href = booking;
+        const openExternal = el.hasAttribute("data-booking-external");
+        if (openExternal) {
+          el.href = booking;
+          el.target = "_blank";
+          el.rel = "noopener noreferrer";
+        } else {
+          el.href = sectionHash;
+          el.removeAttribute("target");
+          el.removeAttribute("rel");
+        }
         el.hidden = false;
-        el.target = "_blank";
-        el.rel = "noopener noreferrer";
-        if (el.dataset.bookingLabel === "auto" || !el.textContent.trim()) {
+        if (el.dataset.bookingLabel === "auto") {
           el.textContent = t(
-            "Demo-Termin online buchen (Calendly)",
-            "Book demo online (Calendly)",
-            "احجز موعد العرض أونلاين (Calendly)"
+            "Demo-Termin online wählen",
+            "Pick a demo time online",
+            "اختر موعد العرض أونلاين"
           );
         }
       } else if (booking && !isCalendlyUrl(booking)) {
@@ -106,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.hidden = false;
         el.target = "_blank";
         el.rel = "noopener noreferrer";
-        if (el.dataset.bookingLabel === "auto" || !el.textContent.trim()) {
+        if (el.dataset.bookingLabel === "auto") {
           el.textContent = /wa\.me/i.test(booking)
             ? t("Demo-Termin per WhatsApp", "Demo time via WhatsApp", "موعد عرض عبر واتساب")
             : t("Termin online buchen", "Book a time online", "احجز موعداً أونلاين");
@@ -121,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
           )
         );
         el.hidden = false;
-        if (el.dataset.bookingLabel === "auto" || !el.textContent.trim()) {
+        if (el.dataset.bookingLabel === "auto") {
           el.textContent = t(
             "Termin per WhatsApp anfragen",
             "Request a time via WhatsApp",
@@ -138,7 +180,83 @@ document.addEventListener("DOMContentLoaded", () => {
       el.hidden = useCalendly;
     });
 
+    const external = document.getElementById("calendlyOpenExternal");
+    if (external && useCalendly) {
+      external.href = booking;
+      external.hidden = false;
+    } else if (external) {
+      external.hidden = true;
+    }
+
+    const waAlt = document.getElementById("calendlyWhatsAppAlt");
+    if (waAlt) {
+      setWhatsAppLink(
+        waAlt,
+        t(
+          `Hallo, ich möchte einen Demo-Termin für ${platformName()} vereinbaren.`,
+          `Hello, I would like to schedule a ${platformName()} demo.`,
+          `مرحبا، أود حجز موعد عرض لـ ${platformName()}.`
+        )
+      );
+    }
+
     initCalendlyEmbed(useCalendly ? booking : "");
+  }
+
+  function loadCalendlyScript() {
+    return new Promise((resolve) => {
+      if (window.Calendly) {
+        resolve(window.Calendly);
+        return;
+      }
+      const existing = document.getElementById("calendlyWidgetScript");
+      if (existing) {
+        existing.addEventListener("load", () => resolve(window.Calendly), { once: true });
+        existing.addEventListener("error", () => resolve(null), { once: true });
+        return;
+      }
+      const s = document.createElement("script");
+      s.id = "calendlyWidgetScript";
+      s.src = "https://assets.calendly.com/assets/external/widget.js";
+      s.async = true;
+      s.onload = () => resolve(window.Calendly);
+      s.onerror = () => resolve(null);
+      document.body.appendChild(s);
+    });
+  }
+
+  function mountCalendlyWidget(widget, url) {
+    widget.innerHTML = "";
+    widget.classList.add("is-loading");
+    const loading = document.createElement("div");
+    loading.className = "calendly-loading";
+    loading.setAttribute("role", "status");
+    loading.textContent = t(
+      "Kalender wird geladen …",
+      "Loading calendar …",
+      "جاري تحميل التقويم …"
+    );
+    widget.appendChild(loading);
+
+    const embedUrl = buildCalendlyEmbedUrl(url);
+    loadCalendlyScript().then((Calendly) => {
+      widget.classList.remove("is-loading");
+      loading.remove();
+      if (Calendly && typeof Calendly.initInlineWidget === "function") {
+        Calendly.initInlineWidget({
+          url: embedUrl,
+          parentElement: widget,
+          resize: true,
+        });
+        return;
+      }
+      const mount = document.createElement("div");
+      mount.className = "calendly-inline-widget";
+      mount.setAttribute("data-url", embedUrl);
+      mount.style.minWidth = "320px";
+      mount.style.height = "700px";
+      widget.appendChild(mount);
+    });
   }
 
   function initCalendlyEmbed(url) {
@@ -147,25 +265,33 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!section || !widget) return;
     if (!url) {
       section.hidden = true;
+      section.setAttribute("aria-hidden", "true");
       return;
     }
     section.hidden = false;
-    widget.innerHTML = "";
-    const mount = document.createElement("div");
-    mount.className = "calendly-inline-widget";
-    mount.setAttribute("data-url", url);
-    mount.style.minWidth = "320px";
-    mount.style.height = "700px";
-    widget.appendChild(mount);
-    if (!document.getElementById("calendlyWidgetScript")) {
-      const s = document.createElement("script");
-      s.id = "calendlyWidgetScript";
-      s.src = "https://assets.calendly.com/assets/external/widget.js";
-      s.async = true;
-      document.body.appendChild(s);
-    } else if (window.Calendly && typeof window.Calendly.initInlineWidgets === "function") {
-      window.Calendly.initInlineWidgets();
+    section.removeAttribute("aria-hidden");
+    if (widget.dataset.calendlyMounted === "1") return;
+
+    const start = () => {
+      if (widget.dataset.calendlyMounted === "1") return;
+      widget.dataset.calendlyMounted = "1";
+      mountCalendlyWidget(widget, url);
+    };
+
+    if (!("IntersectionObserver" in window)) {
+      start();
+      return;
     }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          start();
+        }
+      },
+      { rootMargin: "280px 0px" }
+    );
+    io.observe(section);
   }
 
   function isPlaceholderValue(value) {
@@ -1149,8 +1275,10 @@ document.addEventListener("DOMContentLoaded", () => {
             `طلب عبر الحاسبة: ${count} موظف، الباقة «${plans[paketSelect.value].label}»، تقريباً ${resultPrice.textContent}/شهر.`
           );
         }
-        document.getElementById("kontakt")?.scrollIntoView({ behavior: "smooth", block: "start" });
-        document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        if (!scrollToBooking()) {
+          document.getElementById("kontakt")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
       });
     }
   }

@@ -143,7 +143,7 @@
         <a href="#faq">FAQ</a>
         <div class="nav-actions">
           <a href="#" class="btn-login" data-login>Portal</a>
-          <a href="#kontakt" class="btn btn-primary btn-nav">Demo</a>
+          <a href="#calendlySection" class="btn btn-primary btn-nav" data-booking>Demo</a>
         </div>
       </nav>
 
@@ -181,7 +181,7 @@
           <a href="en/index.html" class="lang-switch" hreflang="en">EN</a>
           <a href="ar/index.html" class="lang-switch" hreflang="ar">AR</a>
         </li>
-        <li><a href="#kontakt" class="mobile-nav-cta">Demo anfragen</a></li>
+        <li><a href="#calendlySection" class="mobile-nav-cta" data-booking>Demo-Termin wählen</a></li>
       </ul>
     </nav>
   </header>
@@ -197,7 +197,7 @@
           <strong data-brand-platform>WorkPass</strong> ist das moderne Zeiterfassungssystem mit digitaler Identität: Check-in per QR, NFC oder GPS, Live-Anwesenheit, Compliance und Berichte – plus Einsatzplan, Chat und Alarme. Für Teams in Berlin, Deutschland und Europa. Mit <strong>Ihrem Branding</strong>.
         </p>
         <div class="hero-actions">
-          <a href="#kontakt" class="btn btn-primary btn-glow">Live-Demo buchen</a>
+          <a href="#calendlySection" class="btn btn-primary btn-glow" data-booking>Live-Demo buchen</a>
           <a href="#video" class="btn btn-outline">Produktvideo ansehen</a>
         </div>
         <div class="hero-quick-contact">
@@ -448,7 +448,7 @@
         </li>
       </ol>
       <div class="start-cta">
-        <a href="#kontakt" class="btn btn-primary btn-glow">Jetzt Demo buchen</a>
+        <a href="#calendlySection" class="btn btn-primary btn-glow" data-booking>Jetzt Demo buchen</a>
         <a href="https://wa.me/4917631676589?text=Hallo%2C%20ich%20m%C3%B6chte%20eine%20WorkPass-Demo." class="btn btn-outline" id="midWhatsAppCta">Per WhatsApp</a>
       </div>
     </div>
@@ -1380,7 +1380,7 @@
       <h2>Bereit für digitale Identity &amp; Zutritt?</h2>
       <p>Live-Demo: Identität → Zutritt → Lagebild → Compliance → PDF-Bericht. Oder fragen Sie die Freischaltung Ihres Firmenzugangs an.</p>
       <div class="cta-actions">
-        <a href="#kontakt" class="btn btn-accent">Jetzt Demo vereinbaren</a>
+        <a href="#calendlySection" class="btn btn-accent" data-booking>Jetzt Demo vereinbaren</a>
         <a href="https://wa.me/4917631676589?text=Hallo%2C%20ich%20m%C3%B6chte%20eine%20WorkPass-Demo." class="btn btn-outline">Per WhatsApp</a>
         <a href="#preise" class="btn btn-outline">Pakete vergleichen</a>
       </div>
@@ -1407,13 +1407,36 @@
     </div>
   </section>
 
+  <section id="calendlySection" class="calendly-section reveal" hidden>
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Termin</span>
+        <h2>Demo-Termin online wählen</h2>
+        <p>30 Minuten Live-Demo – Slot wählen, Bestätigung kommt per E-Mail.</p>
+      </div>
+      <ul class="calendly-perks">
+        <li>30 Minuten</li>
+        <li>Online per Video</li>
+        <li>Sofort-Bestätigung</li>
+      </ul>
+      <div id="calendlyEmbed" class="calendly-embed" data-booking-only></div>
+      <p class="calendly-note">
+        Alternativ:
+        <a href="https://wa.me/4917631676589?text=Hallo%2C%20Demo-Termin%20WorkPass" id="calendlyWhatsAppAlt">WhatsApp</a>,
+        <a href="#kontakt">Kontaktformular</a>
+        oder
+        <a href="https://calendly.com/suppix-workpass-ai/30min" id="calendlyOpenExternal" data-booking-external target="_blank" rel="noopener noreferrer">Kalender in neuem Tab</a>.
+      </p>
+    </div>
+  </section>
+
   <!-- Contact -->
   <section id="kontakt">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Kontakt</span>
-        <h2>Live-Demo anfragen</h2>
-        <p>Ein Formular reicht: Wir melden uns mit Termin oder nächstem Schritt. Optional per WhatsApp.</p>
+        <h2>Schreiben Sie uns</h2>
+        <p>Lieber per Formular? Wir melden uns mit dem nächsten Schritt – oder Sie <a href="#calendlySection" data-booking>wählen direkt einen Demo-Termin</a>.</p>
       </div>
 
       <div class="contact-grid">
@@ -1496,26 +1519,11 @@
               <span>Ich habe die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zu. *</span>
             </label>
           </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%;">Demo anfragen</button>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Nachricht senden</button>
           <p class="form-hint" id="formSubmitHint" hidden></p>
           <div class="form-status" id="contactStatus"></div>
         </form>
       </div>
-    </div>
-  </section>
-
-  <section id="calendlySection" class="calendly-section reveal" hidden>
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Termin</span>
-        <h2>Demo-Termin online wählen</h2>
-        <p>Wählen Sie einen freien Slot – Bestätigung kommt per E-Mail (Calendly).</p>
-      </div>
-      <div id="calendlyEmbed" class="calendly-embed" data-booking-only></div>
-      <p class="calendly-note">
-        Alternativ: <a href="https://wa.me/4917631676589?text=Hallo%2C%20Demo-Termin%20WorkPass" id="calendlyWhatsAppAlt">per WhatsApp</a>
-        oder <a href="#kontakt">Kontaktformular</a>.
-      </p>
     </div>
   </section>
 
@@ -1583,7 +1591,7 @@
 
   <!-- Mobile Sticky CTA -->
   <div class="mobile-cta-bar" id="mobileCtaBar" aria-hidden="true">
-    <a href="#kontakt" class="btn btn-primary">Demo anfragen</a>
+    <a href="#calendlySection" class="btn btn-primary" data-booking>Termin wählen</a>
     <a href="https://wa.me/4917631676589?text=Hallo%2C%20ich%20m%C3%B6chte%20eine%20Demo%20f%C3%BCr%20WorkPass%20buchen." class="btn btn-outline" id="mobileCtaWhatsapp">WhatsApp</a>
   </div>
 
