@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   applySiteConfig();
   initSiteNotice();
+  initCopyrightNote();
   initDemoVideo();
   initHeader();
   initSmoothScroll();
@@ -211,6 +212,18 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         );
     }
+  }
+
+  function initCopyrightNote() {
+    const note = String(cfg.copyrightNote || "").trim();
+    if (!note || document.body.classList.contains("flyer-body")) return;
+    document.querySelectorAll(".footer .footer-bottom").forEach((fb) => {
+      if (fb.querySelector(".copyright-protect")) return;
+      const p = document.createElement("p");
+      p.className = "copyright-protect";
+      p.textContent = note;
+      fb.appendChild(p);
+    });
   }
 
   function initSiteNotice() {

@@ -905,6 +905,16 @@ html[dir="rtl"] .feature-card p {
 body.has-site-notice {
   scroll-padding-top: 7.5rem;
 }
+
+.footer-bottom .copyright-protect,
+.copyright-protect {
+  width: 100%;
+  margin: 0.65rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--gray-500, #94a3b8);
+  opacity: 0.95;
+}
 @media (max-width: 640px) {
   .site-notice {
     font-size: 0.82rem;

@@ -31,6 +31,10 @@ window.SITE_CONFIG = {
     dismissible: true,
   },
 
+  /** Footer-Zusatz (Markenschutz). */
+  copyrightNote:
+    "© Suppix AI UG. Logo, Marke und Design geschützt – Nutzung nur mit schriftlicher Erlaubnis.",
+
   /**
    * Sichtbarer Domain-Name auf Flyer/Marketing (ohne https://).
    * Marketing: suppixai.com · Plattform-Login bleibt appLoginUrl.
