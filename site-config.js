@@ -52,11 +52,11 @@ window.SITE_CONFIG = {
   },
 
   /**
-   * Terminbuchung: WhatsApp-Deep-Link (später Calendly/Cal.com möglich).
+   * Online-Termin (Calendly). Beispiel:
+   * "https://calendly.com/dein-name/workpass-demo"
+   * Leer = Termin-Links nutzen WhatsApp als Fallback.
    */
-  bookingUrl:
-    "https://wa.me/4917631676589?text=" +
-    encodeURIComponent("Hallo, ich möchte einen Demo-Termin für WorkPass vereinbaren."),
+  bookingUrl: "",
 
   media: {
     demoPoster: "assets/video-poster.jpg",

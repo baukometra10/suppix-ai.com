@@ -915,6 +915,29 @@ body.has-site-notice {
   color: var(--gray-500, #94a3b8);
   opacity: 0.95;
 }
+
+.calendly-section {
+  padding: 3.5rem 0 4rem;
+  background: var(--bg-deep, #0b1220);
+}
+.calendly-embed {
+  max-width: 920px;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: #fff;
+  min-height: 680px;
+}
+.calendly-note {
+  text-align: center;
+  margin: 1.25rem 0 0;
+  font-size: 0.9rem;
+  color: var(--gray-500, #94a3b8);
+}
+.calendly-note a {
+  color: var(--primary, #5eb8e8);
+}
 @media (max-width: 640px) {
   .site-notice {
     font-size: 0.82rem;

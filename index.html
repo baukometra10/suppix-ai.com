@@ -1448,7 +1448,7 @@
             <div class="contact-item-icon">📅</div>
             <div>
               <strong style="color: var(--white);">Termin</strong><br>
-              <a href="https://wa.me/4917631676589?text=Hallo%2C%20ich%20m%C3%B6chte%20einen%20Demo-Termin%20f%C3%BCr%20WorkPass%20vereinbaren." data-booking data-booking-label="auto" style="color: var(--primary);">Demo-Termin per WhatsApp</a>
+              <a href="#calendlySection" data-booking data-booking-label="auto" style="color: var(--primary);">Demo-Termin buchen</a>
             </div>
           </div>
           <div class="contact-item">
@@ -1501,6 +1501,21 @@
           <div class="form-status" id="contactStatus"></div>
         </form>
       </div>
+    </div>
+  </section>
+
+  <section id="calendlySection" class="calendly-section reveal" hidden>
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Termin</span>
+        <h2>Demo-Termin online wählen</h2>
+        <p>Wählen Sie einen freien Slot – Bestätigung kommt per E-Mail (Calendly).</p>
+      </div>
+      <div id="calendlyEmbed" class="calendly-embed" data-booking-only></div>
+      <p class="calendly-note">
+        Alternativ: <a href="https://wa.me/4917631676589?text=Hallo%2C%20Demo-Termin%20WorkPass" id="calendlyWhatsAppAlt">per WhatsApp</a>
+        oder <a href="#kontakt">Kontaktformular</a>.
+      </p>
     </div>
   </section>
 

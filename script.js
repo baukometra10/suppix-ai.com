@@ -80,10 +80,28 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
+  function isCalendlyUrl(url) {
+    return /calendly\.com/i.test(String(url || ""));
+  }
+
   function initBookingLinks() {
     const booking = String(cfg.bookingUrl || "").trim();
+    const useCalendly = Boolean(booking) && isCalendlyUrl(booking);
+
     document.querySelectorAll("[data-booking]").forEach((el) => {
-      if (booking) {
+      if (useCalendly) {
+        el.href = booking;
+        el.hidden = false;
+        el.target = "_blank";
+        el.rel = "noopener noreferrer";
+        if (el.dataset.bookingLabel === "auto" || !el.textContent.trim()) {
+          el.textContent = t(
+            "Demo-Termin online buchen (Calendly)",
+            "Book demo online (Calendly)",
+            "احجز موعد العرض أونلاين (Calendly)"
+          );
+        }
+      } else if (booking && !isCalendlyUrl(booking)) {
         el.href = booking;
         el.hidden = false;
         el.target = "_blank";
@@ -94,7 +112,6 @@ document.addEventListener("DOMContentLoaded", () => {
             : t("Termin online buchen", "Book a time online", "احجز موعداً أونلاين");
         }
       } else {
-        // Fallback: WhatsApp demo request
         setWhatsAppLink(
           el,
           t(
@@ -115,8 +132,40 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.querySelectorAll("[data-booking-only]").forEach((el) => {
-      el.hidden = !booking;
+      el.hidden = !useCalendly;
     });
+    document.querySelectorAll("[data-booking-whatsapp-fallback]").forEach((el) => {
+      el.hidden = useCalendly;
+    });
+
+    initCalendlyEmbed(useCalendly ? booking : "");
+  }
+
+  function initCalendlyEmbed(url) {
+    const section = document.getElementById("calendlySection");
+    const widget = document.getElementById("calendlyEmbed");
+    if (!section || !widget) return;
+    if (!url) {
+      section.hidden = true;
+      return;
+    }
+    section.hidden = false;
+    widget.innerHTML = "";
+    const mount = document.createElement("div");
+    mount.className = "calendly-inline-widget";
+    mount.setAttribute("data-url", url);
+    mount.style.minWidth = "320px";
+    mount.style.height = "700px";
+    widget.appendChild(mount);
+    if (!document.getElementById("calendlyWidgetScript")) {
+      const s = document.createElement("script");
+      s.id = "calendlyWidgetScript";
+      s.src = "https://assets.calendly.com/assets/external/widget.js";
+      s.async = true;
+      document.body.appendChild(s);
+    } else if (window.Calendly && typeof window.Calendly.initInlineWidgets === "function") {
+      window.Calendly.initInlineWidgets();
+    }
   }
 
   function isPlaceholderValue(value) {

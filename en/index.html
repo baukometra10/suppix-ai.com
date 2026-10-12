@@ -833,7 +833,7 @@
           <div class="contact-item"><div class="contact-item-icon">📧</div><div><strong style="color: var(--white);">Email</strong><br><a href="mailto:info@suppixai.com" style="color: var(--primary);" data-email>info@suppixai.com</a></div></div>
           <div class="contact-item"><div class="contact-item-icon">📞</div><div><strong style="color: var(--white);">Phone</strong><br><a href="tel:+4917631676589" style="color: var(--gray-500);" data-phone-link>017631676589</a></div></div>
           <div class="contact-item"><div class="contact-item-icon">💬</div><div><strong style="color: var(--white);">WhatsApp</strong><br><a href="https://wa.me/4917631676589?text=Hello%2C%20I%20am%20interested%20in%20WorkPass." id="contactWhatsApp" style="color: var(--primary);">Request demo via WhatsApp</a></div></div>
-          <div class="contact-item"><div class="contact-item-icon">📅</div><div><strong style="color: var(--white);">Appointment</strong><br><a href="https://wa.me/4917631676589?text=Hello%2C%20I%20would%20like%20to%20schedule%20a%20WorkPass%20demo." data-booking data-booking-label="auto" style="color: var(--primary);">Demo time via WhatsApp</a></div></div>
+          <div class="contact-item"><div class="contact-item-icon">📅</div><div><strong style="color: var(--white);">Appointment</strong><br><a href="#calendlySection" data-booking data-booking-label="auto" style="color: var(--primary);">Book a demo time</a></div></div>
         </div>
         <form class="contact-form" id="contactForm" method="POST" action="#" accept-charset="UTF-8">
           <input type="hidden" name="_template" value="table">
@@ -858,6 +858,21 @@
           <div class="form-status" id="contactStatus"></div>
         </form>
       </div>
+    </div>
+  </section>
+
+  <section id="calendlySection" class="calendly-section reveal" hidden>
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Booking</span>
+        <h2>Pick a demo time online</h2>
+        <p>Choose an open slot – you get a confirmation by email (Calendly).</p>
+      </div>
+      <div id="calendlyEmbed" class="calendly-embed" data-booking-only></div>
+      <p class="calendly-note">
+        Or use <a href="https://wa.me/4917631676589?text=Hello%2C%20WorkPass%20demo%20please">WhatsApp</a>
+        or the <a href="#contact">contact form</a>.
+      </p>
     </div>
   </section>
 

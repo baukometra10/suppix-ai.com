@@ -691,7 +691,7 @@
           <div class="contact-item"><div class="contact-item-icon">📧</div><div><strong style="color: var(--white);">البريد</strong><br><a href="mailto:info@suppixai.com" style="color: var(--primary);" data-email>info@suppixai.com</a></div></div>
           <div class="contact-item"><div class="contact-item-icon">📞</div><div><strong style="color: var(--white);">الهاتف</strong><br><a href="tel:+4917631676589" style="color: var(--gray-500);" data-phone-link>017631676589</a></div></div>
           <div class="contact-item"><div class="contact-item-icon">💬</div><div><strong style="color: var(--white);">واتساب</strong><br><a href="https://wa.me/4917631676589?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D9%87%D8%AA%D9%85%20%D8%A8%D9%80%20WorkPass." id="contactWhatsApp" style="color: var(--primary);">اطلب عرضاً عبر واتساب</a></div></div>
-          <div class="contact-item"><div class="contact-item-icon">📅</div><div><strong style="color: var(--white);">موعد</strong><br><a href="#contact" data-booking data-booking-label="auto" style="color: var(--primary);">اطلب موعداً عبر واتساب</a></div></div>
+          <div class="contact-item"><div class="contact-item-icon">📅</div><div><strong style="color: var(--white);">موعد</strong><br><a href="#calendlySection" data-booking data-booking-label="auto" style="color: var(--primary);">احجز موعد العرض</a></div></div>
         </div>
         <form class="contact-form" id="contactForm" method="POST" action="#" accept-charset="UTF-8">
           <input type="hidden" name="_template" value="table">
@@ -716,6 +716,21 @@
           <div class="form-status" id="contactStatus"></div>
         </form>
       </div>
+    </div>
+  </section>
+
+  <section id="calendlySection" class="calendly-section reveal" hidden>
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">الموعد</span>
+        <h2>اختر موعد العرض أونلاين</h2>
+        <p>اختر وقتًا متاحًا – ستصلك رسالة تأكيد بالبريد (Calendly).</p>
+      </div>
+      <div id="calendlyEmbed" class="calendly-embed" data-booking-only></div>
+      <p class="calendly-note">
+        أو عبر <a href="https://wa.me/4917631676589?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%B9%D8%B1%D8%B6%20WorkPass">واتساب</a>
+        أو <a href="#contact">نموذج التواصل</a>.
+      </p>
     </div>
   </section>
 
