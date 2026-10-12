@@ -56,7 +56,7 @@ window.SITE_CONFIG = {
    * "https://calendly.com/dein-name/workpass-demo"
    * Leer = Termin-Links nutzen WhatsApp als Fallback.
    */
-  bookingUrl: "",
+  bookingUrl: "https://calendly.com/suppix-workpass-ai/30min",
 
   media: {
     demoPoster: "assets/video-poster.jpg",
