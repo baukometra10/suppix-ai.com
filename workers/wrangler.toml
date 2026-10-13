@@ -3,11 +3,20 @@ main = "contact-form.js"
 compatibility_date = "2026-03-01"
 workers_dev = true
 
-# Nach dem Deploy: URL in site-config.js als formApiUrl eintragen.
+# Nach dem Deploy: URL in site-config.js als formApiUrl / bookingApiUrl eintragen.
 # Secrets:
 #   npx wrangler secret put RESEND_API_KEY
 #
-# Optional vars (Dashboard oder hier):
+# D1 (Demo-Buchungen):
+#   npx wrangler d1 create suppixai-bookings
+#   → database_id unten eintragen
+#   npx wrangler d1 execute suppixai-bookings --remote --file=./schema.sql
+
+[[d1_databases]]
+binding = "DB"
+database_name = "suppixai-bookings"
+database_id = "dce12939-4d23-454a-b4cb-94c7a53e7879"
+
 [vars]
 TO_EMAIL = "info@suppixai.com"
 # Private Inbox direkt (ohne Porkbun-Forward) – sonst landen Leads oft im Nichts/Junk.
@@ -23,3 +32,10 @@ PHONE = "017631676589"
 WHATSAPP = "4917631676589"
 WEBSITE = "https://suppixai.com"
 LOGO_URL = "https://suppixai.com/assets/logo.png"
+BOOKING_TZ = "Europe/Berlin"
+BOOKING_START_HOUR = "10"
+BOOKING_END_HOUR = "17"
+BOOKING_DURATION_MIN = "30"
+BOOKING_LEAD_HOURS = "2"
+BOOKING_HORIZON_DAYS = "28"
+BOOKING_WEEKDAYS = "1,2,3,4,5"

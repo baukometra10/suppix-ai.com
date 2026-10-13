@@ -56,7 +56,7 @@
         <a href="#faq">FAQ</a>
         <div class="nav-actions">
           <a href="#" class="btn-login" data-login>Portal</a>
-          <a href="#calendlySection" class="btn btn-primary btn-nav" data-booking>Demo</a>
+          <a href="#bookingSection" class="btn btn-primary btn-nav" data-booking>Demo</a>
         </div>
       </nav>
       <div class="header-tools">
@@ -88,7 +88,7 @@
           <a href="index.html" class="lang-switch is-active" hreflang="en" aria-current="page">EN</a>
           <a href="../ar/index.html" class="lang-switch" hreflang="ar">AR</a>
         </li>
-        <li><a href="#calendlySection" class="mobile-nav-cta" data-booking>Pick a demo time</a></li>
+        <li><a href="#bookingSection" class="mobile-nav-cta" data-booking>Pick a demo time</a></li>
       </ul>
     </nav>
   </header>
@@ -103,7 +103,7 @@
           <strong data-brand-platform>WorkPass</strong> runs the full site cycle: identity · access · compliance · reports – and stays close to the team: deployment plan, chat, calls, video meetings, safety and proactive emails. With <strong>your branding</strong> – company name and logo instead of only the default platform name.
         </p>
         <div class="hero-actions">
-          <a href="#calendlySection" class="btn btn-primary btn-glow" data-booking>Book live demo</a>
+          <a href="#bookingSection" class="btn btn-primary btn-glow" data-booking>Book live demo</a>
           <a href="#video" class="btn btn-outline">Watch product video</a>
         </div>
         <div class="hero-quick-contact">
@@ -225,7 +225,7 @@
         <li class="start-step"><span class="start-num">4</span><div><h3>Go-live at the gate</h3><p>First check-in, gate live view, plan delivery and alerts – operations without Excel chase.</p></div></li>
       </ol>
       <div class="start-cta">
-        <a href="#calendlySection" class="btn btn-primary btn-glow" data-booking>Book a demo now</a>
+        <a href="#bookingSection" class="btn btn-primary btn-glow" data-booking>Book a demo now</a>
         <a href="#contact" class="btn btn-outline">Request account activation</a>
       </div>
     </div>
@@ -793,7 +793,7 @@
       <h2>Ready for enterprise identity?</h2>
       <p>Discover WorkPass in a free live demo – or request activation for your company account (we enable access manually).</p>
       <div class="cta-actions">
-        <a href="#calendlySection" class="btn btn-accent" data-booking>Schedule Demo</a>
+        <a href="#bookingSection" class="btn btn-accent" data-booking>Schedule Demo</a>
         <a href="#contact" class="btn btn-outline">Request account activation</a>
         <a href="#compare" class="btn btn-outline">Compare plans</a>
       </div>
@@ -819,25 +819,109 @@
     </div>
   </section>
 
-  <section id="calendlySection" class="calendly-section reveal" hidden>
+  <section id="bookingSection" class="booking-section reveal">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Booking</span>
         <h2>Pick a demo time online</h2>
         <p>30-minute live demo – choose a slot and get email confirmation.</p>
       </div>
-      <ul class="calendly-perks">
+      <ul class="booking-perks">
         <li>30 minutes</li>
         <li>Online video call</li>
         <li>Instant confirmation</li>
       </ul>
-      <div id="calendlyEmbed" class="calendly-embed" data-booking-only></div>
-      <p class="calendly-note">
+      <div class="booking-panel" id="bookingPanel" data-booking-only>
+        <form class="booking-form" id="bookingForm" novalidate>
+          <input type="text" name="_honey" class="booking-honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <div class="booking-step" data-step="1">
+            <h3 class="booking-step-title">1. Details</h3>
+            <div class="booking-grid">
+              <div class="form-group">
+                <label for="bookingDemoType">Demo type *</label>
+                <select id="bookingDemoType" name="demoType" required>
+                  <option value="">Please select</option>
+                  <option value="live-overview">Live product overview</option>
+                  <option value="bau">Focus: construction</option>
+                  <option value="industrie">Focus: industry</option>
+                  <option value="lohn">Focus: payroll</option>
+                  <option value="enterprise">Enterprise / white-label</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="bookingPaket">Plan interest</label>
+                <select id="bookingPaket" name="paket">
+                  <option value="">Not sure yet</option>
+                  <option value="besucherkarte">Visitor Card</option>
+                  <option value="starter">Starter</option>
+                  <option value="professional">Professional</option>
+                  <option value="enterprise">Enterprise</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="bookingLocation">Location / region</label>
+                <input type="text" id="bookingLocation" name="location" placeholder="e.g. Berlin, NRW, EU">
+              </div>
+            </div>
+          </div>
+          <div class="booking-step" data-step="2">
+            <h3 class="booking-step-title">2. Time</h3>
+            <div class="booking-grid booking-grid-2">
+              <div class="form-group">
+                <label for="bookingDate">Day *</label>
+                <input type="date" id="bookingDate" name="date" required>
+              </div>
+              <div class="form-group">
+                <label for="bookingSlot">Time *</label>
+                <select id="bookingSlot" name="slotStart" required disabled>
+                  <option value="">Pick a day first</option>
+                </select>
+                <p class="booking-slot-hint" id="bookingSlotHint">Timezone: Europe/Berlin · Mon–Fri</p>
+              </div>
+            </div>
+          </div>
+          <div class="booking-step" data-step="3">
+            <h3 class="booking-step-title">3. Contact</h3>
+            <div class="booking-grid">
+              <div class="form-group">
+                <label for="bookingName">Name *</label>
+                <input type="text" id="bookingName" name="name" required placeholder="Your name" autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label for="bookingEmail">Email *</label>
+                <input type="email" id="bookingEmail" name="email" required placeholder="you@company.com" autocomplete="email">
+              </div>
+              <div class="form-group">
+                <label for="bookingCompany">Company</label>
+                <input type="text" id="bookingCompany" name="company" placeholder="Company name" autocomplete="organization">
+              </div>
+              <div class="form-group booking-full">
+                <label for="bookingMessage">Message (optional)</label>
+                <textarea id="bookingMessage" name="message" rows="3" placeholder="Team size, sites, priorities…"></textarea>
+              </div>
+            </div>
+            <div class="form-group form-checkbox">
+              <label class="checkbox-label">
+                <input type="checkbox" id="bookingPrivacy" name="privacy" value="accepted" required>
+                <span>I agree to the <a href="../datenschutz.html" target="_blank" rel="noopener">privacy policy</a>. *</span>
+              </label>
+            </div>
+          </div>
+          <div class="booking-actions">
+            <button type="submit" class="btn btn-primary" id="bookingSubmit">Confirm booking</button>
+            <p class="form-status" id="bookingStatus" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+        <div class="booking-success" id="bookingSuccess" hidden>
+          <h3>Booking confirmed</h3>
+          <p id="bookingSuccessText">You will receive a confirmation email (with calendar invite).</p>
+          <a href="#contact" class="btn btn-outline">Go to contact</a>
+        </div>
+      </div>
+      <p class="booking-note">
         Or use
-        <a href="https://wa.me/4917631676589?text=Hello%2C%20WorkPass%20demo%20please" id="calendlyWhatsAppAlt">WhatsApp</a>,
-        the <a href="#contact">contact form</a>,
-        or
-        <a href="https://calendly.com/suppix-workpass-ai/30min" id="calendlyOpenExternal" data-booking-external target="_blank" rel="noopener noreferrer">open calendar in a new tab</a>.
+        <a href="https://wa.me/4917631676589?text=Hello%2C%20WorkPass%20demo%20please" id="bookingWhatsAppAlt">WhatsApp</a>
+        or the <a href="#contact">contact form</a>.
       </p>
     </div>
   </section>
@@ -847,7 +931,7 @@
       <div class="section-header">
         <span class="section-tag">Contact</span>
         <h2>Write to us</h2>
-        <p>Prefer a form? We reply with the next step – or <a href="#calendlySection" data-booking>pick a demo time directly</a>.</p>
+        <p>Prefer a form? We reply with the next step – or <a href="#bookingSection" data-booking>pick a demo time directly</a>.</p>
       </div>
       <div class="contact-grid">
         <div class="contact-info">
@@ -856,7 +940,7 @@
           <div class="contact-item"><div class="contact-item-icon">📧</div><div><strong style="color: var(--white);">Email</strong><br><a href="mailto:info@suppixai.com" style="color: var(--primary);" data-email>info@suppixai.com</a></div></div>
           <div class="contact-item"><div class="contact-item-icon">📞</div><div><strong style="color: var(--white);">Phone</strong><br><a href="tel:+4917631676589" style="color: var(--gray-500);" data-phone-link>017631676589</a></div></div>
           <div class="contact-item"><div class="contact-item-icon">💬</div><div><strong style="color: var(--white);">WhatsApp</strong><br><a href="https://wa.me/4917631676589?text=Hello%2C%20I%20am%20interested%20in%20WorkPass." id="contactWhatsApp" style="color: var(--primary);">Request demo via WhatsApp</a></div></div>
-          <div class="contact-item"><div class="contact-item-icon">📅</div><div><strong style="color: var(--white);">Appointment</strong><br><a href="#calendlySection" data-booking data-booking-label="auto" style="color: var(--primary);">Book a demo time</a></div></div>
+          <div class="contact-item"><div class="contact-item-icon">📅</div><div><strong style="color: var(--white);">Appointment</strong><br><a href="#bookingSection" data-booking data-booking-label="auto" style="color: var(--primary);">Book a demo time</a></div></div>
         </div>
         <form class="contact-form" id="contactForm" method="POST" action="#" accept-charset="UTF-8">
           <input type="hidden" name="_template" value="table">
@@ -897,7 +981,7 @@
   </footer>
 
   <div class="mobile-cta-bar" id="mobileCtaBar" aria-hidden="true">
-    <a href="#calendlySection" class="btn btn-primary" data-booking>Pick a time</a>
+    <a href="#bookingSection" class="btn btn-primary" data-booking>Pick a time</a>
     <a href="https://wa.me/4917631676589?text=Hello%2C%20I%20would%20like%20to%20book%20a%20WorkPass%20demo." class="btn btn-outline" id="mobileCtaWhatsapp">WhatsApp</a>
   </div>
 

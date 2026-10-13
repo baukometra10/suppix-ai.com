@@ -1,18 +1,21 @@
 /**
- * Cloudflare Worker: Kontaktformular → Resend (von @suppixai.com)
+ * Cloudflare Worker: Kontaktformular + Demo-Buchung → Resend (von @suppixai.com)
+ *
+ * Routes:
+ *   POST /              – Kontakt / Newsletter
+ *   GET  /booking/slots – freie Slots (?date=YYYY-MM-DD)
+ *   POST /booking       – Termin reservieren
  *
  * Deploy:
  *   1. npm i -g wrangler  (oder npx wrangler)
  *   2. cd workers && npx wrangler login
- *   3. npx wrangler secret put RESEND_API_KEY
- *   4. npx wrangler deploy
- *
- * Secrets / vars (wrangler.toml + Dashboard):
- *   RESEND_API_KEY   – aus Resend Dashboard
- *   TO_EMAIL         – info@suppixai.com
- *   FROM_EMAIL       – WorkPass <info@suppixai.com>  (Domain in Resend verifiziert)
- *   ALLOWED_ORIGINS  – https://suppixai.com,https://www.suppixai.com
+ *   3. npx wrangler d1 create suppixai-bookings  (ID in wrangler.toml)
+ *   4. npx wrangler d1 execute suppixai-bookings --remote --file=./schema.sql
+ *   5. npx wrangler secret put RESEND_API_KEY
+ *   6. npx wrangler deploy
  */
+
+import { handleBookingPost, handleSlotsGet } from "./booking.js";
 
 const DEFAULT_ALLOWED = [
   "https://suppixai.com",
@@ -25,7 +28,7 @@ function corsHeaders(origin, allowed) {
   const ok = !origin || allowed.includes(origin);
   return {
     "Access-Control-Allow-Origin": ok ? origin || allowed[0] : allowed[0],
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
@@ -278,17 +281,51 @@ export default {
     const allowed = parseAllowed(env);
     const origin = request.headers.get("Origin") || "";
     const cors = corsHeaders(origin, allowed);
+    const url = new URL(request.url);
+    const path = url.pathname.replace(/\/+$/, "") || "/";
 
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: cors });
     }
 
-    if (request.method !== "POST") {
-      return json({ ok: false, error: "Method not allowed" }, 405, cors);
-    }
-
     if (origin && !allowed.includes(origin)) {
       return json({ ok: false, error: "Origin not allowed" }, 403, cors);
+    }
+
+    if (request.method === "GET" && (path === "/booking/slots" || path.endsWith("/booking/slots"))) {
+      try {
+        return await handleSlotsGet(request, env, cors);
+      } catch (err) {
+        return json({ ok: false, error: String(err.message || err) }, 502, cors);
+      }
+    }
+
+    if (request.method === "POST" && (path === "/booking" || path.endsWith("/booking"))) {
+      if (!env.RESEND_API_KEY) {
+        return json({ ok: false, error: "Server not configured" }, 500, cors);
+      }
+      let body;
+      try {
+        body = await request.json();
+      } catch {
+        return json({ ok: false, error: "Invalid JSON" }, 400, cors);
+      }
+      try {
+        return await handleBookingPost(body, env, cors, {
+          escapeHtml,
+          emailShell,
+          ownerEmailHtml,
+          sendResend,
+          logoAttachment,
+          ctaButton,
+        });
+      } catch (err) {
+        return json({ ok: false, error: String(err.message || err) }, 502, cors);
+      }
+    }
+
+    if (request.method !== "POST") {
+      return json({ ok: false, error: "Method not allowed" }, 405, cors);
     }
 
     if (!env.RESEND_API_KEY) {

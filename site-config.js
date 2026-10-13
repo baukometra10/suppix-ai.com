@@ -52,11 +52,14 @@ window.SITE_CONFIG = {
   },
 
   /**
-   * Online-Termin (Calendly). Beispiel:
-   * "https://calendly.com/dein-name/workpass-demo"
+   * Eigene Demo-Buchung (Cloudflare Worker).
    * Leer = Termin-Links nutzen WhatsApp als Fallback.
+   * Gleicher Host wie formApiUrl, Pfade: /booking/slots und /booking
    */
-  bookingUrl: "https://calendly.com/suppix-workpass-ai/30min",
+  bookingApiUrl: "https://suppixai-contact.suppix-ai.workers.dev",
+
+  /** Legacy: externe URL (z. B. altes Calendly). Leer = eigene Buchung / WhatsApp. */
+  bookingUrl: "",
 
   media: {
     demoPoster: "assets/video-poster.jpg",

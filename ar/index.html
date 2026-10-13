@@ -54,7 +54,7 @@
         <a href="#faq">أسئلة</a>
         <div class="nav-actions">
           <a href="#" class="btn-login" data-login>البوابة</a>
-          <a href="#calendlySection" class="btn btn-primary btn-nav" data-booking>تجربة</a>
+          <a href="#bookingSection" class="btn btn-primary btn-nav" data-booking>تجربة</a>
         </div>
       </nav>
       <div class="header-tools">
@@ -86,7 +86,7 @@
           <a href="../en/index.html" class="lang-switch" hreflang="en">EN</a>
           <a href="index.html" class="lang-switch is-active" hreflang="ar" aria-current="page">AR</a>
         </li>
-        <li><a href="#calendlySection" class="mobile-nav-cta" data-booking>اختر موعد العرض</a></li>
+        <li><a href="#bookingSection" class="mobile-nav-cta" data-booking>اختر موعد العرض</a></li>
       </ul>
     </nav>
   </header>
@@ -101,7 +101,7 @@
           <strong data-brand-platform>WorkPass</strong> يدير دورة العمل كاملة في موقع العمل: هوية · دخول · امتثال · تقارير – ويبقى قريباً من الفريق: خطة عمل، شات، مكالمات، اجتماعات فيديو، أمان وتنبيهات استباقية. مع <strong>براندينجك الخاص</strong> – اسم شركتك واللوجو بدل اسم المنصة الافتراضي فقط.
         </p>
         <div class="hero-actions">
-          <a href="#calendlySection" class="btn btn-primary btn-glow" data-booking>احجز عرضاً مباشراً</a>
+          <a href="#bookingSection" class="btn btn-primary btn-glow" data-booking>احجز عرضاً مباشراً</a>
           <a href="#video" class="btn btn-outline">شاهد فيديو المنتج</a>
         </div>
         <div class="hero-quick-contact">
@@ -223,7 +223,7 @@
         <li class="start-step"><span class="start-num">4</span><div><h3>الانطلاق عند البوابة</h3><p>أول تسجيل دخول، عرض البواب، إرسال الخطة والتنبيهات – تشغيل بلا مطاردة Excel.</p></div></li>
       </ol>
       <div class="start-cta">
-        <a href="#calendlySection" class="btn btn-primary btn-glow" data-booking>احجز عرضاً الآن</a>
+        <a href="#bookingSection" class="btn btn-primary btn-glow" data-booking>احجز عرضاً الآن</a>
         <a href="#contact" class="btn btn-outline">اطلب تفعيل الحساب</a>
       </div>
     </div>
@@ -651,7 +651,7 @@
       <h2>جاهز لهوية مؤسسية حديثة؟</h2>
       <p>اكتشف WorkPass في عرض مباشر مجاني – أو اطلب تفعيل حساب شركتكم (نفعّل الوصول يدويًا).</p>
       <div class="cta-actions">
-        <a href="#calendlySection" class="btn btn-accent" data-booking>حدد موعد العرض</a>
+        <a href="#bookingSection" class="btn btn-accent" data-booking>حدد موعد العرض</a>
         <a href="#contact" class="btn btn-outline">اطلب تفعيل الحساب</a>
         <a href="#compare" class="btn btn-outline">قارن الخطط</a>
       </div>
@@ -677,25 +677,109 @@
     </div>
   </section>
 
-  <section id="calendlySection" class="calendly-section reveal" hidden>
+  <section id="bookingSection" class="booking-section reveal">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">الموعد</span>
         <h2>اختر موعد العرض أونلاين</h2>
         <p>عرض مباشر 30 دقيقة – اختر وقتًا وستصلك رسالة تأكيد بالبريد.</p>
       </div>
-      <ul class="calendly-perks">
+      <ul class="booking-perks">
         <li>30 دقيقة</li>
         <li>مكالمة فيديو</li>
         <li>تأكيد فوري</li>
       </ul>
-      <div id="calendlyEmbed" class="calendly-embed" data-booking-only></div>
-      <p class="calendly-note">
+      <div class="booking-panel" id="bookingPanel" data-booking-only>
+        <form class="booking-form" id="bookingForm" novalidate>
+          <input type="text" name="_honey" class="booking-honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <div class="booking-step" data-step="1">
+            <h3 class="booking-step-title">1. التفاصيل</h3>
+            <div class="booking-grid">
+              <div class="form-group">
+                <label for="bookingDemoType">نوع العرض *</label>
+                <select id="bookingDemoType" name="demoType" required>
+                  <option value="">اختر</option>
+                  <option value="live-overview">نظرة عامة على المنتج</option>
+                  <option value="bau">تركيز: البناء</option>
+                  <option value="industrie">تركيز: الصناعة</option>
+                  <option value="lohn">تركيز: الرواتب</option>
+                  <option value="enterprise">مؤسسات / White-Label</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="bookingPaket">الباقة المهتم بها</label>
+                <select id="bookingPaket" name="paket">
+                  <option value="">غير محدد بعد</option>
+                  <option value="besucherkarte">بطاقة زائر</option>
+                  <option value="starter">Starter</option>
+                  <option value="professional">Professional</option>
+                  <option value="enterprise">Enterprise</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="bookingLocation">الموقع / المنطقة</label>
+                <input type="text" id="bookingLocation" name="location" placeholder="مثال: برلين، ألمانيا، أوروبا">
+              </div>
+            </div>
+          </div>
+          <div class="booking-step" data-step="2">
+            <h3 class="booking-step-title">2. الموعد</h3>
+            <div class="booking-grid booking-grid-2">
+              <div class="form-group">
+                <label for="bookingDate">اليوم *</label>
+                <input type="date" id="bookingDate" name="date" required>
+              </div>
+              <div class="form-group">
+                <label for="bookingSlot">الوقت *</label>
+                <select id="bookingSlot" name="slotStart" required disabled>
+                  <option value="">اختر اليوم أولاً</option>
+                </select>
+                <p class="booking-slot-hint" id="bookingSlotHint">التوقيت: Europe/Berlin · الإثنين–الجمعة</p>
+              </div>
+            </div>
+          </div>
+          <div class="booking-step" data-step="3">
+            <h3 class="booking-step-title">3. التواصل</h3>
+            <div class="booking-grid">
+              <div class="form-group">
+                <label for="bookingName">الاسم *</label>
+                <input type="text" id="bookingName" name="name" required placeholder="اسمك" autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label for="bookingEmail">البريد *</label>
+                <input type="email" id="bookingEmail" name="email" required placeholder="you@company.com" autocomplete="email">
+              </div>
+              <div class="form-group">
+                <label for="bookingCompany">الشركة</label>
+                <input type="text" id="bookingCompany" name="company" placeholder="اسم الشركة" autocomplete="organization">
+              </div>
+              <div class="form-group booking-full">
+                <label for="bookingMessage">رسالة (اختياري)</label>
+                <textarea id="bookingMessage" name="message" rows="3" placeholder="حجم الفريق، المواقع، الأولويات…"></textarea>
+              </div>
+            </div>
+            <div class="form-group form-checkbox">
+              <label class="checkbox-label">
+                <input type="checkbox" id="bookingPrivacy" name="privacy" value="accepted" required>
+                <span>أوافق على <a href="../datenschutz.html" target="_blank" rel="noopener">سياسة الخصوصية</a>. *</span>
+              </label>
+            </div>
+          </div>
+          <div class="booking-actions">
+            <button type="submit" class="btn btn-primary" id="bookingSubmit">تأكيد الحجز</button>
+            <p class="form-status" id="bookingStatus" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+        <div class="booking-success" id="bookingSuccess" hidden>
+          <h3>تم تأكيد الموعد</h3>
+          <p id="bookingSuccessText">ستصلك رسالة تأكيد بالبريد (مع دعوة تقويم).</p>
+          <a href="#contact" class="btn btn-outline">إلى التواصل</a>
+        </div>
+      </div>
+      <p class="booking-note">
         أو عبر
-        <a href="https://wa.me/4917631676589?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%B9%D8%B1%D8%B6%20WorkPass" id="calendlyWhatsAppAlt">واتساب</a>،
-        <a href="#contact">نموذج التواصل</a>،
-        أو
-        <a href="https://calendly.com/suppix-workpass-ai/30min" id="calendlyOpenExternal" data-booking-external target="_blank" rel="noopener noreferrer">فتح التقويم في تبويب جديد</a>.
+        <a href="https://wa.me/4917631676589?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%B9%D8%B1%D8%B6%20WorkPass" id="bookingWhatsAppAlt">واتساب</a>
+        أو <a href="#contact">نموذج التواصل</a>.
       </p>
     </div>
   </section>
@@ -705,7 +789,7 @@
       <div class="section-header">
         <span class="section-tag">تواصل</span>
         <h2>راسلنا</h2>
-        <p>تفضل النموذج؟ نرد بالخطوة التالية – أو <a href="#calendlySection" data-booking>اختر موعد العرض مباشرة</a>.</p>
+        <p>تفضل النموذج؟ نرد بالخطوة التالية – أو <a href="#bookingSection" data-booking>اختر موعد العرض مباشرة</a>.</p>
       </div>
       <div class="contact-grid">
         <div class="contact-info">
@@ -714,7 +798,7 @@
           <div class="contact-item"><div class="contact-item-icon">📧</div><div><strong style="color: var(--white);">البريد</strong><br><a href="mailto:info@suppixai.com" style="color: var(--primary);" data-email>info@suppixai.com</a></div></div>
           <div class="contact-item"><div class="contact-item-icon">📞</div><div><strong style="color: var(--white);">الهاتف</strong><br><a href="tel:+4917631676589" style="color: var(--gray-500);" data-phone-link>017631676589</a></div></div>
           <div class="contact-item"><div class="contact-item-icon">💬</div><div><strong style="color: var(--white);">واتساب</strong><br><a href="https://wa.me/4917631676589?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D9%87%D8%AA%D9%85%20%D8%A8%D9%80%20WorkPass." id="contactWhatsApp" style="color: var(--primary);">اطلب عرضاً عبر واتساب</a></div></div>
-          <div class="contact-item"><div class="contact-item-icon">📅</div><div><strong style="color: var(--white);">موعد</strong><br><a href="#calendlySection" data-booking data-booking-label="auto" style="color: var(--primary);">احجز موعد العرض</a></div></div>
+          <div class="contact-item"><div class="contact-item-icon">📅</div><div><strong style="color: var(--white);">موعد</strong><br><a href="#bookingSection" data-booking data-booking-label="auto" style="color: var(--primary);">احجز موعد العرض</a></div></div>
         </div>
         <form class="contact-form" id="contactForm" method="POST" action="#" accept-charset="UTF-8">
           <input type="hidden" name="_template" value="table">
@@ -755,7 +839,7 @@
   </footer>
 
   <div class="mobile-cta-bar" id="mobileCtaBar" aria-hidden="true">
-    <a href="#calendlySection" class="btn btn-primary" data-booking>اختر موعداً</a>
+    <a href="#bookingSection" class="btn btn-primary" data-booking>اختر موعداً</a>
     <a href="https://wa.me/4917631676589?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%AD%D8%AC%D8%B2%20%D8%B9%D8%B1%D8%B6%20WorkPass." class="btn btn-outline" id="mobileCtaWhatsapp">واتساب</a>
   </div>
 

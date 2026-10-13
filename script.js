@@ -84,35 +84,26 @@ document.addEventListener("DOMContentLoaded", () => {
     return /calendly\.com/i.test(String(url || ""));
   }
 
-  function bookingSectionId() {
-    return document.getElementById("calendlySection") ? "calendlySection" : "";
+  function bookingApiBase() {
+    const fromCfg = String(cfg.bookingApiUrl || cfg.formApiUrl || "").trim().replace(/\/$/, "");
+    return fromCfg;
   }
 
-  function buildCalendlyEmbedUrl(raw) {
-    let u;
-    try {
-      u = new URL(String(raw).trim());
-    } catch {
-      return String(raw || "").trim();
-    }
-    u.searchParams.set("hide_gdpr_banner", "1");
-    u.searchParams.set("hide_event_type_details", "1");
-    u.searchParams.set("background_color", "ffffff");
-    u.searchParams.set("text_color", "0f172a");
-    u.searchParams.set("primary_color", "5eb8e8");
-    if (typeof location !== "undefined" && location.hostname) {
-      u.searchParams.set("embed_domain", location.hostname);
-      u.searchParams.set("embed_type", "Inline");
-    }
-    const lang = pageLang();
-    if (lang === "de" || lang === "en" || lang === "fr" || lang === "es" || lang === "it" || lang === "nl" || lang === "pt") {
-      u.searchParams.set("locale", lang);
-    }
-    return u.toString();
+  function ownBookingEnabled() {
+    return Boolean(bookingApiBase());
+  }
+
+  function bookingSectionEl() {
+    return document.getElementById("bookingSection") || document.getElementById("calendlySection");
+  }
+
+  function bookingSectionId() {
+    const el = bookingSectionEl();
+    return el ? el.id : "";
   }
 
   function scrollToBooking() {
-    const section = document.getElementById("calendlySection");
+    const section = bookingSectionEl();
     if (!section || section.hidden) return false;
     section.scrollIntoView({ behavior: "smooth", block: "start" });
     return true;
@@ -120,21 +111,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function initBookingLinks() {
     const booking = String(cfg.bookingUrl || "").trim();
-    const useCalendly = Boolean(booking) && isCalendlyUrl(booking);
+    const useOwn = ownBookingEnabled();
+    const useCalendly = !useOwn && Boolean(booking) && isCalendlyUrl(booking);
+    const useExternal = !useOwn && Boolean(booking) && !isCalendlyUrl(booking);
     const sectionHash = bookingSectionId() ? `#${bookingSectionId()}` : "#kontakt";
 
     document.querySelectorAll("[data-booking]").forEach((el) => {
-      if (useCalendly) {
-        const openExternal = el.hasAttribute("data-booking-external");
-        if (openExternal) {
-          el.href = booking;
-          el.target = "_blank";
-          el.rel = "noopener noreferrer";
-        } else {
-          el.href = sectionHash;
-          el.removeAttribute("target");
-          el.removeAttribute("rel");
-        }
+      if (useOwn || useCalendly) {
+        el.href = sectionHash;
+        el.removeAttribute("target");
+        el.removeAttribute("rel");
         el.hidden = false;
         if (el.dataset.bookingLabel === "auto") {
           el.textContent = t(
@@ -143,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "اختر موعد العرض أونلاين"
           );
         }
-      } else if (booking && !isCalendlyUrl(booking)) {
+      } else if (useExternal) {
         el.href = booking;
         el.hidden = false;
         el.target = "_blank";
@@ -174,21 +160,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.querySelectorAll("[data-booking-only]").forEach((el) => {
-      el.hidden = !useCalendly;
+      el.hidden = !(useOwn || useCalendly);
     });
     document.querySelectorAll("[data-booking-whatsapp-fallback]").forEach((el) => {
-      el.hidden = useCalendly;
+      el.hidden = useOwn || useCalendly || useExternal;
     });
 
-    const external = document.getElementById("calendlyOpenExternal");
-    if (external && useCalendly) {
-      external.href = booking;
-      external.hidden = false;
-    } else if (external) {
-      external.hidden = true;
-    }
-
-    const waAlt = document.getElementById("calendlyWhatsAppAlt");
+    const waAlt =
+      document.getElementById("bookingWhatsAppAlt") || document.getElementById("calendlyWhatsAppAlt");
     if (waAlt) {
       setWhatsAppLink(
         waAlt,
@@ -200,98 +179,206 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
 
-    initCalendlyEmbed(useCalendly ? booking : "");
-  }
-
-  function loadCalendlyScript() {
-    return new Promise((resolve) => {
-      if (window.Calendly) {
-        resolve(window.Calendly);
-        return;
+    if (useOwn) {
+      initOwnBookingForm();
+    } else {
+      const section = bookingSectionEl();
+      if (section && !useCalendly) {
+        section.hidden = true;
+        section.setAttribute("aria-hidden", "true");
       }
-      const existing = document.getElementById("calendlyWidgetScript");
-      if (existing) {
-        existing.addEventListener("load", () => resolve(window.Calendly), { once: true });
-        existing.addEventListener("error", () => resolve(null), { once: true });
-        return;
-      }
-      const s = document.createElement("script");
-      s.id = "calendlyWidgetScript";
-      s.src = "https://assets.calendly.com/assets/external/widget.js";
-      s.async = true;
-      s.onload = () => resolve(window.Calendly);
-      s.onerror = () => resolve(null);
-      document.body.appendChild(s);
-    });
-  }
-
-  function mountCalendlyWidget(widget, url) {
-    widget.innerHTML = "";
-    widget.classList.add("is-loading");
-    const loading = document.createElement("div");
-    loading.className = "calendly-loading";
-    loading.setAttribute("role", "status");
-    loading.textContent = t(
-      "Kalender wird geladen …",
-      "Loading calendar …",
-      "جاري تحميل التقويم …"
-    );
-    widget.appendChild(loading);
-
-    const embedUrl = buildCalendlyEmbedUrl(url);
-    loadCalendlyScript().then((Calendly) => {
-      widget.classList.remove("is-loading");
-      loading.remove();
-      if (Calendly && typeof Calendly.initInlineWidget === "function") {
-        Calendly.initInlineWidget({
-          url: embedUrl,
-          parentElement: widget,
-          resize: true,
-        });
-        return;
-      }
-      const mount = document.createElement("div");
-      mount.className = "calendly-inline-widget";
-      mount.setAttribute("data-url", embedUrl);
-      mount.style.minWidth = "320px";
-      mount.style.height = "700px";
-      widget.appendChild(mount);
-    });
-  }
-
-  function initCalendlyEmbed(url) {
-    const section = document.getElementById("calendlySection");
-    const widget = document.getElementById("calendlyEmbed");
-    if (!section || !widget) return;
-    if (!url) {
-      section.hidden = true;
-      section.setAttribute("aria-hidden", "true");
-      return;
     }
+
+    if (location.hash === "#calendlySection" && bookingSectionId()) {
+      location.hash = bookingSectionId();
+    }
+  }
+
+  function initOwnBookingForm() {
+    const section = bookingSectionEl();
+    const form = document.getElementById("bookingForm");
+    const dateInput = document.getElementById("bookingDate");
+    const slotSelect = document.getElementById("bookingSlot");
+    const statusEl = document.getElementById("bookingStatus");
+    const successEl = document.getElementById("bookingSuccess");
+    const submitBtn = document.getElementById("bookingSubmit");
+    if (!section || !form || !dateInput || !slotSelect) return;
+
     section.hidden = false;
     section.removeAttribute("aria-hidden");
-    if (widget.dataset.calendlyMounted === "1") return;
+    if (form.dataset.bookingBound === "1") return;
+    form.dataset.bookingBound = "1";
 
-    const start = () => {
-      if (widget.dataset.calendlyMounted === "1") return;
-      widget.dataset.calendlyMounted = "1";
-      mountCalendlyWidget(widget, url);
-    };
+    const api = bookingApiBase();
+    let meta = { today: "", maxDate: "", durationMin: 30, timezone: "Europe/Berlin" };
+    let slotEndByStart = {};
 
-    if (!("IntersectionObserver" in window)) {
-      start();
-      return;
+    function setStatus(msg, isError) {
+      if (!statusEl) return;
+      statusEl.textContent = msg || "";
+      statusEl.classList.toggle("is-error", Boolean(isError));
+      statusEl.classList.toggle("is-success", Boolean(msg) && !isError);
     }
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          io.disconnect();
-          start();
+
+    function resetSlotSelect(placeholder) {
+      slotSelect.innerHTML = "";
+      const opt = document.createElement("option");
+      opt.value = "";
+      opt.textContent = placeholder;
+      slotSelect.appendChild(opt);
+      slotSelect.disabled = true;
+      slotEndByStart = {};
+    }
+
+    async function loadMeta() {
+      try {
+        const res = await fetch(`${api}/booking/slots?lang=${encodeURIComponent(pageLang())}`);
+        const data = await res.json();
+        if (!data?.ok) throw new Error(data?.error || "meta");
+        meta = data;
+        if (data.today) dateInput.min = data.today;
+        if (data.maxDate) dateInput.max = data.maxDate;
+        const hint = document.getElementById("bookingSlotHint");
+        if (hint && data.timezone) {
+          hint.textContent = t(
+            `Zeitzone: ${data.timezone} · ${data.durationMin || 30} Min · Mo–Fr`,
+            `Timezone: ${data.timezone} · ${data.durationMin || 30} min · Mon–Fri`,
+            `التوقيت: ${data.timezone} · ${data.durationMin || 30} د · الإثنين–الجمعة`
+          );
         }
-      },
-      { rootMargin: "280px 0px" }
-    );
-    io.observe(section);
+      } catch {
+        setStatus(
+          t(
+            "Terminzeiten konnten nicht geladen werden.",
+            "Could not load available times.",
+            "تعذر تحميل الأوقات المتاحة."
+          ),
+          true
+        );
+      }
+    }
+
+    async function loadSlotsForDate(ymd) {
+      resetSlotSelect(t("Lädt …", "Loading …", "جاري التحميل …"));
+      setStatus("");
+      try {
+        const res = await fetch(
+          `${api}/booking/slots?date=${encodeURIComponent(ymd)}&lang=${encodeURIComponent(pageLang())}`
+        );
+        const data = await res.json();
+        if (!data?.ok) throw new Error(data?.error || "slots");
+        slotSelect.innerHTML = "";
+        const empty = document.createElement("option");
+        empty.value = "";
+        empty.textContent = data.slots?.length
+          ? t("Uhrzeit wählen", "Choose a time", "اختر وقتاً")
+          : t("Keine freien Slots", "No open slots", "لا توجد أوقات متاحة");
+        slotSelect.appendChild(empty);
+        (data.slots || []).forEach((s) => {
+          const opt = document.createElement("option");
+          opt.value = s.start;
+          opt.textContent = s.label || s.display || s.start;
+          slotSelect.appendChild(opt);
+          slotEndByStart[s.start] = s.end;
+        });
+        slotSelect.disabled = !(data.slots && data.slots.length);
+      } catch {
+        resetSlotSelect(t("Fehler beim Laden", "Failed to load", "فشل التحميل"));
+        setStatus(
+          t(
+            "Slots konnten nicht geladen werden.",
+            "Could not load slots.",
+            "تعذر تحميل المواعيد."
+          ),
+          true
+        );
+      }
+    }
+
+    dateInput.addEventListener("change", () => {
+      if (dateInput.value) loadSlotsForDate(dateInput.value);
+      else resetSlotSelect(t("Zuerst Tag wählen", "Pick a day first", "اختر اليوم أولاً"));
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      setStatus("");
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      const honey = form.querySelector('[name="_honey"]');
+      if (honey && honey.value) {
+        setStatus(t("Termin bestätigt.", "Booking confirmed.", "تم تأكيد الموعد."), false);
+        return;
+      }
+      const slotStart = slotSelect.value;
+      if (!slotStart) {
+        setStatus(t("Bitte Uhrzeit wählen.", "Please choose a time.", "يرجى اختيار وقت."), true);
+        return;
+      }
+      if (submitBtn) submitBtn.disabled = true;
+      setStatus(t("Wird gebucht …", "Booking …", "جاري الحجز …"), false);
+      try {
+        const payload = {
+          name: document.getElementById("bookingName")?.value || "",
+          email: document.getElementById("bookingEmail")?.value || "",
+          company: document.getElementById("bookingCompany")?.value || "",
+          paket: document.getElementById("bookingPaket")?.value || "",
+          location: document.getElementById("bookingLocation")?.value || "",
+          demoType: document.getElementById("bookingDemoType")?.value || "",
+          message: document.getElementById("bookingMessage")?.value || "",
+          privacy: document.getElementById("bookingPrivacy")?.checked ? "accepted" : "",
+          lang: pageLang(),
+          slotStart,
+          slotEnd: slotEndByStart[slotStart] || "",
+          _honey: "",
+        };
+        const res = await fetch(`${api}/booking`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) {
+          throw new Error(data.error || res.statusText || "booking failed");
+        }
+        form.hidden = true;
+        if (successEl) {
+          successEl.hidden = false;
+          const txt = document.getElementById("bookingSuccessText");
+          if (txt && data.label) {
+            txt.textContent = t(
+              `Ihr Termin: ${data.label}. Bestätigung per E-Mail (inkl. Kalendereintrag).`,
+              `Your time: ${data.label}. Confirmation email sent (with calendar invite).`,
+              `موعدك: ${data.label}. تم إرسال التأكيد بالبريد (مع دعوة تقويم).`
+            );
+          }
+        }
+        setStatus("");
+      } catch (err) {
+        const msg = String(err?.message || err);
+        const friendly = /already|409|not available/i.test(msg)
+          ? t(
+              "Dieser Slot ist nicht mehr frei – bitte anderen wählen.",
+              "That slot is no longer free – please pick another.",
+              "هذا الموعد لم يعد متاحاً – اختر وقتاً آخر."
+            )
+          : t(
+              "Buchung fehlgeschlagen. Bitte erneut versuchen oder WhatsApp nutzen.",
+              "Booking failed. Please try again or use WhatsApp.",
+              "فشل الحجز. حاول مجدداً أو استخدم واتساب."
+            );
+        setStatus(friendly, true);
+        if (dateInput.value) loadSlotsForDate(dateInput.value);
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    });
+
+    loadMeta().then(() => {
+      resetSlotSelect(t("Zuerst Tag wählen", "Pick a day first", "اختر اليوم أولاً"));
+    });
   }
 
   function isPlaceholderValue(value) {

@@ -916,16 +916,16 @@ body.has-site-notice {
   opacity: 0.95;
 }
 
-.calendly-section {
+.booking-section {
   padding: 4rem 0 4.5rem;
   background:
     radial-gradient(ellipse 80% 50% at 50% 0%, rgba(94, 184, 232, 0.12), transparent 55%),
     var(--bg-deep, #0b1220);
 }
-.calendly-section .section-header {
+.booking-section .section-header {
   margin-bottom: 1.5rem;
 }
-.calendly-perks {
+.booking-perks {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -937,11 +937,11 @@ body.has-site-notice {
   font-size: 0.95rem;
   color: var(--gray-400, #94a3b8);
 }
-.calendly-perks li {
+.booking-perks li {
   position: relative;
   padding-inline-start: 1.15rem;
 }
-.calendly-perks li::before {
+.booking-perks li::before {
   content: "";
   position: absolute;
   inset-inline-start: 0;
@@ -951,61 +951,117 @@ body.has-site-notice {
   border-radius: 50%;
   background: var(--primary, #5eb8e8);
 }
-.calendly-embed {
-  position: relative;
-  max-width: 960px;
+.booking-panel {
+  max-width: 920px;
   margin: 0 auto;
   border-radius: 18px;
-  overflow: hidden;
   border: 1px solid rgba(148, 163, 184, 0.28);
-  background: #fff;
-  min-height: 720px;
+  background: rgba(15, 23, 42, 0.72);
+  padding: 1.5rem 1.35rem 1.75rem;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
 }
-.calendly-embed .calendly-inline-widget,
-.calendly-embed iframe {
-  width: 100% !important;
-  min-width: 320px;
+.booking-honey {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
 }
-.calendly-loading {
+.booking-step {
+  margin-bottom: 1.35rem;
+  padding-bottom: 1.15rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+}
+.booking-step:last-of-type {
+  border-bottom: 0;
+  margin-bottom: 0.5rem;
+}
+.booking-step-title {
+  margin: 0 0 0.85rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--white, #fff);
+}
+.booking-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem 1rem;
+}
+.booking-grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.booking-full {
+  grid-column: 1 / -1;
+}
+.booking-panel .form-group label {
+  color: var(--gray-400, #94a3b8);
+}
+.booking-panel .form-group input,
+.booking-panel .form-group select,
+.booking-panel .form-group textarea {
+  width: 100%;
+  background: rgba(2, 8, 23, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  color: var(--white, #fff);
+}
+.booking-slot-hint {
+  margin: 0.4rem 0 0;
+  font-size: 0.8rem;
+  color: var(--gray-500, #94a3b8);
+}
+.booking-actions {
+  margin-top: 1rem;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 420px;
-  padding: 2rem;
-  font-size: 0.95rem;
-  color: #64748b;
-  background:
-    linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 37%, #f1f5f9 63%);
-  background-size: 400% 100%;
-  animation: calendlyShimmer 1.2s ease-in-out infinite;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: stretch;
 }
-@keyframes calendlyShimmer {
-  0% { background-position: 100% 0; }
-  100% { background-position: 0 0; }
+.booking-actions .btn {
+  width: 100%;
 }
-.calendly-note {
+.booking-success {
+  text-align: center;
+  padding: 1.5rem 0.5rem;
+}
+.booking-success h3 {
+  margin: 0 0 0.65rem;
+  color: var(--white, #fff);
+}
+.booking-success p {
+  margin: 0 0 1.25rem;
+  color: var(--gray-400, #94a3b8);
+}
+.booking-note {
   text-align: center;
   margin: 1.35rem 0 0;
   font-size: 0.9rem;
   line-height: 1.55;
   color: var(--gray-500, #94a3b8);
 }
-.calendly-note a {
+.booking-note a {
   color: var(--primary, #5eb8e8);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+.booking-panel .form-status.is-error {
+  color: #fca5a5;
+}
+.booking-panel .form-status.is-success {
+  color: #86efac;
+}
 @media (max-width: 768px) {
-  .calendly-section {
+  .booking-section {
     padding: 3rem 0 3.5rem;
   }
-  .calendly-embed {
-    min-height: 640px;
+  .booking-panel {
     border-radius: 14px;
-    margin-inline: 0;
+    padding: 1.15rem 0.95rem 1.35rem;
   }
-  .calendly-perks {
+  .booking-grid,
+  .booking-grid-2 {
+    grid-template-columns: 1fr;
+  }
+  .booking-perks {
     gap: 0.55rem 1.1rem;
     font-size: 0.88rem;
     margin-bottom: 1.25rem;
