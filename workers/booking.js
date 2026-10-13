@@ -319,6 +319,26 @@ function toBase64(str) {
   return btoa(unescape(encodeURIComponent(str)));
 }
 
+/** Fire-and-forget sync to WorkPass portal (never fails the booking). */
+async function notifyWorkPassPortal(env, payload) {
+  const url = String(env.WORKPASS_BOOKING_WEBHOOK_URL || "").trim();
+  const key = String(env.MARKETING_BOOKING_WEBHOOK_KEY || "").trim();
+  if (!url || !key) return;
+  try {
+    await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${key}`,
+        "X-Suppix-Webhook-Key": key,
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch {
+    // ignore — marketing booking already stored in D1 / emailed
+  }
+}
+
 export async function handleBookingPost(body, env, cors, helpers) {
   const { escapeHtml, emailShell, ownerEmailHtml, sendResend, logoAttachment, ctaButton } = helpers;
   const cfg = bookingConfig(env);
@@ -405,6 +425,23 @@ export async function handleBookingPost(body, env, cors, helpers) {
     }
     throw err;
   }
+
+  await notifyWorkPassPortal(env, {
+    event: "demo_booking.created",
+    id,
+    slot_start: slotStartIso,
+    slot_end: slotEndIso,
+    name,
+    email,
+    company,
+    paket,
+    location,
+    demo_type: demoType,
+    lang,
+    message,
+    status: "confirmed",
+    source: "suppixai-worker",
+  });
 
   const toEmail = env.TO_EMAIL || "info@suppixai.com";
   const fromEmail = env.FROM_EMAIL || "WorkPass <info@suppixai.com>";
@@ -621,6 +658,22 @@ export async function handleManagePost(body, env, cors, helpers) {
   await env.DB.prepare(`UPDATE demo_bookings SET status = 'cancelled' WHERE id = ?`)
     .bind(row.id)
     .run();
+
+  await notifyWorkPassPortal(env, {
+    event: "demo_booking.cancelled",
+    id: row.id,
+    slot_start: row.slot_start,
+    slot_end: row.slot_end,
+    name: row.name,
+    email: row.email,
+    company: row.company,
+    paket: row.paket,
+    location: row.location,
+    demo_type: row.demo_type,
+    lang: row.lang,
+    status: "cancelled",
+    source: "suppixai-worker",
+  });
 
   const cfg = bookingConfig(env);
   const whenLabel = formatSlotLabel(row.slot_start, cfg.tz, row.lang || "de");

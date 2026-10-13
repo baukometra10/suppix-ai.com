@@ -6,6 +6,10 @@ workers_dev = true
 # Nach dem Deploy: URL in site-config.js als formApiUrl / bookingApiUrl eintragen.
 # Secrets:
 #   npx wrangler secret put RESEND_API_KEY
+#   npx wrangler secret put MARKETING_BOOKING_WEBHOOK_KEY
+#
+# WorkPass-Portal Sync (gleicher Key wie Env MARKETING_BOOKING_WEBHOOK_KEY auf der App):
+#   WORKPASS_BOOKING_WEBHOOK_URL = https://suppix-ai-workpass.com/api/webhooks/marketing/demo-booking
 #
 # D1 (Demo-Buchungen):
 #   npx wrangler d1 create suppixai-bookings
@@ -39,3 +43,4 @@ BOOKING_DURATION_MIN = "30"
 BOOKING_LEAD_HOURS = "2"
 BOOKING_HORIZON_DAYS = "28"
 BOOKING_WEEKDAYS = "1,2,3,4,5"
+WORKPASS_BOOKING_WEBHOOK_URL = "https://suppix-ai-workpass.com/api/webhooks/marketing/demo-booking"
