@@ -1049,6 +1049,25 @@ body.has-site-notice {
 .booking-panel .form-status.is-success {
   color: #86efac;
 }
+.reviews-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem 1.25rem;
+  border: 1px dashed rgba(148, 163, 184, 0.35);
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.45);
+}
+.reviews-empty p {
+  margin: 0 0 1rem;
+  color: var(--gray-400, #94a3b8);
+}
+.booking-manage-card .booking-manage-details {
+  margin: 1rem 0 1.25rem;
+}
+.booking-manage-details strong {
+  font-size: 1.15rem;
+  color: var(--white, #fff);
+}
 @media (max-width: 768px) {
   .booking-section {
     padding: 3rem 0 3.5rem;

@@ -15,7 +15,12 @@
  *   6. npx wrangler deploy
  */
 
-import { handleBookingPost, handleSlotsGet } from "./booking.js";
+import {
+  handleBookingPost,
+  handleManageGet,
+  handleManagePost,
+  handleSlotsGet,
+} from "./booking.js";
 
 const DEFAULT_ALLOWED = [
   "https://suppixai.com",
@@ -295,6 +300,31 @@ export default {
     if (request.method === "GET" && (path === "/booking/slots" || path.endsWith("/booking/slots"))) {
       try {
         return await handleSlotsGet(request, env, cors);
+      } catch (err) {
+        return json({ ok: false, error: String(err.message || err) }, 502, cors);
+      }
+    }
+
+    if (request.method === "GET" && (path === "/booking/manage" || path.endsWith("/booking/manage"))) {
+      try {
+        return await handleManageGet(request, env, cors);
+      } catch (err) {
+        return json({ ok: false, error: String(err.message || err) }, 502, cors);
+      }
+    }
+
+    if (request.method === "POST" && (path === "/booking/manage" || path.endsWith("/booking/manage"))) {
+      let body;
+      try {
+        body = await request.json();
+      } catch {
+        return json({ ok: false, error: "Invalid JSON" }, 400, cors);
+      }
+      try {
+        return await handleManagePost(body, env, cors, {
+          ownerEmailHtml,
+          sendResend,
+        });
       } catch (err) {
         return json({ ok: false, error: String(err.message || err) }, 502, cors);
       }

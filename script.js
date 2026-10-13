@@ -210,7 +210,8 @@ document.addEventListener("DOMContentLoaded", () => {
     form.dataset.bookingBound = "1";
 
     const api = bookingApiBase();
-    let meta = { today: "", maxDate: "", durationMin: 30, timezone: "Europe/Berlin" };
+    let meta = { today: "", maxDate: "", durationMin: 30, timezone: "Europe/Berlin", closedDates: [] };
+    let closedSet = new Set();
     let slotEndByStart = {};
 
     function setStatus(msg, isError) {
@@ -236,14 +237,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await res.json();
         if (!data?.ok) throw new Error(data?.error || "meta");
         meta = data;
+        closedSet = new Set(data.closedDates || []);
         if (data.today) dateInput.min = data.today;
         if (data.maxDate) dateInput.max = data.maxDate;
         const hint = document.getElementById("bookingSlotHint");
         if (hint && data.timezone) {
           hint.textContent = t(
-            `Zeitzone: ${data.timezone} · ${data.durationMin || 30} Min · Mo–Fr`,
-            `Timezone: ${data.timezone} · ${data.durationMin || 30} min · Mon–Fri`,
-            `التوقيت: ${data.timezone} · ${data.durationMin || 30} د · الإثنين–الجمعة`
+            `Zeitzone: ${data.timezone} · ${data.durationMin || 30} Min · Mo–Fr · ohne Feiertage`,
+            `Timezone: ${data.timezone} · ${data.durationMin || 30} min · Mon–Fri · no public holidays`,
+            `التوقيت: ${data.timezone} · ${data.durationMin || 30} د · الإثنين–الجمعة · بدون عطل رسمية`
           );
         }
       } catch {
@@ -261,12 +263,36 @@ document.addEventListener("DOMContentLoaded", () => {
     async function loadSlotsForDate(ymd) {
       resetSlotSelect(t("Lädt …", "Loading …", "جاري التحميل …"));
       setStatus("");
+      if (closedSet.has(ymd)) {
+        resetSlotSelect(t("Feiertag – kein Termin", "Public holiday – closed", "عطلة رسمية – مغلق"));
+        setStatus(
+          t(
+            "An gesetzlichen Feiertagen (DE) sind keine Demos möglich.",
+            "No demos on German public holidays.",
+            "لا عروض في العطل الرسمية الألمانية."
+          ),
+          true
+        );
+        return;
+      }
       try {
         const res = await fetch(
           `${api}/booking/slots?date=${encodeURIComponent(ymd)}&lang=${encodeURIComponent(pageLang())}`
         );
         const data = await res.json();
         if (!data?.ok) throw new Error(data?.error || "slots");
+        if (data.holiday) {
+          resetSlotSelect(t("Feiertag – kein Termin", "Public holiday – closed", "عطلة رسمية – مغلق"));
+          setStatus(
+            t(
+              "An gesetzlichen Feiertagen (DE) sind keine Demos möglich.",
+              "No demos on German public holidays.",
+              "لا عروض في العطل الرسمية الألمانية."
+            ),
+            true
+          );
+          return;
+        }
         slotSelect.innerHTML = "";
         const empty = document.createElement("option");
         empty.value = "";
@@ -1503,22 +1529,46 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       const reviews = normalizeReviews(data);
       if (!reviews.length) {
+        grid.innerHTML = `<div class="reviews-empty">
+          <p>${t(
+            "Noch keine öffentlichen Kundenstimmen freigegeben.",
+            "No public customer reviews published yet.",
+            "لا توجد تقييمات عملاء عامة بعد."
+          )}</p>
+          <a href="#bookingSection" class="btn btn-primary btn-sm" data-booking>${t(
+            "Demo-Termin wählen",
+            "Book a demo",
+            "احجز موعداً"
+          )}</a>
+        </div>`;
         if (note) {
           note.textContent = t(
-            "Noch keine öffentlichen Plattform-Bewertungen – Platzhalter bleiben, bis Kunden Feedback freigeben.",
-            "No public platform reviews yet – placeholders stay until customers publish feedback.",
-            "لا توجد تقييمات عامة بعد – تبقى العناصر المؤقتة حتى ينشر العملاء ملاحظات."
+            "Sobald Freigaben über die Plattform-API kommen, erscheinen sie hier automatisch.",
+            "As soon as reviews are approved via the platform API, they appear here automatically.",
+            "عند اعتماد التقييمات عبر واجهة المنصة تظهر هنا تلقائياً."
           );
         }
         return;
       }
       renderReviews(reviews);
     } catch {
+      grid.innerHTML = `<div class="reviews-empty">
+        <p>${t(
+          "Bewertungen gerade nicht erreichbar.",
+          "Reviews temporarily unavailable.",
+          "التقييمات غير متاحة مؤقتاً."
+        )}</p>
+        <a href="#bookingSection" class="btn btn-outline btn-sm" data-booking>${t(
+          "Trotzdem Demo buchen",
+          "Book a demo anyway",
+          "احجز العرض رغم ذلك"
+        )}</a>
+      </div>`;
       if (note) {
         note.textContent = t(
-          "Live-Bewertungen vorübergehend nicht erreichbar. Platzhalter bleiben sichtbar.",
-          "Live reviews temporarily unavailable. Placeholders stay visible.",
-          "التقييمات المباشرة غير متاحة مؤقتاً. تبقى العناصر المؤقتة."
+          "Sie können trotzdem einen Demo-Termin wählen.",
+          "You can still pick a demo time.",
+          "يمكنك اختيار موعد عرض رغم ذلك."
         );
       }
     } finally {

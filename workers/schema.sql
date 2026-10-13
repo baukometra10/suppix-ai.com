@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS demo_bookings (
   demo_type TEXT,
   lang TEXT,
   message TEXT,
+  manage_token TEXT,
   status TEXT NOT NULL DEFAULT 'confirmed',
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
@@ -18,6 +19,10 @@ CREATE TABLE IF NOT EXISTS demo_bookings (
 CREATE UNIQUE INDEX IF NOT EXISTS idx_demo_bookings_slot
   ON demo_bookings(slot_start)
   WHERE status = 'confirmed';
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_demo_bookings_manage_token
+  ON demo_bookings(manage_token)
+  WHERE manage_token IS NOT NULL;
 
 CREATE INDEX IF NOT EXISTS idx_demo_bookings_email
   ON demo_bookings(email);

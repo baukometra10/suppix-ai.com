@@ -99,9 +99,83 @@ function formatSlotLabel(iso, timeZone, lang) {
   }).format(d);
 }
 
+/** German nationwide public holidays (no state-only holidays). */
+function easterSunday(year) {
+  const a = year % 19;
+  const b = Math.floor(year / 100);
+  const c = year % 100;
+  const d = Math.floor(b / 4);
+  const e = b % 4;
+  const f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4);
+  const k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const month = Math.floor((h + l - 7 * m + 114) / 31);
+  const day = ((h + l - 7 * m + 114) % 31) + 1;
+  return { y: year, m: month, d: day };
+}
+
+function ymdFromParts(y, m, d) {
+  return `${y}-${pad(m)}-${pad(d)}`;
+}
+
+function addDaysParts(y, m, d, days) {
+  const dt = new Date(Date.UTC(y, m - 1, d + days));
+  return { y: dt.getUTCFullYear(), m: dt.getUTCMonth() + 1, d: dt.getUTCDate() };
+}
+
+function germanHolidaysForYear(year) {
+  const easter = easterSunday(year);
+  const set = new Set([
+    ymdFromParts(year, 1, 1),
+    ymdFromParts(year, 5, 1),
+    ymdFromParts(year, 10, 3),
+    ymdFromParts(year, 12, 25),
+    ymdFromParts(year, 12, 26),
+  ]);
+  const offsets = [-2, 1, 39, 50]; // Karfreitag, Ostermontag, Himmelfahrt, Pfingstmontag
+  for (const off of offsets) {
+    const p = addDaysParts(easter.y, easter.m, easter.d, off);
+    set.add(ymdFromParts(p.y, p.m, p.d));
+  }
+  return set;
+}
+
+function isGermanHoliday(ymd) {
+  const y = Number(ymd.slice(0, 4));
+  if (!y) return false;
+  return germanHolidaysForYear(y).has(ymd) || germanHolidaysForYear(y + 1).has(ymd);
+}
+
+function closedDatesInRange(fromYmd, toYmd) {
+  const out = [];
+  let cur = fromYmd;
+  while (cur <= toYmd) {
+    if (isGermanHoliday(cur)) out.push(cur);
+    cur = addDaysYmd(cur, 1);
+  }
+  return out;
+}
+
+function googleCalendarUrl({ title, startIso, endIso, details, website }) {
+  const stamp = (iso) => iso.replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: title,
+    dates: `${stamp(startIso)}/${stamp(endIso)}`,
+    details: details || "",
+    location: website || "",
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
 function generateDaySlots(ymd, cfg, now) {
   const parsed = parseYmd(ymd);
   if (!parsed) return [];
+  if (isGermanHoliday(ymd)) return [];
   const { y, m, d } = parsed;
   const probe = zonedLocalToUtc(y, m, d, 12, 0, cfg.tz);
   const weekday = zonedParts(probe, cfg.tz).weekday;
@@ -159,6 +233,7 @@ export async function handleSlotsGet(request, env, cors) {
         weekdays: cfg.weekdays,
         startHour: cfg.startHour,
         endHour: cfg.endHour,
+        closedDates: closedDatesInRange(todayYmd, maxYmd),
       },
       200,
       cors
@@ -167,6 +242,21 @@ export async function handleSlotsGet(request, env, cors) {
 
   if (!parseYmd(dateParam) || dateParam < todayYmd || dateParam > maxYmd) {
     return json({ ok: false, error: "Invalid date" }, 400, cors);
+  }
+
+  if (isGermanHoliday(dateParam)) {
+    return json(
+      {
+        ok: true,
+        date: dateParam,
+        timezone: cfg.tz,
+        durationMin: cfg.durationMin,
+        holiday: true,
+        slots: [],
+      },
+      200,
+      cors
+    );
   }
 
   const booked = await bookedStartsForDay(env.DB, dateParam, cfg.tz);
@@ -183,6 +273,7 @@ export async function handleSlotsGet(request, env, cors) {
       date: dateParam,
       timezone: cfg.tz,
       durationMin: cfg.durationMin,
+      holiday: false,
       slots,
     },
     200,
@@ -282,14 +373,15 @@ export async function handleBookingPost(body, env, cors, helpers) {
   }
 
   const id = newId();
+  const manageToken = newId();
   const slotStartIso = match.start;
   const slotEndIso = match.end;
 
   try {
     await env.DB.prepare(
       `INSERT INTO demo_bookings
-        (id, slot_start, slot_end, name, email, company, paket, location, demo_type, lang, message, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'confirmed')`
+        (id, slot_start, slot_end, name, email, company, paket, location, demo_type, lang, message, manage_token, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'confirmed')`
     )
       .bind(
         id,
@@ -302,7 +394,8 @@ export async function handleBookingPost(body, env, cors, helpers) {
         location,
         demoType,
         lang,
-        message
+        message,
+        manageToken
       )
       .run();
   } catch (err) {
@@ -322,10 +415,16 @@ export async function handleBookingPost(body, env, cors, helpers) {
     .filter(Boolean);
   const brandCompany = env.BRAND_COMPANY || "Suppix AI UG";
   const platform = env.PLATFORM || "WorkPass";
-  const phone = env.PHONE || "017631676589";
-  const whatsapp = env.WHATSAPP || "4917631676589";
   const website = env.WEBSITE || "https://suppixai.com";
   const logo = env.LOGO_URL || "https://suppixai.com/assets/logo.png";
+  const manageUrl = `${website.replace(/\/$/, "")}/termin.html?token=${encodeURIComponent(manageToken)}`;
+  const gcalUrl = googleCalendarUrl({
+    title: `${platform} Demo`,
+    startIso: slotStartIso,
+    endIso: slotEndIso,
+    details: `Demo with ${brandCompany}. Manage: ${manageUrl}`,
+    website,
+  });
 
   const whenLabel = formatSlotLabel(slotStartIso, cfg.tz, lang);
   const de = !lang || lang.startsWith("de");
@@ -345,6 +444,7 @@ export async function handleBookingPost(body, env, cors, helpers) {
       Nachricht: message,
       Sprache: lang,
       BookingId: id,
+      Verwalten: manageUrl,
     },
     company: brandCompany,
     platform,
@@ -380,7 +480,8 @@ export async function handleBookingPost(body, env, cors, helpers) {
       ? `تم حجز موعد العرض لـ <strong style="color:#0f172a">${escapeHtml(platform)}</strong>.`
       : `Your <strong style="color:#0f172a">${escapeHtml(platform)}</strong> demo is booked.`;
   const whenTitle = de ? "Ihr Termin" : ar ? "موعدك" : "Your appointment";
-  const cta = de ? "Website öffnen" : ar ? "فتح الموقع" : "Open website";
+  const manageLabel = de ? "Termin absagen oder umbuchen" : ar ? "إلغاء أو إعادة جدولة" : "Cancel or reschedule";
+  const gcalLabel = de ? "In Google Kalender öffnen" : ar ? "فتح في تقويم Google" : "Add to Google Calendar";
   const closing = de
     ? `Mit freundlichen Grüßen<br><strong style="color:#0f172a">Ihr Team von ${escapeHtml(brandCompany)}</strong>`
     : ar
@@ -397,7 +498,8 @@ export async function handleBookingPost(body, env, cors, helpers) {
     <p style="margin:8px 0 0;font-size:13px;color:#64748b">${cfg.durationMin} min · ${escapeHtml(cfg.tz)}${demoType ? ` · ${escapeHtml(demoType)}` : ""}</p>
   </td></tr>
 </table>
-${ctaButton(website, cta)}
+${ctaButton(manageUrl, manageLabel)}
+${ctaButton(gcalUrl, gcalLabel)}
 <p style="margin:12px 0 0;font-size:14px;line-height:1.6;color:#334155">${closing}</p>`;
 
   const customerHtml = emailShell({
@@ -417,7 +519,7 @@ ${ctaButton(website, cta)}
     startIso: slotStartIso,
     endIso: slotEndIso,
     summary: `${platform} Demo`,
-    description: `Demo with ${brandCompany}. Paket: ${paket || "-"}. Location: ${location || "-"}. Type: ${demoType || "-"}.`,
+    description: `Demo with ${brandCompany}. Paket: ${paket || "-"}. Location: ${location || "-"}. Type: ${demoType || "-"}. Manage: ${manageUrl}`,
     organizerEmail: toEmail,
   });
 
@@ -437,6 +539,8 @@ ${ctaButton(website, cta)}
       greeting.replace(/<[^>]+>/g, ""),
       thanks.replace(/<[^>]+>/g, ""),
       whenLabel,
+      manageUrl,
+      gcalUrl,
       website,
     ].join("\n"),
     attachments: [
@@ -455,10 +559,127 @@ ${ctaButton(website, cta)}
       slotStart: slotStartIso,
       slotEnd: slotEndIso,
       label: whenLabel,
+      manageUrl,
     },
     200,
     cors
   );
+}
+
+export async function handleManageGet(request, env, cors) {
+  const cfg = bookingConfig(env);
+  const url = new URL(request.url);
+  const token = String(url.searchParams.get("token") || "").trim();
+  if (!token || !env.DB) {
+    return json({ ok: false, error: "Token required" }, 400, cors);
+  }
+  const row = await env.DB.prepare(
+    `SELECT id, slot_start, slot_end, name, email, company, paket, location, demo_type, lang, status
+     FROM demo_bookings WHERE manage_token = ? LIMIT 1`
+  )
+    .bind(token)
+    .first();
+  if (!row) return json({ ok: false, error: "Not found" }, 404, cors);
+  return json(
+    {
+      ok: true,
+      status: row.status,
+      slotStart: row.slot_start,
+      slotEnd: row.slot_end,
+      label: formatSlotLabel(row.slot_start, cfg.tz, row.lang || "de"),
+      name: row.name,
+      company: row.company,
+      paket: row.paket,
+      location: row.location,
+      demoType: row.demo_type,
+      lang: row.lang,
+      timezone: cfg.tz,
+    },
+    200,
+    cors
+  );
+}
+
+export async function handleManagePost(body, env, cors, helpers) {
+  const { ownerEmailHtml, sendResend } = helpers;
+  const token = String(body.token || "").trim();
+  const action = String(body.action || "").trim().toLowerCase();
+  if (!token || !env.DB) return json({ ok: false, error: "Token required" }, 400, cors);
+  if (action !== "cancel") return json({ ok: false, error: "Unsupported action" }, 400, cors);
+
+  const row = await env.DB.prepare(
+    `SELECT id, slot_start, slot_end, name, email, company, paket, location, demo_type, lang, status
+     FROM demo_bookings WHERE manage_token = ? LIMIT 1`
+  )
+    .bind(token)
+    .first();
+  if (!row) return json({ ok: false, error: "Not found" }, 404, cors);
+  if (row.status !== "confirmed") {
+    return json({ ok: true, status: row.status, already: true }, 200, cors);
+  }
+
+  await env.DB.prepare(`UPDATE demo_bookings SET status = 'cancelled' WHERE id = ?`)
+    .bind(row.id)
+    .run();
+
+  const cfg = bookingConfig(env);
+  const whenLabel = formatSlotLabel(row.slot_start, cfg.tz, row.lang || "de");
+  const website = env.WEBSITE || "https://suppixai.com";
+  const notifyFrom = env.NOTIFY_FROM_EMAIL || "WorkPass Anfragen <anfragen@suppixai.com>";
+  const fromEmail = env.FROM_EMAIL || "WorkPass <info@suppixai.com>";
+  const toEmail = env.TO_EMAIL || "info@suppixai.com";
+  const ownerRecipients = String(env.OWNER_EMAIL || env.TO_EMAIL || "info@suppixai.com")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const brandCompany = env.BRAND_COMPANY || "Suppix AI UG";
+  const platform = env.PLATFORM || "WorkPass";
+
+  if (env.RESEND_API_KEY) {
+    const ownerMail = ownerEmailHtml({
+      fields: {
+        Typ: "Demo abgesagt",
+        Name: row.name,
+        EMail: row.email,
+        Unternehmen: row.company,
+        Termin: whenLabel,
+        BookingId: row.id,
+      },
+      company: brandCompany,
+      platform,
+      website,
+      replyEmail: row.email,
+    });
+    await sendResend(env, {
+      from: notifyFrom,
+      to: ownerRecipients,
+      reply_to: row.email,
+      subject: `Demo abgesagt – ${row.name} · ${whenLabel}`,
+      html: ownerMail.html,
+      text: ownerMail.text,
+    });
+
+    const lang = row.lang || "de";
+    const de = !lang.startsWith("en") && !lang.startsWith("ar");
+    const ar = lang.startsWith("ar");
+    await sendResend(env, {
+      from: fromEmail,
+      to: [row.email],
+      reply_to: toEmail,
+      subject: de
+        ? `Demo abgesagt – ${whenLabel}`
+        : ar
+          ? `تم إلغاء الموعد – ${whenLabel}`
+          : `Demo cancelled – ${whenLabel}`,
+      text: de
+        ? `Ihr Termin ${whenLabel} wurde abgesagt. Neu buchen: ${website}/#bookingSection`
+        : ar
+          ? `تم إلغاء موعدك ${whenLabel}. حجز جديد: ${website}/#bookingSection`
+          : `Your appointment ${whenLabel} was cancelled. Rebook: ${website}/#bookingSection`,
+    });
+  }
+
+  return json({ ok: true, status: "cancelled", label: whenLabel }, 200, cors);
 }
 
 function json(body, status, headers) {

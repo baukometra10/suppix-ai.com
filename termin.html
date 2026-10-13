@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="Demo-Termin verwalten – WorkPass">
+  <title>Termin verwalten | WorkPass</title>
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="extras.css">
+  <link rel="stylesheet" href="premium.css">
+</head>
+<body class="theme-premium">
+  <header class="header scrolled" id="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <img src="assets/logo.png" alt="Suppix AI UG" class="logo-img">
+        <div class="logo-text">
+          <span class="logo-platform">WorkPass</span>
+          <span class="logo-sub">Termin</span>
+        </div>
+      </a>
+      <nav class="nav-desktop">
+        <a href="index.html">Startseite</a>
+        <a href="index.html#bookingSection" class="btn btn-primary">Neu buchen</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="thanks-page" id="main">
+    <div class="container thanks-card booking-manage-card">
+      <h1>Termin verwalten</h1>
+      <p class="thanks-lead" id="manageLead">Termin wird geladen …</p>
+      <div id="manageDetails" class="booking-manage-details" hidden>
+        <p><strong id="manageWhen"></strong></p>
+        <p id="manageMeta" class="booking-slot-hint"></p>
+      </div>
+      <p class="form-status" id="manageStatus" role="status" aria-live="polite"></p>
+      <div class="thanks-actions" id="manageActions" hidden>
+        <button type="button" class="btn btn-outline" id="manageCancelBtn">Termin absagen</button>
+        <a href="index.html#bookingSection" class="btn btn-primary" id="manageReschedule">Neuen Termin buchen</a>
+      </div>
+      <p class="booking-note" id="manageFallback" hidden>
+        Kein gültiger Link. <a href="index.html#bookingSection">Demo neu buchen</a>
+        oder <a href="mailto:info@suppixai.com">info@suppixai.com</a>.
+      </p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom" style="border-top: none; padding-top: 0;">
+      <span>&copy; <span data-year>2026</span> Suppix AI UG</span>
+      <span><a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a></span>
+    </div>
+  </footer>
+
+  <script src="site-config.js"></script>
+  <script>
+    (function () {
+      const cfg = window.SITE_CONFIG || {};
+      const api = String(cfg.bookingApiUrl || cfg.formApiUrl || "").replace(/\/$/, "");
+      const params = new URLSearchParams(location.search);
+      const token = (params.get("token") || "").trim();
+      const lead = document.getElementById("manageLead");
+      const details = document.getElementById("manageDetails");
+      const whenEl = document.getElementById("manageWhen");
+      const metaEl = document.getElementById("manageMeta");
+      const statusEl = document.getElementById("manageStatus");
+      const actions = document.getElementById("manageActions");
+      const fallback = document.getElementById("manageFallback");
+      const cancelBtn = document.getElementById("manageCancelBtn");
+      const year = document.querySelector("[data-year]");
+      if (year) year.textContent = String(new Date().getFullYear());
+
+      if (!token || !api) {
+        lead.textContent = "Ungültiger Verwaltungslink.";
+        fallback.hidden = false;
+        return;
+      }
+
+      fetch(api + "/booking/manage?token=" + encodeURIComponent(token))
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (res) {
+          if (!res.ok || !res.d.ok) throw new Error(res.d && res.d.error || "not found");
+          const d = res.d;
+          if (d.status === "cancelled") {
+            lead.textContent = "Dieser Termin wurde bereits abgesagt.";
+            whenEl.textContent = d.label || "";
+            details.hidden = !d.label;
+            actions.hidden = false;
+            cancelBtn.hidden = true;
+            return;
+          }
+          lead.textContent = "Ihr gebuchter Demo-Termin:";
+          whenEl.textContent = d.label || d.slotStart;
+          metaEl.textContent = [d.demoType, d.paket, d.location, d.timezone].filter(Boolean).join(" · ");
+          details.hidden = false;
+          actions.hidden = false;
+        })
+        .catch(function () {
+          lead.textContent = "Termin nicht gefunden oder Link abgelaufen.";
+          fallback.hidden = false;
+        });
+
+      cancelBtn.addEventListener("click", function () {
+        if (!confirm("Termin wirklich absagen?")) return;
+        cancelBtn.disabled = true;
+        statusEl.textContent = "Wird abgesagt …";
+        fetch(api + "/booking/manage", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: token, action: "cancel" }),
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (d) {
+            if (!d.ok) throw new Error(d.error || "fail");
+            lead.textContent = "Termin abgesagt.";
+            statusEl.textContent = "Bestätigung per E-Mail folgt. Sie können einen neuen Termin buchen.";
+            cancelBtn.hidden = true;
+          })
+          .catch(function () {
+            statusEl.textContent = "Absage fehlgeschlagen. Bitte E-Mail an info@suppixai.com.";
+            statusEl.classList.add("is-error");
+            cancelBtn.disabled = false;
+          });
+      });
+    })();
+  </script>
+</body>
+</html>
