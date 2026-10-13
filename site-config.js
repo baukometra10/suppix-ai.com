@@ -12,6 +12,19 @@ window.SITE_CONFIG = {
   appLoginUrl: "https://suppix-ai-workpass.com",
 
   /**
+   * Social Profiles (leere URLs werden nicht angezeigt).
+   * Instagram / LinkedIn / YouTube / X bitte ergänzen, sobald Links feststehen.
+   */
+  social: {
+    facebook: "https://www.facebook.com/profile.php?id=61594787245415",
+    instagram: "",
+    linkedin: "",
+    youtube: "",
+    x: "",
+    tiktok: "",
+  },
+
+  /**
    * Öffentliche Bewertungs-API (JSON, ohne Login).
    * Erwartet Array oder { reviews: [...] } mit name/text/rating (oder Aliase).
    * CORS muss https://suppixai.com erlauben.

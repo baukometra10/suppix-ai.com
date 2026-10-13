@@ -1581,6 +1581,61 @@ button:focus-visible {
   outline-offset: 3px;
 }
 
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(94, 184, 232, 0.28);
+  background: rgba(17, 24, 39, 0.55);
+  color: var(--gray-300, #cbd5e1);
+  text-decoration: none;
+  font-size: 0.86rem;
+  line-height: 1.2;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.social-link:hover,
+.social-link:focus-visible {
+  color: var(--white, #fff);
+  border-color: rgba(94, 184, 232, 0.55);
+  background: rgba(94, 184, 232, 0.12);
+}
+
+.social-icon {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--primary, #5eb8e8);
+  flex-shrink: 0;
+}
+
+.social-facebook .social-icon { background: #1877f2; }
+.social-instagram .social-icon { background: #e4405f; }
+.social-linkedin .social-icon { background: #0a66c2; }
+.social-youtube .social-icon { background: #ff0000; }
+.social-x .social-icon { background: #e7e9ea; }
+.social-tiktok .social-icon { background: #69c9d0; }
+.social-whatsapp .social-icon { background: #25d366; }
+
+.footer-col-social .social-links {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footer-bottom .social-links {
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(24px);

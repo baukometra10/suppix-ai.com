@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initFlyerQr();
   initLiveReviews();
   initImpressumPending();
+  initSocialLinks();
 
   function sitePublicUrl() {
     if (cfg.liveUrl) return cfg.liveUrl;
@@ -36,6 +37,64 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function pageLang() {
     return String(document.documentElement.lang || "de").toLowerCase().slice(0, 2);
+  }
+
+  function socialEntries() {
+    const s = cfg.social || {};
+    const phone = String(cfg.whatsapp || cfg.phoneRaw || "").replace(/\D/g, "");
+    const list = [
+      { key: "facebook", label: "Facebook", href: s.facebook },
+      { key: "instagram", label: "Instagram", href: s.instagram },
+      { key: "linkedin", label: "LinkedIn", href: s.linkedin },
+      { key: "youtube", label: "YouTube", href: s.youtube },
+      { key: "x", label: "X", href: s.x },
+      { key: "tiktok", label: "TikTok", href: s.tiktok },
+    ];
+    if (phone) {
+      list.push({
+        key: "whatsapp",
+        label: "WhatsApp",
+        href: `https://wa.me/${phone}`,
+      });
+    }
+    return list.filter((item) => String(item.href || "").trim().startsWith("http"));
+  }
+
+  function initSocialLinks() {
+    const entries = socialEntries();
+    if (!entries.length) return;
+
+    const renderInto = (host) => {
+      if (!host || host.querySelector(".social-links")) return;
+      const nav = document.createElement("nav");
+      nav.className = "social-links";
+      nav.setAttribute("aria-label", t("Social Media", "Social media", "وسائل التواصل"));
+      nav.innerHTML = entries
+        .map(
+          (item) =>
+            `<a class="social-link social-${item.key}" href="${escapeHtml(item.href)}" target="_blank" rel="noopener noreferrer me" aria-label="${escapeHtml(item.label)}"><span aria-hidden="true" class="social-icon"></span><span class="social-label">${escapeHtml(item.label)}</span></a>`
+        )
+        .join("");
+      host.appendChild(nav);
+    };
+
+    document.querySelectorAll("[data-social-links]").forEach(renderInto);
+
+    document.querySelectorAll(".footer .footer-grid").forEach((grid) => {
+      if (grid.querySelector(".footer-col-social")) return;
+      const col = document.createElement("div");
+      col.className = "footer-col footer-col-social";
+      const title =
+        pageLang() === "en" ? "Follow" : pageLang() === "ar" ? "تابعنا" : "Folgen";
+      col.innerHTML = `<h4>${title}</h4>`;
+      renderInto(col);
+      grid.appendChild(col);
+    });
+
+    document.querySelectorAll(".footer .footer-bottom").forEach((fb) => {
+      if (fb.closest(".footer")?.querySelector(".footer-col-social")) return;
+      renderInto(fb);
+    });
   }
 
   function initAnalytics() {
