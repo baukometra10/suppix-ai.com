@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="WorkPass Angebot – druckfertig als PDF">
+  <title>Angebot | WorkPass</title>
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="extras.css">
+  <link rel="stylesheet" href="premium.css">
+  <style>
+    .offer-page { max-width: 760px; margin: 2rem auto 4rem; padding: 0 1rem; }
+    .offer-card {
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(94, 184, 232, 0.2);
+      border-radius: 16px;
+      padding: 1.75rem;
+    }
+    .offer-grid { display: grid; gap: 0.85rem; margin: 1.25rem 0; }
+    .offer-grid label { display: block; font-size: 0.85rem; margin-bottom: 0.3rem; color: var(--gray-500); }
+    .offer-grid input, .offer-grid select, .offer-grid textarea {
+      width: 100%; padding: 0.65rem 0.75rem; border-radius: 10px;
+      border: 1px solid rgba(148,163,184,0.25); background: rgba(2,6,23,0.55); color: inherit;
+    }
+    .offer-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem; }
+    .offer-summary {
+      margin-top: 1.5rem; padding: 1.1rem 1.2rem; border-radius: 12px;
+      border: 1px solid rgba(94,184,232,0.25); background: rgba(17,24,39,0.7);
+    }
+    .offer-summary strong { font-size: 1.35rem; color: var(--primary, #5eb8e8); }
+    .offer-note { font-size: 0.85rem; color: var(--gray-500); margin-top: 0.75rem; }
+    @media print {
+      .header, .footer, .offer-actions, .skip-link, .no-print { display: none !important; }
+      body { background: #fff !important; color: #0f172a !important; }
+      .offer-card, .offer-summary { border-color: #cbd5e1; background: #fff !important; color: #0f172a !important; box-shadow: none; }
+      .offer-grid input, .offer-grid select, .offer-grid textarea { border: 1px solid #94a3b8; background: #fff; color: #0f172a; }
+    }
+  </style>
+</head>
+<body class="theme-premium">
+  <header class="header scrolled no-print">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <img src="assets/logo.png" alt="WorkPass" class="logo-img" width="48" height="48">
+        <div class="logo-text">
+          <span class="logo-platform">WorkPass</span>
+          <span class="logo-sub">Angebot</span>
+        </div>
+      </a>
+      <a href="demo.html" class="btn btn-primary">Demo</a>
+    </div>
+  </header>
+
+  <main class="offer-page" id="main">
+    <div class="offer-card">
+      <span class="section-tag">Unverbindlich · 14 Tage gültig</span>
+      <h1>WorkPass Angebot</h1>
+      <p>Ausfüllen, per E-Mail senden oder als PDF drucken (Browser → Drucken → Als PDF speichern).</p>
+
+      <form id="offerForm" class="offer-grid" novalidate>
+        <div>
+          <label for="offerName">Name *</label>
+          <input id="offerName" name="name" required autocomplete="name">
+        </div>
+        <div>
+          <label for="offerEmail">E-Mail *</label>
+          <input id="offerEmail" name="email" type="email" required autocomplete="email">
+        </div>
+        <div>
+          <label for="offerCompany">Firma</label>
+          <input id="offerCompany" name="company" autocomplete="organization">
+        </div>
+        <div>
+          <label for="offerPaket">Paket</label>
+          <select id="offerPaket" name="paket">
+            <option value="besucherkarte">Besucherkarte – 19 €/Monat</option>
+            <option value="starter">Starter – 149 €/Monat</option>
+            <option value="professional" selected>Professional – 999 €/Monat</option>
+            <option value="enterprise">Enterprise – 2.490 €/Monat</option>
+          </select>
+        </div>
+        <div>
+          <label for="offerEmployees">Mitarbeiter</label>
+          <input id="offerEmployees" name="employees" type="number" min="1" max="500" value="15">
+        </div>
+        <div>
+          <label for="offerNotes">Notiz / Pilot / Sonderkonditionen</label>
+          <textarea id="offerNotes" name="notes" rows="3" placeholder="z. B. Pilot 14 Tage · 1 Standort"></textarea>
+        </div>
+      </form>
+
+      <div class="offer-summary">
+        <div class="calc-result-label">Geschätzter Monatspreis (netto)</div>
+        <strong id="offerMonthly">–</strong>
+        <p class="offer-note" id="offerBreakdown"></p>
+        <p class="offer-note">Preise zzgl. MwSt. soweit gesetzlich vorgesehen. Kein automatischer Vertrag – Angebot zur Abstimmung nach Demo/Pilot.</p>
+      </div>
+
+      <div class="offer-actions no-print">
+        <button type="button" class="btn btn-outline" id="offerPrintBtn">Als PDF drucken</button>
+        <button type="button" class="btn btn-primary" id="offerSendBtn">Per E-Mail senden</button>
+        <p class="form-status" id="offerStatus" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer no-print">
+    <div class="container footer-bottom">
+      <span>&copy; <span data-year>2026</span> Suppix AI UG</span>
+      <span><a href="impressum.html">Impressum</a> · <a href="agb.html">AGB</a></span>
+    </div>
+  </footer>
+
+  <script src="site-config.js"></script>
+  <script>
+    (function () {
+      const cfg = window.SITE_CONFIG || {};
+      const api = String(cfg.bookingApiUrl || cfg.formApiUrl || "").replace(/\/$/, "");
+      const params = new URLSearchParams(location.search);
+      const plans = {
+        besucherkarte: { base: 19, per: 0, thr: Infinity, label: "Besucherkarte" },
+        starter: { base: 149, per: 0, thr: Infinity, label: "Starter" },
+        professional: { base: 999, per: 2.5, thr: 10, label: "Professional" },
+        enterprise: { base: 2490, per: 3, thr: 0, label: "Enterprise" },
+      };
+
+      const nameEl = document.getElementById("offerName");
+      const emailEl = document.getElementById("offerEmail");
+      const companyEl = document.getElementById("offerCompany");
+      const paketEl = document.getElementById("offerPaket");
+      const empEl = document.getElementById("offerEmployees");
+      const notesEl = document.getElementById("offerNotes");
+      const monthlyEl = document.getElementById("offerMonthly");
+      const breakEl = document.getElementById("offerBreakdown");
+      const statusEl = document.getElementById("offerStatus");
+      const year = document.querySelector("[data-year]");
+      if (year) year.textContent = String(new Date().getFullYear());
+
+      [["name", nameEl], ["email", emailEl], ["company", companyEl], ["paket", paketEl], ["employees", empEl], ["notes", notesEl]].forEach(function (pair) {
+        const v = params.get(pair[0]);
+        if (v && pair[1]) pair[1].value = v;
+      });
+
+      function calc() {
+        const plan = plans[paketEl.value] || plans.professional;
+        const n = Math.min(500, Math.max(1, Number(empEl.value) || 1));
+        let total = plan.base;
+        if (plan.per > 0 && n > plan.thr) total += (n - plan.thr) * plan.per;
+        monthlyEl.textContent = total.toLocaleString("de-DE", { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + " €";
+        breakEl.textContent =
+          plan.per > 0 && n > plan.thr
+            ? plan.label + ": " + plan.base + " € + " + (n - plan.thr) + " × " + plan.per + " €"
+            : plan.label + ": Basispreis inkl. Mitarbeiter";
+        return { total: total, plan: plan, n: n };
+      }
+
+      paketEl.addEventListener("change", calc);
+      empEl.addEventListener("input", calc);
+      calc();
+
+      document.getElementById("offerPrintBtn").addEventListener("click", function () {
+        calc();
+        window.print();
+      });
+
+      document.getElementById("offerSendBtn").addEventListener("click", async function () {
+        const name = nameEl.value.trim();
+        const email = emailEl.value.trim();
+        if (!name || !email) {
+          statusEl.textContent = "Name und E-Mail sind Pflicht.";
+          statusEl.classList.add("is-error");
+          return;
+        }
+        if (!api) {
+          statusEl.textContent = "API nicht konfiguriert.";
+          statusEl.classList.add("is-error");
+          return;
+        }
+        statusEl.classList.remove("is-error");
+        statusEl.textContent = "Wird gesendet …";
+        const c = calc();
+        try {
+          const res = await fetch(api + "/offer", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: name,
+              email: email,
+              company: companyEl.value.trim(),
+              paket: paketEl.value,
+              employees: c.n,
+              notes: notesEl.value.trim(),
+              lang: "de",
+              sendToCustomer: true,
+            }),
+          });
+          const data = await res.json().catch(function () { return {}; });
+          if (!res.ok || !data.ok) throw new Error(data.error || "fail");
+          statusEl.textContent = "Angebot per E-Mail gesendet (Kunde + interne Kopie).";
+        } catch (e) {
+          statusEl.textContent = "Senden fehlgeschlagen. Bitte drucken oder E-Mail manuell.";
+          statusEl.classList.add("is-error");
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

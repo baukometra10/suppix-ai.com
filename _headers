@@ -1,0 +1,22 @@
+# Cloudflare Pages / static host cache & security hints
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+
+/*.html
+  Cache-Control: public, max-age=300, must-revalidate
+
+/assets/*
+  Cache-Control: public, max-age=604800, immutable
+
+/styles.css
+  Cache-Control: public, max-age=86400
+/extras.css
+  Cache-Control: public, max-age=86400
+/premium.css
+  Cache-Control: public, max-age=86400
+/script.js
+  Cache-Control: public, max-age=3600
+/site-config.js
+  Cache-Control: public, max-age=300

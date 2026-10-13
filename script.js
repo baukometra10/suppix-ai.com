@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cfg = window.SITE_CONFIG || globalThis.SITE_CONFIG || {};
 
   applySiteConfig();
+  initAnalytics();
   initSiteNotice();
   initCopyrightNote();
   initDemoVideo();
@@ -35,6 +36,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function pageLang() {
     return String(document.documentElement.lang || "de").toLowerCase().slice(0, 2);
+  }
+
+  function initAnalytics() {
+    const a = cfg.analytics || {};
+    const ids = String(a.gtagId || "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (!ids.length || document.getElementById("gtag-js")) return;
+    const primary = ids[0];
+    window.dataLayer = window.dataLayer || [];
+    window.gtag =
+      window.gtag ||
+      function () {
+        window.dataLayer.push(arguments);
+      };
+    window.gtag("js", new Date());
+    ids.forEach((id) => window.gtag("config", id, { anonymize_ip: true }));
+    const s = document.createElement("script");
+    s.id = "gtag-js";
+    s.async = true;
+    s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(primary)}`;
+    document.head.appendChild(s);
+  }
+
+  function trackDemoBooking(detail) {
+    try {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "demo_booking",
+        booking_label: detail?.label || "",
+        booking_id: detail?.id || "",
+      });
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "demo_booking", {
+          event_category: "conversion",
+          event_label: detail?.label || "booking",
+          value: 1,
+        });
+        const sendTo = String(cfg.analytics?.adsSendTo || "").trim();
+        if (sendTo) {
+          window.gtag("event", "conversion", { send_to: sendTo, value: 1.0, currency: "EUR" });
+        }
+      }
+    } catch {
+      /* ignore */
+    }
   }
 
   function isEnglish() {
@@ -381,6 +429,7 @@ document.addEventListener("DOMContentLoaded", () => {
             );
           }
         }
+        trackDemoBooking({ label: data.label || "", id: data.id || "" });
         setStatus("");
       } catch (err) {
         const msg = String(err?.message || err);

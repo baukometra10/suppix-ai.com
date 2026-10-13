@@ -19,7 +19,9 @@ import {
   handleBookingPost,
   handleManageGet,
   handleManagePost,
+  handleOfferPost,
   handleSlotsGet,
+  runDemoReminders,
 } from "./booking.js";
 
 const DEFAULT_ALLOWED = [
@@ -282,6 +284,14 @@ function json(body, status, headers) {
 }
 
 export default {
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(
+      runDemoReminders(env, { sendResend }).then((r) => {
+        console.log("demo-reminders", JSON.stringify(r));
+      })
+    );
+  },
+
   async fetch(request, env) {
     const allowed = parseAllowed(env);
     const origin = request.headers.get("Origin") || "";
@@ -291,6 +301,21 @@ export default {
 
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: cors });
+    }
+
+    // Cron trigger can also be invoked manually with secret header
+    if (request.method === "POST" && (path === "/cron/reminders" || path.endsWith("/cron/reminders"))) {
+      const key = request.headers.get("X-Cron-Key") || "";
+      const expected = String(env.MARKETING_BOOKING_WEBHOOK_KEY || "").trim();
+      if (!expected || key !== expected) {
+        return json({ ok: false, error: "Unauthorized" }, 401, cors);
+      }
+      try {
+        const result = await runDemoReminders(env, { sendResend });
+        return json(result, 200, cors);
+      } catch (err) {
+        return json({ ok: false, error: String(err.message || err) }, 502, cors);
+      }
     }
 
     if (origin && !allowed.includes(origin)) {
@@ -347,6 +372,28 @@ export default {
           ownerEmailHtml,
           sendResend,
           logoAttachment,
+          ctaButton,
+        });
+      } catch (err) {
+        return json({ ok: false, error: String(err.message || err) }, 502, cors);
+      }
+    }
+
+    if (request.method === "POST" && (path === "/offer" || path.endsWith("/offer"))) {
+      if (!env.RESEND_API_KEY) {
+        return json({ ok: false, error: "Server not configured" }, 500, cors);
+      }
+      let body;
+      try {
+        body = await request.json();
+      } catch {
+        return json({ ok: false, error: "Invalid JSON" }, 400, cors);
+      }
+      try {
+        return await handleOfferPost(body, env, cors, {
+          escapeHtml,
+          emailShell,
+          sendResend,
           ctaButton,
         });
       } catch (err) {

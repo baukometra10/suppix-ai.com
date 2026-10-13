@@ -23,6 +23,17 @@ window.SITE_CONFIG = {
   liveUrl: "https://suppixai.com",
 
   /**
+   * Analytics / Ads (Conversion bei Demo-Buchung).
+   * gtagId: GA4 (G-…) und/oder Google Ads (AW-…) – kommasepariert möglich.
+   * adsSendTo: optional Google Ads Conversion-Label, z. B. "AW-123/AbCdef".
+   * Leer lassen = kein Tracking-Skript.
+   */
+  analytics: {
+    gtagId: "",
+    adsSendTo: "",
+  },
+
+  /**
    * Hinweisleiste „Firma/Website in Bearbeitung“.
    * enabled: false → Banner ausblenden (wenn alles final ist).
    */

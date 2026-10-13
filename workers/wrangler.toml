@@ -44,3 +44,7 @@ BOOKING_LEAD_HOURS = "2"
 BOOKING_HORIZON_DAYS = "28"
 BOOKING_WEEKDAYS = "1,2,3,4,5"
 WORKPASS_BOOKING_WEBHOOK_URL = "https://suppix-ai-workpass.com/api/webhooks/marketing/demo-booking"
+
+# Stündlich: ~24h-Reminder vor Demo (E-Mail an Kunde + Owner mit WhatsApp-Vorlage)
+[triggers]
+crons = ["0 * * * *"]

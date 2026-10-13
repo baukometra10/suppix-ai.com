@@ -745,4 +745,215 @@ function json(body, status, headers) {
   });
 }
 
+/**
+ * Cron: send ~24h-before reminders (email to customer + owner WhatsApp deep-link).
+ * Window: slot starts in 20–28 hours; status confirmed; reminder_sent_at NULL.
+ */
+export async function runDemoReminders(env, helpers) {
+  const { sendResend } = helpers;
+  if (!env.DB || !env.RESEND_API_KEY) {
+    return { ok: false, error: "not configured", sent: 0 };
+  }
+
+  const now = Date.now();
+  const fromIso = new Date(now + 20 * 3600 * 1000).toISOString();
+  const toIso = new Date(now + 28 * 3600 * 1000).toISOString();
+
+  let rows = [];
+  try {
+    const res = await env.DB.prepare(
+      `SELECT id, slot_start, slot_end, name, email, company, lang, manage_token, paket, demo_type
+       FROM demo_bookings
+       WHERE status = 'confirmed'
+         AND slot_start >= ?
+         AND slot_start < ?
+         AND (reminder_sent_at IS NULL OR reminder_sent_at = '')
+       LIMIT 40`
+    )
+      .bind(fromIso, toIso)
+      .all();
+    rows = res?.results || [];
+  } catch (err) {
+    // Column may be missing before migration
+    return { ok: false, error: String(err.message || err), sent: 0 };
+  }
+
+  const website = String(env.WEBSITE || "https://suppixai.com").replace(/\/$/, "");
+  const fromEmail = env.FROM_EMAIL || "WorkPass <info@suppixai.com>";
+  const notifyFrom = env.NOTIFY_FROM_EMAIL || fromEmail;
+  const toEmail = env.TO_EMAIL || "info@suppixai.com";
+  const ownerEmail = env.OWNER_EMAIL || toEmail;
+  const platform = env.PLATFORM || "WorkPass";
+  const whatsapp = String(env.WHATSAPP || "4917631676589").replace(/\D/g, "");
+  const cfg = bookingConfig(env);
+  let sent = 0;
+
+  for (const row of rows) {
+    const lang = String(row.lang || "de").toLowerCase();
+    const de = !lang || lang.startsWith("de");
+    const ar = lang.startsWith("ar");
+    const whenLabel = formatSlotLabel(row.slot_start, cfg.tz, lang);
+    const manageLang = lang.startsWith("en") ? "en" : lang.startsWith("ar") ? "ar" : "de";
+    const manageUrl = `${website}/termin.html?token=${encodeURIComponent(row.manage_token || "")}${
+      manageLang !== "de" ? `&lang=${manageLang}` : ""
+    }`;
+    const demoUrl = `${website}/demo.html`;
+
+    const subject = de
+      ? `Erinnerung: ${platform}-Demo morgen – ${whenLabel}`
+      : ar
+        ? `تذكير: عرض ${platform} غداً – ${whenLabel}`
+        : `Reminder: ${platform} demo tomorrow – ${whenLabel}`;
+
+    const text = de
+      ? `Hallo ${row.name},\n\nkurze Erinnerung: Ihre ${platform}-Demo ist morgen um ${whenLabel}.\n\nUmbuchen/Absagen: ${manageUrl}\nDemo-Seite: ${demoUrl}\n\nBis bald\n${platform}`
+      : ar
+        ? `مرحباً ${row.name},\n\nتذكير: عرض ${platform} غداً الساعة ${whenLabel}.\n\nإدارة الموعد: ${manageUrl}\n\nإلى اللقاء\n${platform}`
+        : `Hi ${row.name},\n\nreminder: your ${platform} demo is tomorrow at ${whenLabel}.\n\nReschedule/cancel: ${manageUrl}\nDemo page: ${demoUrl}\n\nSee you soon\n${platform}`;
+
+    await sendResend(env, {
+      from: fromEmail,
+      to: [row.email],
+      reply_to: toEmail,
+      subject,
+      text,
+    });
+
+    const waText = encodeURIComponent(
+      de
+        ? `Hallo ${row.name}, Erinnerung an Ihre WorkPass-Demo morgen: ${whenLabel}. Umbuchen: ${manageUrl}`
+        : ar
+          ? `مرحباً ${row.name}، تذكير بعرض WorkPass غداً: ${whenLabel}`
+          : `Hi ${row.name}, reminder for your WorkPass demo tomorrow: ${whenLabel}. Manage: ${manageUrl}`
+    );
+    // Prefer customer phone is unknown → owner gets click-to-chat template to forward / call
+    const ownerWa = `https://wa.me/${whatsapp}?text=${waText}`;
+
+    await sendResend(env, {
+      from: notifyFrom,
+      to: [ownerEmail],
+      subject: `[Reminder] Demo ${whenLabel} – ${row.name}`,
+      text: [
+        `Kunde: ${row.name} <${row.email}>`,
+        row.company ? `Firma: ${row.company}` : null,
+        `Termin: ${whenLabel}`,
+        `Paket: ${row.paket || "-"} · Typ: ${row.demo_type || "-"}`,
+        `WhatsApp-Vorlage (an dich / zum Weiterleiten): ${ownerWa}`,
+        `Verwalten: ${manageUrl}`,
+        `Angebot vorbereiten: ${website}/angebot.html?name=${encodeURIComponent(row.name)}&email=${encodeURIComponent(row.email)}&company=${encodeURIComponent(row.company || "")}&paket=${encodeURIComponent(row.paket || "")}`,
+      ]
+        .filter(Boolean)
+        .join("\n"),
+    });
+
+    await env.DB.prepare(`UPDATE demo_bookings SET reminder_sent_at = datetime('now') WHERE id = ?`)
+      .bind(row.id)
+      .run();
+    sent += 1;
+  }
+
+  return { ok: true, sent, checked: rows.length, window: { fromIso, toIso } };
+}
+
+/** Email a printable offer summary (HTML) – customer + owner copy. */
+export async function handleOfferPost(body, env, cors, helpers) {
+  const { sendResend, escapeHtml, emailShell, ctaButton } = helpers;
+  if (!env.RESEND_API_KEY) {
+    return json({ ok: false, error: "Server not configured" }, 500, cors);
+  }
+
+  const name = String(body.name || "").trim().slice(0, 120);
+  const email = String(body.email || "").trim().toLowerCase().slice(0, 200);
+  const company = String(body.company || "").trim().slice(0, 160);
+  const paket = String(body.paket || "professional").trim().slice(0, 40);
+  const employees = Math.min(500, Math.max(1, Number(body.employees) || 15));
+  const notes = String(body.notes || "").trim().slice(0, 2000);
+  const lang = String(body.lang || "de").toLowerCase().slice(0, 5);
+  const sendToCustomer = body.sendToCustomer !== false;
+
+  if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return json({ ok: false, error: "name and email required" }, 400, cors);
+  }
+
+  const prices = {
+    besucherkarte: { base: 19, per: 0, thr: Infinity, label: "Besucherkarte" },
+    starter: { base: 149, per: 0, thr: Infinity, label: "Starter" },
+    professional: { base: 999, per: 2.5, thr: 10, label: "Professional" },
+    enterprise: { base: 2490, per: 3, thr: 0, label: "Enterprise" },
+  };
+  const plan = prices[paket] || prices.professional;
+  let monthly = plan.base;
+  if (plan.per > 0 && employees > plan.thr) monthly += (employees - plan.thr) * plan.per;
+
+  const website = String(env.WEBSITE || "https://suppixai.com").replace(/\/$/, "");
+  const fromEmail = env.FROM_EMAIL || "WorkPass <info@suppixai.com>";
+  const notifyFrom = env.NOTIFY_FROM_EMAIL || fromEmail;
+  const toEmail = env.TO_EMAIL || "info@suppixai.com";
+  const ownerEmail = env.OWNER_EMAIL || toEmail;
+  const platform = env.PLATFORM || "WorkPass";
+  const brand = env.BRAND_COMPANY || "Suppix AI UG";
+  const de = !lang.startsWith("en") && !lang.startsWith("ar");
+  const offerPage = `${website}/angebot.html?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&company=${encodeURIComponent(company)}&paket=${encodeURIComponent(paket)}&employees=${employees}`;
+
+  const monthlyLabel = `${monthly.toLocaleString("de-DE", { minimumFractionDigits: 0, maximumFractionDigits: 2 })} €`;
+  const rowsHtml = `
+    <tr><td style="padding:8px 0;border-bottom:1px solid #e2e8f0">Paket</td><td style="padding:8px 0;border-bottom:1px solid #e2e8f0;text-align:right"><strong>${escapeHtml(plan.label)}</strong></td></tr>
+    <tr><td style="padding:8px 0;border-bottom:1px solid #e2e8f0">Mitarbeiter</td><td style="padding:8px 0;border-bottom:1px solid #e2e8f0;text-align:right">${employees}</td></tr>
+    <tr><td style="padding:8px 0">Geschätzter Monatspreis</td><td style="padding:8px 0;text-align:right"><strong>${monthlyLabel}</strong></td></tr>
+  `;
+
+  const intro = de
+    ? `<p style="margin:0 0 12px;font-size:15px;line-height:1.6;color:#334155">Hallo ${escapeHtml(name)},</p>
+       <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#334155">anbei Ihr unverbindliches ${escapeHtml(platform)}-Angebot${company ? ` für <strong>${escapeHtml(company)}</strong>` : ""}.</p>`
+    : `<p style="margin:0 0 12px;font-size:15px;line-height:1.6;color:#334155">Hi ${escapeHtml(name)},</p>
+       <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#334155">please find your non-binding ${escapeHtml(platform)} offer${company ? ` for <strong>${escapeHtml(company)}</strong>` : ""}.</p>`;
+
+  const bodyHtml = `${intro}
+    <table style="width:100%;border-collapse:collapse;font-size:14px;color:#0f172a">${rowsHtml}</table>
+    ${notes ? `<p style="margin:16px 0 0;font-size:14px;color:#475569">${escapeHtml(notes)}</p>` : ""}
+    <p style="margin:16px 0 0;font-size:13px;color:#64748b">Gültigkeit: 14 Tage · Preise zzgl. MwSt. soweit gesetzlich vorgesehen · ${escapeHtml(brand)}</p>
+    ${ctaButton(offerPage, de ? "Angebot im Browser öffnen / drucken" : "Open / print offer")}
+    ${ctaButton(`${website}/demo.html`, de ? "Demo buchen" : "Book a demo")}`;
+
+  const html = emailShell({
+    logoSrc: env.LOGO_URL || `${website}/assets/logo.png`,
+    company: brand,
+    platform,
+    website,
+    titleBadge: de ? "Angebot" : "Offer",
+    bodyHtml,
+    useImage: true,
+  });
+
+  if (sendToCustomer) {
+    await sendResend(env, {
+      from: fromEmail,
+      to: [email],
+      reply_to: toEmail,
+      subject: de ? `${platform} Angebot – ${company || name}` : `${platform} offer – ${company || name}`,
+      html,
+      text: `${plan.label} · ${employees} MA · ${monthlyLabel}/Monat\n${offerPage}`,
+    });
+  }
+
+  await sendResend(env, {
+    from: notifyFrom,
+    to: [ownerEmail],
+    subject: `[Angebot] ${company || name} – ${plan.label} · ${monthlyLabel}`,
+    text: `Angebot an ${name} <${email}>\n${plan.label} · ${employees} MA · ${monthlyLabel}\n${offerPage}\n${notes}`,
+  });
+
+  return json(
+    {
+      ok: true,
+      monthly,
+      paket: plan.label,
+      employees,
+      offerUrl: offerPage,
+    },
+    200,
+    cors
+  );
+}
+
 export { bookingConfig, formatSlotLabel };
