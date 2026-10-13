@@ -67,3 +67,8 @@ https://suppixai.com/en/imprint.html
 https://suppixai.com/en/terms.html
 https://suppixai.com/ar/imprint.html
 https://suppixai.com/ar/terms.html
+https://suppixai.com/en/blog/
+https://suppixai.com/en/blog/time-tracking-obligation.html
+https://suppixai.com/en/blog/subcontractor-control.html
+https://suppixai.com/en/blog/digital-time-clock-benefits.html
+https://suppixai.com/en/blog/qr-nfc-gps-compared.html
