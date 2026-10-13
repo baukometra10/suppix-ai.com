@@ -19,3 +19,8 @@ Thumbs.db
 cloudflare-deploy/
 cloudflare-deploy-lite/
 *.zip
+
+__pycache__/
+*.pyc
+workers/.wrangler/
+
