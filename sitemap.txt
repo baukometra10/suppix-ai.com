@@ -48,4 +48,6 @@ https://suppixai.com/en/flyer.html
 https://suppixai.com/ar/flyer.html
 https://suppixai.com/impressum.html
 https://suppixai.com/datenschutz.html
+https://suppixai.com/en/privacy.html
+https://suppixai.com/ar/privacy.html
 https://suppixai.com/agb.html
