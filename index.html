@@ -54,19 +54,37 @@
       { "@type": "Continent", "name": "Europe" }
     ],
     "offers": { "@type": "Offer", "price": "19", "priceCurrency": "EUR" },
-    "provider": {
-      "@type": "Organization",
-      "name": "Suppix AI UG",
-      "url": "https://suppixai.com",
-      "email": "info@suppixai.com",
-      "telephone": "+4917631676589",
-      "logo": "https://suppixai.com/assets/logo.png",
-      "sameAs": [
-        "https://suppix-ai-workpass.com",
-        "https://www.facebook.com/profile.php?id=61594787245415"
-      ]
-    },
+    "brand": { "@type": "Brand", "name": "WorkPass" },
+    "provider": { "@id": "https://suppixai.com/#organization" },
     "url": "https://suppixai.com"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://suppixai.com/#organization",
+    "name": "Suppix AI UG",
+    "alternateName": ["Suppix", "Suppix AI", "SUPPIX AI", "WorkPass"],
+    "legalName": "Suppix AI UG",
+    "url": "https://suppixai.com",
+    "logo": "https://suppixai.com/assets/logo.png",
+    "email": "info@suppixai.com",
+    "telephone": "+4917631676589",
+    "description": "Suppix AI UG entwickelt WorkPass – ein digitales Zeiterfassungssystem mit Identität, Zutritt (QR/NFC/GPS), Live-Anwesenheit und Berichten für Bau, Industrie und Teams in Berlin, Deutschland und Europa.",
+    "knowsAbout": ["Zeiterfassung", "Zeiterfassungssystem", "digitale Stempeluhr", "Zutritt", "Live-Anwesenheit", "WorkPass"],
+    "areaServed": [
+      { "@type": "City", "name": "Berlin" },
+      { "@type": "Country", "name": "Germany" },
+      { "@type": "Continent", "name": "Europe" }
+    ],
+    "brand": { "@type": "Brand", "name": "WorkPass" },
+    "sameAs": [
+      "https://suppix-ai-workpass.com",
+      "https://www.facebook.com/profile.php?id=61594787245415",
+      "https://www.instagram.com/suppix.workpass.ai/",
+      "https://www.linkedin.com/in/suppix-ai-8b1758443"
+    ]
   }
   </script>
   <script type="application/ld+json">
@@ -74,9 +92,10 @@
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "WorkPass – Suppix AI",
+    "alternateName": ["Suppix", "Suppix AI", "WorkPass Zeiterfassung"],
     "url": "https://suppixai.com",
     "inLanguage": ["de", "en", "ar", "pl"],
-    "publisher": { "@type": "Organization", "name": "Suppix AI UG" }
+    "publisher": { "@id": "https://suppixai.com/#organization" }
   }
   </script>
   <script type="application/ld+json">
@@ -90,6 +109,14 @@
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Ja. WorkPass erfasst Check-in und Check-out per QR, NFC, GPS-Geofence oder Drehkreuz – mit Foto, Zeitstempel und Audit."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Was ist Suppix bzw. Suppix AI UG?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Suppix AI UG (kurz Suppix / Suppix AI) ist das Unternehmen hinter WorkPass – einem digitalen Zeiterfassungssystem mit Zutritt und Live-Anwesenheit für Berlin, Deutschland und Europa. Offizielle Website: https://suppixai.com"
         }
       },
       {
