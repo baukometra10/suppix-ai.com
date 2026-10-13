@@ -13,12 +13,12 @@ window.SITE_CONFIG = {
 
   /**
    * Social Profiles (leere URLs werden nicht angezeigt).
-   * Instagram / LinkedIn / YouTube / X bitte ergänzen, sobald Links feststehen.
+   * YouTube / X bitte ergänzen, sobald Links feststehen.
    */
   social: {
     facebook: "https://www.facebook.com/profile.php?id=61594787245415",
-    instagram: "",
-    linkedin: "",
+    instagram: "https://www.instagram.com/suppix.workpass.ai/",
+    linkedin: "https://www.linkedin.com/in/suppix-ai-8b1758443",
     youtube: "",
     x: "",
     tiktok: "",
