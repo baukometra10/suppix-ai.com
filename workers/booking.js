@@ -454,7 +454,10 @@ export async function handleBookingPost(body, env, cors, helpers) {
   const platform = env.PLATFORM || "WorkPass";
   const website = env.WEBSITE || "https://suppixai.com";
   const logo = env.LOGO_URL || "https://suppixai.com/assets/logo.png";
-  const manageUrl = `${website.replace(/\/$/, "")}/termin.html?token=${encodeURIComponent(manageToken)}`;
+  const manageLang = String(lang || "de").toLowerCase().slice(0, 2);
+  const manageLangQ =
+    manageLang === "en" || manageLang === "ar" ? `&lang=${manageLang}` : "";
+  const manageUrl = `${website.replace(/\/$/, "")}/termin.html?token=${encodeURIComponent(manageToken)}${manageLangQ}`;
   const gcalUrl = googleCalendarUrl({
     title: `${platform} Demo`,
     startIso: slotStartIso,

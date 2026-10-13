@@ -10,8 +10,12 @@ https://suppixai.com/ar/
 https://suppixai.com/ar/time-tracking.html
 https://suppixai.com/pl/
 https://suppixai.com/ueber-uns.html
+https://suppixai.com/en/about-us.html
+https://suppixai.com/ar/about-us.html
 https://suppixai.com/bau.html
 https://suppixai.com/industrie.html
+https://suppixai.com/ar/bau.html
+https://suppixai.com/ar/industrie.html
 https://suppixai.com/flyer.html
 https://suppixai.com/en/flyer.html
 https://suppixai.com/ar/flyer.html

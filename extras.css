@@ -1516,6 +1516,18 @@ body.has-site-notice {
   font-size: 0.92rem;
 }
 
+.legal-lang-note {
+  margin: 0 0 1.25rem;
+  font-size: 0.88rem;
+  color: var(--gray-500);
+  line-height: 1.5;
+}
+
+.legal-lang-note a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .legal-pending strong {
   color: var(--white);
 }

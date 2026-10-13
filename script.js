@@ -1461,7 +1461,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!text || !published) return null;
         return {
           text: String(text).trim(),
-          name: String(name || t("Kunde", "Customer")).trim(),
+          name: String(name || t("Kunde", "Customer", "عميل")).trim(),
           role: String(role || "").trim(),
           rating: Number(rating) || 5,
         };
@@ -1491,7 +1491,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (note) {
       note.textContent = t(
         "Echte Kundenstimmen aus der SUPPIX-Plattform.",
-        "Real customer reviews from the SUPPIX platform."
+        "Real customer reviews from the SUPPIX platform.",
+        "تقييمات عملاء حقيقية من منصة SUPPIX."
       );
       note.classList.add("is-live");
     }
@@ -1513,9 +1514,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const api = (cfg.reviewsApiUrl || "").trim();
     if (!grid || !api) return;
 
+    grid.innerHTML = "";
     grid.classList.add("is-loading");
     if (note) {
-      note.textContent = t("Lade aktuelle Bewertungen…", "Loading latest reviews…");
+      note.textContent = t(
+        "Lade aktuelle Bewertungen…",
+        "Loading latest reviews…",
+        "جاري تحميل التقييمات…"
+      );
     }
 
     try {
