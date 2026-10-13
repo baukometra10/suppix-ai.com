@@ -45,3 +45,11 @@ Kunde trägt optional Telefon im Buchungsformular ein → Reminder per SMS + E-M
 - UI: https://suppixai.com/angebot.html (drucken = PDF)
 - API: `POST /offer` (E-Mail an Kunde + Owner)
 - Query-Params: `?name=&email=&company=&paket=&employees=`
+
+
+## Twilio: SMS nach Deutschland
+
+Absender ist oft eine US-Nummer (`TWILIO_FROM_NUMBER`). In der Twilio Console unter
+**Messaging → Settings → Geo permissions** Deutschland (Germany) freischalten,
+sonst schlagen Reminder-SMS an DE-Nummern fehl. Trial-Konten senden oft nur an
+verifizierte Nummern.
