@@ -22,6 +22,8 @@ window.SITE_CONFIG = {
     youtube: "",
     x: "",
     tiktok: "",
+    /** Öffentlicher Google-Business / Maps-Link, sobald verfügbar */
+    googleBusiness: "",
   },
 
   /**

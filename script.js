@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
       { key: "youtube", label: "YouTube", href: s.youtube },
       { key: "x", label: "X", href: s.x },
       { key: "tiktok", label: "TikTok", href: s.tiktok },
+      { key: "googleBusiness", label: "Google", href: s.googleBusiness },
     ];
     if (phone) {
       list.push({

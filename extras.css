@@ -1624,6 +1624,7 @@ button:focus-visible {
 .social-youtube .social-icon { background: #ff0000; }
 .social-x .social-icon { background: #e7e9ea; }
 .social-tiktok .social-icon { background: #69c9d0; }
+.social-googleBusiness .social-icon { background: #4285f4; }
 .social-whatsapp .social-icon { background: #25d366; }
 
 .footer-col-social .social-links {

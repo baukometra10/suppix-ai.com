@@ -46,20 +46,38 @@
       { "@type": "Country", "name": "Germany" },
       { "@type": "Continent", "name": "Europe" }
     ],
+    "brand": { "@type": "Brand", "name": "WorkPass" },
     "offers": { "@type": "Offer", "price": "19", "priceCurrency": "EUR" },
-    "provider": {
-      "@type": "Organization",
-      "name": "Suppix AI UG",
-      "url": "https://suppixai.com",
-      "email": "info@suppixai.com",
-      "telephone": "+4917631676589",
-      "logo": "https://suppixai.com/assets/logo.png",
-      "sameAs": [
-        "https://suppix-ai-workpass.com",
-        "https://www.facebook.com/profile.php?id=61594787245415"
-      ]
-    },
+    "provider": { "@id": "https://suppixai.com/#organization" },
     "url": "https://suppixai.com/en/"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://suppixai.com/#organization",
+    "name": "Suppix AI UG",
+    "alternateName": ["Suppix", "Suppix AI", "SUPPIX AI", "WorkPass"],
+    "legalName": "Suppix AI UG",
+    "url": "https://suppixai.com",
+    "logo": "https://suppixai.com/assets/logo.png",
+    "email": "info@suppixai.com",
+    "telephone": "+4917631676589",
+    "description": "Suppix AI UG builds WorkPass – digital time tracking with identity, access (QR/NFC/GPS), live attendance and reports for Berlin, Germany and Europe.",
+    "knowsAbout": ["time tracking", "Zeiterfassung", "WorkPass", "access control", "live attendance"],
+    "areaServed": [
+      { "@type": "City", "name": "Berlin" },
+      { "@type": "Country", "name": "Germany" },
+      { "@type": "Continent", "name": "Europe" }
+    ],
+    "brand": { "@type": "Brand", "name": "WorkPass" },
+    "sameAs": [
+      "https://suppix-ai-workpass.com",
+      "https://www.facebook.com/profile.php?id=61594787245415",
+      "https://www.instagram.com/suppix.workpass.ai/",
+      "https://www.linkedin.com/in/suppix-ai-8b1758443"
+    ]
   }
   </script>
   <script type="application/ld+json">
@@ -69,7 +87,7 @@
     "name": "WorkPass – Suppix AI",
     "url": "https://suppixai.com/en/",
     "inLanguage": "en",
-    "publisher": { "@type": "Organization", "name": "Suppix AI UG" }
+    "publisher": { "@id": "https://suppixai.com/#organization" }
   }
   </script>
   <script type="application/ld+json">
@@ -77,6 +95,14 @@
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Suppix / Suppix AI UG?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Suppix AI UG (also called Suppix / Suppix AI) is the company behind WorkPass, a digital time-tracking system with access control and live attendance. Official site: https://suppixai.com"
+        }
+      },
       {
         "@type": "Question",
         "name": "Does the system report lateness and expected attendance?",
