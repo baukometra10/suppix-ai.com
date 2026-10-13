@@ -1343,6 +1343,9 @@ document.addEventListener("DOMContentLoaded", () => {
       enterprise: { base: 2490, perEmployee: 3, threshold: 0, label: "Enterprise" },
     };
 
+    const savingsEl = document.getElementById("calcSavings");
+    const savingsNote = document.getElementById("calcSavingsNote");
+
     function calculate() {
       const plan = plans[paketSelect.value];
       const count = parseInt(range.value, 10);
@@ -1368,6 +1371,22 @@ document.addEventListener("DOMContentLoaded", () => {
               `${plan.label}: All employees included`,
               `${plan.label}: جميع الموظفين مشمولون`
             );
+
+      // Conservative model: ~8 min/admin coordination avoided per employee/day × 20 days × €35/h
+      if (savingsEl) {
+        const hours = count * (8 / 60) * 20;
+        const euro = Math.round(hours * 35);
+        savingsEl.textContent = isEnglish()
+          ? `~€${euro.toLocaleString("en-US")} / ~${Math.round(hours)} h`
+          : `~${euro.toLocaleString(isArabic() ? "ar-EG" : "de-DE")} € / ~${Math.round(hours)} h`;
+        if (savingsNote) {
+          savingsNote.textContent = t(
+            "*Modell: ca. 8 Min. weniger Koordination/MA/Tag · 20 Tage · 35 €/h – Richtwert, keine Garantie.",
+            "*Model: ~8 min less chase per employee/day · 20 days · €35/h – estimate, not a guarantee.",
+            "*نموذج: نحو 8 دقائق أقل تنسيقاً لكل موظف/يوم · 20 يوماً · 35 €/ساعة – تقدير وليس ضماناً."
+          );
+        }
+      }
     }
 
     paketSelect.addEventListener("change", calculate);
