@@ -397,6 +397,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const payload = {
           name: document.getElementById("bookingName")?.value || "",
           email: document.getElementById("bookingEmail")?.value || "",
+          phone: document.getElementById("bookingPhone")?.value || "",
           company: document.getElementById("bookingCompany")?.value || "",
           paket: document.getElementById("bookingPaket")?.value || "",
           location: document.getElementById("bookingLocation")?.value || "",

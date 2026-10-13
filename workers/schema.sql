@@ -13,6 +13,9 @@ CREATE TABLE IF NOT EXISTS demo_bookings (
   message TEXT,
   manage_token TEXT,
   status TEXT NOT NULL DEFAULT 'confirmed',
+  phone TEXT,
+  reminder_sent_at TEXT,
+  offer_sent_at TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

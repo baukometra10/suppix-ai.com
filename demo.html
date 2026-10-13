@@ -3,22 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="WorkPass Demo buchen: 30 Minuten Live-Durchlauf – Identität, Zutritt, Live-Lage und Bericht. Für Bau, Industrie und Teams in Deutschland.">
+  <meta name="description" content="WorkPass Demo: 30 Minuten live – Identität, Check-in, Live-Lage, Bericht. Termin online wählen. Für Bau & Industrie.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://suppixai.com/demo.html">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="WorkPass Demo buchen – 30 Minuten live">
-  <meta property="og:description" content="Termin wählen: Identität → Check-in → Live-Lage → Bericht. Online, ohne Verpflichtung.">
+  <meta property="og:title" content="WorkPass Demo – 30 Minuten live buchen">
+  <meta property="og:description" content="Kein Pitch-Deck. Live-Durchlauf: Ausweis → Check-in → Pforte → Bericht. Ohne Verpflichtung.">
   <meta property="og:image" content="https://suppixai.com/assets/og-share.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://suppixai.com/demo.html">
   <meta property="og:locale" content="de_DE">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://suppixai.com/assets/og-share.png">
   <title>Demo buchen | WorkPass – 30 Minuten live</title>
-  <link rel="icon" href="/favicon.ico" sizes="48x48">
   <link rel="icon" href="assets/icon-192.png" type="image/png" sizes="192x192">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="extras.css">
   <link rel="stylesheet" href="premium.css">
+  <link rel="preload" href="assets/logo.png" as="image">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -35,59 +38,61 @@
   <header class="header scrolled" id="header">
     <div class="container header-inner">
       <a href="index.html" class="logo">
-        <img src="assets/logo.png" alt="Suppix AI UG – WorkPass" class="logo-img">
+        <img src="assets/logo.png" alt="Suppix AI UG – WorkPass" class="logo-img" width="48" height="48">
         <div class="logo-text">
           <span class="logo-platform">WorkPass</span>
           <span class="logo-sub">Live-Demo</span>
         </div>
       </a>
-      <nav class="nav-desktop">
+      <nav class="nav-desktop" aria-label="Hauptnavigation">
         <a href="index.html">Startseite</a>
         <a href="index.html#bookingSection" class="btn btn-primary" data-booking>Termin wählen</a>
       </nav>
     </div>
   </header>
 
-  <section class="page-hero" id="main">
+  <section class="page-hero demo-hero-tight" id="main">
     <div class="container">
-      <span class="section-tag">Google Ads · Demo</span>
-      <h1>In 30 Minuten sehen, ob WorkPass Ihr System wird</h1>
-      <p>Kein Pitch-Deck. Live: digitale Identität → Check-in → Pforte/Live-Lage → Bericht. Danach entscheiden Sie – ohne Verpflichtung.</p>
-      <a href="index.html#bookingSection" class="btn btn-primary btn-glow" data-booking>Jetzt Demo-Termin wählen</a>
+      <span class="section-tag">30 Min · Online · unverbindlich</span>
+      <h1>Sehen Sie in 30 Minuten, ob WorkPass Ihr System ist</h1>
+      <p class="demo-lead">Ein Flow. Kein Pitch-Deck.<br>
+        <strong>Ausweis → Check-in → Pforte/Live-Lage → Bericht.</strong>
+      </p>
+      <div class="demo-cta-row">
+        <a href="index.html#bookingSection" class="btn btn-primary btn-glow" data-booking>Jetzt Termin wählen</a>
+        <a href="index.html#pilot" class="btn btn-outline">14-Tage-Pilot ansehen</a>
+      </div>
+      <ul class="demo-proof" aria-label="Kurzvorteile">
+        <li>Bau &amp; Industrie</li>
+        <li>Karte ohne Smartphone</li>
+        <li>Bestätigung per E-Mail</li>
+      </ul>
     </div>
   </section>
 
   <div class="page-content">
     <div class="container">
-      <h2>Was Sie in der Demo sehen</h2>
-      <ul>
-        <li><strong>Ausweis &amp; App</strong> – QR, Foto, Gültigkeit</li>
-        <li><strong>Check-in</strong> – QR / NFC / GPS</li>
-        <li><strong>Pforte &amp; Live Map</strong> – wer ist wo</li>
-        <li><strong>Compliance &amp; Bericht</strong> – PDF / DATEV-Richtung</li>
-      </ul>
-
-      <h2>Für wen die Demo gedacht ist</h2>
-      <p>Geschäftsführung, Bauleitung, HR und IT in <a href="bau.html">Bau</a>, <a href="industrie.html">Industrie</a> und Logistik – typisch ab ca. 10 Mitarbeitenden oder mehreren Standorten.</p>
-
-      <h2>So läuft der Termin</h2>
-      <ol>
-        <li>Termin online wählen (Bestätigung per E-Mail)</li>
-        <li>30 Minuten Videocall – Ihr Szenario im Fokus</li>
-        <li>Optional: Pilot / Paket-Empfehlung danach</li>
+      <h2>Was in der Demo passiert</h2>
+      <ol class="demo-steps">
+        <li><strong>Ihr Szenario</strong> – Bau, Industrie oder Lohn</li>
+        <li><strong>Live-Durchlauf</strong> – Identität, Tor, Lage, Export</li>
+        <li><strong>Nächster Schritt</strong> – Pilot oder Angebot</li>
       </ol>
 
+      <h2>Für wen</h2>
+      <p>Geschäftsführung, Bauleitung, HR und IT – typisch ab ca. 10 Mitarbeitenden oder mehreren Standorten. Branchen: <a href="bau.html">Bau</a>, <a href="industrie.html">Industrie</a>, Logistik.</p>
+
       <div class="subpage-cta">
-        <h3>Termin jetzt festlegen</h3>
-        <p>Freie Slots Mo–Fr, Europe/Berlin. Absagen und Umbuchen über den Link in der Bestätigung.</p>
+        <h3>Slot festlegen</h3>
+        <p>Mo–Fr, Europe/Berlin. Umbuchen über den Link in der Bestätigung. Optional Telefon für SMS-Erinnerung.</p>
         <a href="index.html#bookingSection" class="btn btn-primary" data-booking>Demo buchen</a>
         <a href="index.html#rechner" class="btn btn-outline" style="margin-left:0.5rem;">Preisrechner</a>
       </div>
 
-      <p style="margin-top:2rem;font-size:0.9rem;opacity:0.8;">
-        Weiterlesen: <a href="zeiterfassung.html">Zeiterfassungssystem</a> ·
+      <p class="demo-links">
+        <a href="zeiterfassung.html">Zeiterfassungssystem</a> ·
         <a href="vergleich-excel.html">statt Excel</a> ·
-        <a href="vergleich-stempeluhr.html">vs. Stempeluhr</a>
+        <a href="blog/">Ratgeber</a>
       </p>
     </div>
   </div>
@@ -98,7 +103,7 @@
       <span><a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a></span>
     </div>
   </footer>
-  <script src="site-config.js"></script>
-  <script src="script.js"></script>
+  <script src="site-config.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

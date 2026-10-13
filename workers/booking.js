@@ -354,6 +354,10 @@ export async function handleBookingPost(body, env, cors, helpers) {
   const location = String(body.location || body.standort || "").trim().slice(0, 120);
   const demoType = String(body.demoType || body.demo_type || "").trim().slice(0, 80);
   const message = String(body.message || "").trim().slice(0, 2000);
+  const phone = String(body.phone || body.telefon || "")
+    .trim()
+    .replace(/[^\d+]/g, "")
+    .slice(0, 32);
   const privacy = String(body.privacy || "").trim();
   const lang = String(body.lang || "de").trim().slice(0, 8);
   const slotStart = String(body.slotStart || body.slot_start || "").trim();
@@ -398,26 +402,52 @@ export async function handleBookingPost(body, env, cors, helpers) {
   const slotEndIso = match.end;
 
   try {
-    await env.DB.prepare(
-      `INSERT INTO demo_bookings
-        (id, slot_start, slot_end, name, email, company, paket, location, demo_type, lang, message, manage_token, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'confirmed')`
-    )
-      .bind(
-        id,
-        slotStartIso,
-        slotEndIso,
-        name,
-        email,
-        company,
-        paket,
-        location,
-        demoType,
-        lang,
-        message,
-        manageToken
+    try {
+      await env.DB.prepare(
+        `INSERT INTO demo_bookings
+          (id, slot_start, slot_end, name, email, company, paket, location, demo_type, lang, message, manage_token, status, phone)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'confirmed', ?)`
       )
-      .run();
+        .bind(
+          id,
+          slotStartIso,
+          slotEndIso,
+          name,
+          email,
+          company,
+          paket,
+          location,
+          demoType,
+          lang,
+          message,
+          manageToken,
+          phone || null
+        )
+        .run();
+    } catch (errPhone) {
+      // Fallback if phone column not migrated yet
+      if (!/no such column|phone/i.test(String(errPhone?.message || errPhone))) throw errPhone;
+      await env.DB.prepare(
+        `INSERT INTO demo_bookings
+          (id, slot_start, slot_end, name, email, company, paket, location, demo_type, lang, message, manage_token, status)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'confirmed')`
+      )
+        .bind(
+          id,
+          slotStartIso,
+          slotEndIso,
+          name,
+          email,
+          company,
+          paket,
+          location,
+          demoType,
+          lang,
+          message,
+          manageToken
+        )
+        .run();
+    }
   } catch (err) {
     const msg = String(err?.message || err);
     if (/UNIQUE|constraint/i.test(msg)) {
@@ -745,6 +775,34 @@ function json(body, status, headers) {
   });
 }
 
+/** Optional Twilio SMS. Secrets: TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER */
+async function sendTwilioSms(env, toRaw, bodyText) {
+  const sid = String(env.TWILIO_ACCOUNT_SID || "").trim();
+  const token = String(env.TWILIO_AUTH_TOKEN || "").trim();
+  const from = String(env.TWILIO_FROM_NUMBER || "").trim();
+  let to = String(toRaw || "").replace(/[^\d+]/g, "");
+  if (!sid || !token || !from) return { skipped: true, reason: "twilio not configured" };
+  if (!to) return { skipped: true, reason: "no phone" };
+  if (to.startsWith("00")) to = `+${to.slice(2)}`;
+  if (/^0\d+/.test(to)) to = `+49${to.slice(1)}`;
+  if (!to.startsWith("+")) to = `+${to}`;
+
+  const auth = btoa(`${sid}:${token}`);
+  const res = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${auth}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({ To: to, From: from, Body: String(bodyText || "").slice(0, 320) }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return { ok: false, error: data?.message || res.statusText || "twilio error" };
+  }
+  return { ok: true, sid: data.sid };
+}
+
 /**
  * Cron: send ~24h-before reminders (email to customer + owner WhatsApp deep-link).
  * Window: slot starts in 20–28 hours; status confirmed; reminder_sent_at NULL.
@@ -762,7 +820,7 @@ export async function runDemoReminders(env, helpers) {
   let rows = [];
   try {
     const res = await env.DB.prepare(
-      `SELECT id, slot_start, slot_end, name, email, company, lang, manage_token, paket, demo_type
+      `SELECT id, slot_start, slot_end, name, email, company, lang, manage_token, paket, demo_type, phone
        FROM demo_bookings
        WHERE status = 'confirmed'
          AND slot_start >= ?
@@ -819,6 +877,13 @@ export async function runDemoReminders(env, helpers) {
       text,
     });
 
+    const smsBody = de
+      ? `WorkPass-Demo morgen ${whenLabel}. Umbuchen: ${manageUrl}`
+      : ar
+        ? `عرض WorkPass غداً ${whenLabel}. إدارة: ${manageUrl}`
+        : `WorkPass demo tomorrow ${whenLabel}. Manage: ${manageUrl}`;
+    const smsResult = await sendTwilioSms(env, row.phone, smsBody);
+
     const waText = encodeURIComponent(
       de
         ? `Hallo ${row.name}, Erinnerung an Ihre WorkPass-Demo morgen: ${whenLabel}. Umbuchen: ${manageUrl}`
@@ -826,7 +891,7 @@ export async function runDemoReminders(env, helpers) {
           ? `مرحباً ${row.name}، تذكير بعرض WorkPass غداً: ${whenLabel}`
           : `Hi ${row.name}, reminder for your WorkPass demo tomorrow: ${whenLabel}. Manage: ${manageUrl}`
     );
-    // Prefer customer phone is unknown → owner gets click-to-chat template to forward / call
+    // Owner WhatsApp deep-link (manual send / forward)
     const ownerWa = `https://wa.me/${whatsapp}?text=${waText}`;
 
     await sendResend(env, {
@@ -836,8 +901,16 @@ export async function runDemoReminders(env, helpers) {
       text: [
         `Kunde: ${row.name} <${row.email}>`,
         row.company ? `Firma: ${row.company}` : null,
+        row.phone ? `Telefon: ${row.phone}` : null,
         `Termin: ${whenLabel}`,
         `Paket: ${row.paket || "-"} · Typ: ${row.demo_type || "-"}`,
+        smsResult?.ok
+          ? `SMS an Kunde: gesendet`
+          : smsResult?.skipped
+            ? `SMS: übersprungen (${smsResult.reason || "keine Config/Telefon"})`
+            : smsResult?.error
+              ? `SMS Fehler: ${smsResult.error}`
+              : null,
         `WhatsApp-Vorlage (an dich / zum Weiterleiten): ${ownerWa}`,
         `Verwalten: ${manageUrl}`,
         `Angebot vorbereiten: ${website}/angebot.html?name=${encodeURIComponent(row.name)}&email=${encodeURIComponent(row.email)}&company=${encodeURIComponent(row.company || "")}&paket=${encodeURIComponent(row.paket || "")}`,
