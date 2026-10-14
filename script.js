@@ -1499,9 +1499,31 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    const numberInput = document.getElementById("calcEmployeesInput");
+    const maxEmployees = Number(range.max) || 2000;
+
+    function syncFromRange() {
+      if (numberInput) numberInput.value = range.value;
+      calculate();
+    }
+
+    function syncFromNumber() {
+      if (!numberInput) return;
+      let n = parseInt(numberInput.value, 10);
+      if (!Number.isFinite(n)) n = 1;
+      n = Math.min(maxEmployees, Math.max(1, n));
+      numberInput.value = String(n);
+      range.value = String(n);
+      calculate();
+    }
+
     paketSelect.addEventListener("change", calculate);
-    range.addEventListener("input", calculate);
-    calculate();
+    range.addEventListener("input", syncFromRange);
+    if (numberInput) {
+      numberInput.addEventListener("input", syncFromNumber);
+      numberInput.addEventListener("change", syncFromNumber);
+    }
+    syncFromRange();
 
     const demoBtn = document.getElementById("calcDemoBtn");
     if (demoBtn) {

@@ -160,14 +160,18 @@ function closedDatesInRange(fromYmd, toYmd) {
   return out;
 }
 
-function googleCalendarUrl({ title, startIso, endIso, details, website }) {
+function teamsMeetingUrl(env) {
+  return String(env.TEAMS_MEETING_URL || "").trim();
+}
+
+function googleCalendarUrl({ title, startIso, endIso, details, website, location }) {
   const stamp = (iso) => iso.replace(/[-:]/g, "").replace(/\.\d{3}/, "");
   const params = new URLSearchParams({
     action: "TEMPLATE",
     text: title,
     dates: `${stamp(startIso)}/${stamp(endIso)}`,
     details: details || "",
-    location: website || "",
+    location: location || website || "",
   });
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
@@ -285,7 +289,7 @@ function newId() {
   return crypto.randomUUID();
 }
 
-function buildIcs({ uid, startIso, endIso, summary, description, organizerEmail }) {
+function buildIcs({ uid, startIso, endIso, summary, description, organizerEmail, location, url }) {
   const stamp = (iso) =>
     iso.replace(/[-:]/g, "").replace(/\.\d{3}/, "").replace(/Z$/, "Z");
   const escapeIcs = (s) =>
@@ -307,11 +311,15 @@ function buildIcs({ uid, startIso, endIso, summary, description, organizerEmail 
     `DTEND:${stamp(endIso)}`,
     `SUMMARY:${escapeIcs(summary)}`,
     `DESCRIPTION:${escapeIcs(description)}`,
+  ];
+  if (location) lines.push(`LOCATION:${escapeIcs(location)}`);
+  if (url) lines.push(`URL:${escapeIcs(url)}`);
+  lines.push(
     `ORGANIZER:mailto:${organizerEmail}`,
     "STATUS:CONFIRMED",
     "END:VEVENT",
-    "END:VCALENDAR",
-  ];
+    "END:VCALENDAR"
+  );
   return lines.join("\r\n");
 }
 
@@ -488,12 +496,21 @@ export async function handleBookingPost(body, env, cors, helpers) {
   const manageLangQ =
     manageLang === "en" || manageLang === "ar" ? `&lang=${manageLang}` : "";
   const manageUrl = `${website.replace(/\/$/, "")}/termin.html?token=${encodeURIComponent(manageToken)}${manageLangQ}`;
+  const teamsUrl = teamsMeetingUrl(env);
+  const meetLocation = teamsUrl || website;
   const gcalUrl = googleCalendarUrl({
     title: `${platform} Demo`,
     startIso: slotStartIso,
     endIso: slotEndIso,
-    details: `Demo with ${brandCompany}. Manage: ${manageUrl}`,
+    details: [
+      `Demo with ${brandCompany}.`,
+      teamsUrl ? `Microsoft Teams: ${teamsUrl}` : null,
+      `Manage: ${manageUrl}`,
+    ]
+      .filter(Boolean)
+      .join("\n"),
     website,
+    location: meetLocation,
   });
 
   const whenLabel = formatSlotLabel(slotStartIso, cfg.tz, lang);
@@ -515,6 +532,7 @@ export async function handleBookingPost(body, env, cors, helpers) {
       Sprache: lang,
       BookingId: id,
       Verwalten: manageUrl,
+      ...(teamsUrl ? { Teams: teamsUrl } : {}),
     },
     company: brandCompany,
     platform,
@@ -552,6 +570,14 @@ export async function handleBookingPost(body, env, cors, helpers) {
   const whenTitle = de ? "Ihr Termin" : ar ? "موعدك" : "Your appointment";
   const manageLabel = de ? "Termin absagen oder umbuchen" : ar ? "إلغاء أو إعادة جدولة" : "Cancel or reschedule";
   const gcalLabel = de ? "In Google Kalender öffnen" : ar ? "فتح في تقويم Google" : "Add to Google Calendar";
+  const teamsLabel = de ? "Microsoft Teams beitreten" : ar ? "الانضمام عبر Microsoft Teams" : "Join Microsoft Teams";
+  const meetHint = teamsUrl
+    ? de
+      ? "Die Demo findet online per <strong>Microsoft Teams</strong> statt (Link unten)."
+      : ar
+        ? "العرض يتم عبر <strong>Microsoft Teams</strong> (الرابط أدناه)."
+        : "The demo is online via <strong>Microsoft Teams</strong> (link below)."
+    : "";
   const closing = de
     ? `Mit freundlichen Grüßen<br><strong style="color:#0f172a">Ihr Team von ${escapeHtml(brandCompany)}</strong>`
     : ar
@@ -561,15 +587,17 @@ export async function handleBookingPost(body, env, cors, helpers) {
   const bodyHtml = `
 <p style="margin:0 0 10px;font-size:22px;font-weight:700;color:#0f172a;line-height:1.3">${greeting}</p>
 <p style="margin:0 0 18px;font-size:15px;line-height:1.65;color:#475569">${thanks}</p>
+${meetHint ? `<p style="margin:0 0 14px;font-size:14px;line-height:1.6;color:#475569">${meetHint}</p>` : ""}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f8fafc" style="background-color:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;margin:0 0 20px">
   <tr><td style="padding:14px 16px">
     <p style="margin:0 0 6px;font-weight:700;font-size:14px;color:#0f172a">${whenTitle}</p>
     <p style="margin:0;font-size:16px;color:#0f172a;font-weight:700">${escapeHtml(whenLabel)}</p>
-    <p style="margin:8px 0 0;font-size:13px;color:#64748b">${cfg.durationMin} min · ${escapeHtml(cfg.tz)}${demoType ? ` · ${escapeHtml(demoType)}` : ""}</p>
+    <p style="margin:8px 0 0;font-size:13px;color:#64748b">${cfg.durationMin} min · ${escapeHtml(cfg.tz)}${demoType ? ` · ${escapeHtml(demoType)}` : ""}${teamsUrl ? " · Microsoft Teams" : ""}</p>
   </td></tr>
 </table>
-${ctaButton(manageUrl, manageLabel)}
+${teamsUrl ? ctaButton(teamsUrl, teamsLabel) : ""}
 ${ctaButton(gcalUrl, gcalLabel)}
+${ctaButton(manageUrl, manageLabel)}
 <p style="margin:12px 0 0;font-size:14px;line-height:1.6;color:#334155">${closing}</p>`;
 
   const customerHtml = emailShell({
@@ -589,8 +617,17 @@ ${ctaButton(gcalUrl, gcalLabel)}
     startIso: slotStartIso,
     endIso: slotEndIso,
     summary: `${platform} Demo`,
-    description: `Demo with ${brandCompany}. Paket: ${paket || "-"}. Location: ${location || "-"}. Type: ${demoType || "-"}. Manage: ${manageUrl}`,
+    description: [
+      `Demo with ${brandCompany}.`,
+      `Paket: ${paket || "-"}. Region: ${location || "-"}. Type: ${demoType || "-"}.`,
+      teamsUrl ? `Microsoft Teams: ${teamsUrl}` : null,
+      `Manage: ${manageUrl}`,
+    ]
+      .filter(Boolean)
+      .join("\n"),
     organizerEmail: toEmail,
+    location: teamsUrl ? "Microsoft Teams" : website,
+    url: teamsUrl || manageUrl,
   });
 
   await sendResend(env, {
@@ -671,7 +708,7 @@ export async function handleManageGet(request, env, cors) {
 }
 
 export async function handleManagePost(body, env, cors, helpers) {
-  const { ownerEmailHtml, sendResend } = helpers;
+  const { ownerEmailHtml, sendResend, escapeHtml, emailShell, ctaButton, logoAttachment } = helpers;
   const token = String(body.token || "").trim();
   const action = String(body.action || "").trim().toLowerCase();
   if (!token || !env.DB) return json({ ok: false, error: "Token required" }, 400, cors);
@@ -710,26 +747,33 @@ export async function handleManagePost(body, env, cors, helpers) {
 
   const cfg = bookingConfig(env);
   const whenLabel = formatSlotLabel(row.slot_start, cfg.tz, row.lang || "de");
-  const website = env.WEBSITE || "https://suppixai.com";
+  const website = String(env.WEBSITE || "https://suppixai.com").replace(/\/$/, "");
   const notifyFrom = env.NOTIFY_FROM_EMAIL || "WorkPass Anfragen <anfragen@suppixai.com>";
   const fromEmail = env.FROM_EMAIL || "WorkPass <info@suppixai.com>";
   const toEmail = env.TO_EMAIL || "info@suppixai.com";
-  const ownerRecipients = String(env.OWNER_EMAIL || env.TO_EMAIL || "info@suppixai.com")
-    .split(",")
+  const logo = env.LOGO_URL || "https://suppixai.com/assets/logo.png";
+  const ownerRecipients = [
+    ...String(env.OWNER_EMAIL || "").split(","),
+    ...String(env.TO_EMAIL || "").split(","),
+  ]
     .map((s) => s.trim())
     .filter(Boolean);
+  const uniqueOwners = [...new Set(ownerRecipients.length ? ownerRecipients : ["info@suppixai.com"])];
   const brandCompany = env.BRAND_COMPANY || "Suppix AI UG";
   const platform = env.PLATFORM || "WorkPass";
+  const bookUrl = `${website}/#bookingSection`;
 
   if (env.RESEND_API_KEY) {
     const ownerMail = ownerEmailHtml({
       fields: {
-        Typ: "Demo abgesagt",
+        Typ: "STORNIERT – Demo abgesagt",
+        Status: "cancelled",
         Name: row.name,
         EMail: row.email,
-        Unternehmen: row.company,
+        Unternehmen: row.company || "–",
         Termin: whenLabel,
         BookingId: row.id,
+        Hinweis: "Slot ist wieder frei. Termin in D1 auf cancelled gesetzt.",
       },
       company: brandCompany,
       platform,
@@ -738,30 +782,77 @@ export async function handleManagePost(body, env, cors, helpers) {
     });
     await sendResend(env, {
       from: notifyFrom,
-      to: ownerRecipients,
+      to: uniqueOwners,
       reply_to: row.email,
-      subject: `Demo abgesagt – ${row.name} · ${whenLabel}`,
+      subject: `STORNIERT: Demo abgesagt – ${row.name} · ${whenLabel}`,
       html: ownerMail.html,
       text: ownerMail.text,
     });
 
-    const lang = row.lang || "de";
+    const lang = String(row.lang || "de").toLowerCase();
     const de = !lang.startsWith("en") && !lang.startsWith("ar");
     const ar = lang.startsWith("ar");
+    const greeting = row.name
+      ? de
+        ? `Hallo ${escapeHtml(row.name)},`
+        : ar
+          ? `مرحباً ${escapeHtml(row.name)}،`
+          : `Hello ${escapeHtml(row.name)},`
+      : de
+        ? "Hallo,"
+        : ar
+          ? "مرحباً،"
+          : "Hello,";
+    const title = de ? "Termin storniert" : ar ? "تم إلغاء الموعد" : "Booking cancelled";
+    const body = de
+      ? `Ihr Demo-Termin für <strong style="color:#0f172a">${escapeHtml(platform)}</strong> am <strong>${escapeHtml(whenLabel)}</strong> wurde storniert.`
+      : ar
+        ? `تم إلغاء موعد عرض <strong style="color:#0f172a">${escapeHtml(platform)}</strong> بتاريخ <strong>${escapeHtml(whenLabel)}</strong>.`
+        : `Your <strong style="color:#0f172a">${escapeHtml(platform)}</strong> demo on <strong>${escapeHtml(whenLabel)}</strong> has been cancelled.`;
+    const rebook = de ? "Neuen Termin buchen" : ar ? "حجز موعد جديد" : "Book a new time";
+    const closing = de
+      ? `Mit freundlichen Grüßen<br><strong style="color:#0f172a">Ihr Team von ${escapeHtml(brandCompany)}</strong>`
+      : ar
+        ? `مع أطيب التحيات<br><strong style="color:#0f172a">فريق ${escapeHtml(brandCompany)}</strong>`
+        : `Kind regards<br><strong style="color:#0f172a">Your team at ${escapeHtml(brandCompany)}</strong>`;
+
+    const customerHtml = emailShell({
+      logoSrc: "cid:suppix-logo",
+      company: brandCompany,
+      platform,
+      website,
+      titleBadge: title,
+      bodyHtml: `
+<p style="margin:0 0 10px;font-size:22px;font-weight:700;color:#0f172a;line-height:1.3">${greeting}</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.65;color:#475569">${body}</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#fef2f2" style="background-color:#fef2f2;border:1px solid #fecaca;border-radius:12px;margin:0 0 20px">
+  <tr><td style="padding:14px 16px">
+    <p style="margin:0;font-size:14px;color:#991b1b;font-weight:700">${escapeHtml(whenLabel)} · ${de ? "storniert" : ar ? "ملغى" : "cancelled"}</p>
+  </td></tr>
+</table>
+${ctaButton(bookUrl, rebook)}
+<p style="margin:12px 0 0;font-size:14px;line-height:1.6;color:#334155">${closing}</p>`,
+      footerNote: `${escapeHtml(brandCompany)} · `,
+      dir: ar ? "rtl" : "ltr",
+      useImage: true,
+    });
+
     await sendResend(env, {
       from: fromEmail,
       to: [row.email],
       reply_to: toEmail,
       subject: de
-        ? `Demo abgesagt – ${whenLabel}`
+        ? `Termin storniert – ${whenLabel}`
         : ar
           ? `تم إلغاء الموعد – ${whenLabel}`
-          : `Demo cancelled – ${whenLabel}`,
+          : `Booking cancelled – ${whenLabel}`,
+      html: customerHtml,
       text: de
-        ? `Ihr Termin ${whenLabel} wurde abgesagt. Neu buchen: ${website}/#bookingSection`
+        ? `Ihr Termin ${whenLabel} wurde storniert. Neu buchen: ${bookUrl}`
         : ar
-          ? `تم إلغاء موعدك ${whenLabel}. حجز جديد: ${website}/#bookingSection`
-          : `Your appointment ${whenLabel} was cancelled. Rebook: ${website}/#bookingSection`,
+          ? `تم إلغاء موعدك ${whenLabel}. حجز جديد: ${bookUrl}`
+          : `Your appointment ${whenLabel} was cancelled. Rebook: ${bookUrl}`,
+      attachments: logoAttachment ? [logoAttachment(logo)] : undefined,
     });
   }
 
@@ -808,7 +899,7 @@ async function sendTwilioSms(env, toRaw, bodyText) {
  * Window: slot starts in 20–28 hours; status confirmed; reminder_sent_at NULL.
  */
 export async function runDemoReminders(env, helpers) {
-  const { sendResend } = helpers;
+  const { sendResend, escapeHtml, emailShell, ctaButton, logoAttachment, ownerEmailHtml } = helpers;
   if (!env.DB || !env.RESEND_API_KEY) {
     return { ok: false, error: "not configured", sent: 0 };
   }
@@ -832,7 +923,6 @@ export async function runDemoReminders(env, helpers) {
       .all();
     rows = res?.results || [];
   } catch (err) {
-    // Column may be missing before migration
     return { ok: false, error: String(err.message || err), sent: 0 };
   }
 
@@ -840,9 +930,12 @@ export async function runDemoReminders(env, helpers) {
   const fromEmail = env.FROM_EMAIL || "WorkPass <info@suppixai.com>";
   const notifyFrom = env.NOTIFY_FROM_EMAIL || fromEmail;
   const toEmail = env.TO_EMAIL || "info@suppixai.com";
+  const logo = env.LOGO_URL || "https://suppixai.com/assets/logo.png";
+  const brandCompany = env.BRAND_COMPANY || "Suppix AI UG";
   const ownerEmail = env.OWNER_EMAIL || toEmail;
   const platform = env.PLATFORM || "WorkPass";
   const whatsapp = String(env.WHATSAPP || "4917631676589").replace(/\D/g, "");
+  const teamsUrl = teamsMeetingUrl(env);
   const cfg = bookingConfig(env);
   let sent = 0;
 
@@ -863,18 +956,72 @@ export async function runDemoReminders(env, helpers) {
         ? `تذكير: عرض ${platform} غداً – ${whenLabel}`
         : `Reminder: ${platform} demo tomorrow – ${whenLabel}`;
 
-    const text = de
-      ? `Hallo ${row.name},\n\nkurze Erinnerung: Ihre ${platform}-Demo ist morgen um ${whenLabel}.\n\nUmbuchen/Absagen: ${manageUrl}\nDemo-Seite: ${demoUrl}\n\nBis bald\n${platform}`
+    const greeting = row.name
+      ? de
+        ? `Hallo ${escapeHtml(row.name)},`
+        : ar
+          ? `مرحباً ${escapeHtml(row.name)}،`
+          : `Hi ${escapeHtml(row.name)},`
+      : de
+        ? "Hallo,"
+        : ar
+          ? "مرحباً،"
+          : "Hi,";
+    const title = de ? "Demo-Erinnerung" : ar ? "تذكير بالعرض" : "Demo reminder";
+    const intro = de
+      ? `kurze Erinnerung: Ihre <strong style="color:#0f172a">${escapeHtml(platform)}</strong>-Demo ist morgen.`
       : ar
-        ? `مرحباً ${row.name},\n\nتذكير: عرض ${platform} غداً الساعة ${whenLabel}.\n\nإدارة الموعد: ${manageUrl}\n\nإلى اللقاء\n${platform}`
-        : `Hi ${row.name},\n\nreminder: your ${platform} demo is tomorrow at ${whenLabel}.\n\nReschedule/cancel: ${manageUrl}\nDemo page: ${demoUrl}\n\nSee you soon\n${platform}`;
+        ? `تذكير قصير: عرض <strong style="color:#0f172a">${escapeHtml(platform)}</strong> غداً.`
+        : `quick reminder: your <strong style="color:#0f172a">${escapeHtml(platform)}</strong> demo is tomorrow.`;
+    const whenTitle = de ? "Ihr Termin" : ar ? "موعدك" : "Your appointment";
+    const teamsLabel = de ? "Microsoft Teams beitreten" : ar ? "الانضمام عبر Teams" : "Join Microsoft Teams";
+    const manageLabel = de ? "Umbuchen oder absagen" : ar ? "إعادة جدولة أو إلغاء" : "Reschedule or cancel";
+    const demoLabel = de ? "Demo-Seite öffnen" : ar ? "فتح صفحة العرض" : "Open demo page";
+    const closing = de
+      ? `Bis bald<br><strong style="color:#0f172a">Ihr Team von ${escapeHtml(brandCompany)}</strong>`
+      : ar
+        ? `إلى اللقاء<br><strong style="color:#0f172a">فريق ${escapeHtml(brandCompany)}</strong>`
+        : `See you soon<br><strong style="color:#0f172a">Your team at ${escapeHtml(brandCompany)}</strong>`;
+
+    const customerHtml = emailShell({
+      logoSrc: "cid:suppix-logo",
+      company: brandCompany,
+      platform,
+      website,
+      titleBadge: title,
+      bodyHtml: `
+<p style="margin:0 0 10px;font-size:22px;font-weight:700;color:#0f172a;line-height:1.3">${greeting}</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.65;color:#475569">${intro}</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f0f9ff" style="background-color:#f0f9ff;border:1px solid #bae6fd;border-radius:12px;margin:0 0 20px">
+  <tr><td style="padding:14px 16px">
+    <p style="margin:0 0 6px;font-weight:700;font-size:14px;color:#0f172a">${whenTitle}</p>
+    <p style="margin:0;font-size:16px;color:#0f172a;font-weight:700">${escapeHtml(whenLabel)}</p>
+    <p style="margin:8px 0 0;font-size:13px;color:#64748b">${cfg.durationMin} min${teamsUrl ? " · Microsoft Teams" : ""}</p>
+  </td></tr>
+</table>
+${teamsUrl ? ctaButton(teamsUrl, teamsLabel) : ""}
+${ctaButton(manageUrl, manageLabel)}
+${ctaButton(demoUrl, demoLabel)}
+<p style="margin:12px 0 0;font-size:14px;line-height:1.6;color:#334155">${closing}</p>`,
+      footerNote: `${escapeHtml(brandCompany)} · `,
+      dir: ar ? "rtl" : "ltr",
+      useImage: true,
+    });
+
+    const text = de
+      ? `Hallo ${row.name},\n\nkurze Erinnerung: Ihre ${platform}-Demo ist morgen um ${whenLabel}.\n${teamsUrl ? `Teams: ${teamsUrl}\n` : ""}Umbuchen/Absagen: ${manageUrl}\nDemo-Seite: ${demoUrl}\n\nBis bald\n${platform}`
+      : ar
+        ? `مرحباً ${row.name},\n\nتذكير: عرض ${platform} غداً الساعة ${whenLabel}.\n${teamsUrl ? `Teams: ${teamsUrl}\n` : ""}إدارة الموعد: ${manageUrl}\n\nإلى اللقاء\n${platform}`
+        : `Hi ${row.name},\n\nreminder: your ${platform} demo is tomorrow at ${whenLabel}.\n${teamsUrl ? `Teams: ${teamsUrl}\n` : ""}Reschedule/cancel: ${manageUrl}\nDemo page: ${demoUrl}\n\nSee you soon\n${platform}`;
 
     await sendResend(env, {
       from: fromEmail,
       to: [row.email],
       reply_to: toEmail,
       subject,
+      html: customerHtml,
       text,
+      attachments: logoAttachment ? [logoAttachment(logo)] : undefined,
     });
 
     const smsBody = de
@@ -891,32 +1038,52 @@ export async function runDemoReminders(env, helpers) {
           ? `مرحباً ${row.name}، تذكير بعرض WorkPass غداً: ${whenLabel}`
           : `Hi ${row.name}, reminder for your WorkPass demo tomorrow: ${whenLabel}. Manage: ${manageUrl}`
     );
-    // Owner WhatsApp deep-link (manual send / forward)
     const ownerWa = `https://wa.me/${whatsapp}?text=${waText}`;
+
+    const ownerMail = ownerEmailHtml
+      ? ownerEmailHtml({
+          fields: {
+            Typ: "Demo-Erinnerung (24h)",
+            Name: row.name,
+            EMail: row.email,
+            Unternehmen: row.company || "–",
+            Telefon: row.phone || "–",
+            Termin: whenLabel,
+            Paket: row.paket || "–",
+            "Demo-Typ": row.demo_type || "–",
+            SMS: smsResult?.ok
+              ? "gesendet"
+              : smsResult?.skipped
+                ? `übersprungen (${smsResult.reason || "–"})`
+                : smsResult?.error || "–",
+            Teams: teamsUrl || "–",
+            Verwalten: manageUrl,
+            WhatsApp: ownerWa,
+            Angebot: `${website}/angebot.html?name=${encodeURIComponent(row.name)}&email=${encodeURIComponent(row.email)}&company=${encodeURIComponent(row.company || "")}&paket=${encodeURIComponent(row.paket || "")}`,
+          },
+          company: brandCompany,
+          platform,
+          website,
+          replyEmail: row.email,
+        })
+      : null;
 
     await sendResend(env, {
       from: notifyFrom,
       to: [ownerEmail],
       subject: `[Reminder] Demo ${whenLabel} – ${row.name}`,
-      text: [
-        `Kunde: ${row.name} <${row.email}>`,
-        row.company ? `Firma: ${row.company}` : null,
-        row.phone ? `Telefon: ${row.phone}` : null,
-        `Termin: ${whenLabel}`,
-        `Paket: ${row.paket || "-"} · Typ: ${row.demo_type || "-"}`,
-        smsResult?.ok
-          ? `SMS an Kunde: gesendet`
-          : smsResult?.skipped
-            ? `SMS: übersprungen (${smsResult.reason || "keine Config/Telefon"})`
-            : smsResult?.error
-              ? `SMS Fehler: ${smsResult.error}`
-              : null,
-        `WhatsApp-Vorlage (an dich / zum Weiterleiten): ${ownerWa}`,
-        `Verwalten: ${manageUrl}`,
-        `Angebot vorbereiten: ${website}/angebot.html?name=${encodeURIComponent(row.name)}&email=${encodeURIComponent(row.email)}&company=${encodeURIComponent(row.company || "")}&paket=${encodeURIComponent(row.paket || "")}`,
-      ]
-        .filter(Boolean)
-        .join("\n"),
+      html: ownerMail?.html,
+      text:
+        ownerMail?.text ||
+        [
+          `Kunde: ${row.name} <${row.email}>`,
+          row.company ? `Firma: ${row.company}` : null,
+          `Termin: ${whenLabel}`,
+          teamsUrl ? `Teams: ${teamsUrl}` : null,
+          `Verwalten: ${manageUrl}`,
+        ]
+          .filter(Boolean)
+          .join("\n"),
     });
 
     await env.DB.prepare(`UPDATE demo_bookings SET reminder_sent_at = datetime('now') WHERE id = ?`)

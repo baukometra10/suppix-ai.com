@@ -833,8 +833,10 @@
           <option value="enterprise">Enterprise – €2,490/mo</option>
         </select>
         <label for="calcEmployees">Number of employees</label>
-        <input type="range" id="calcEmployees" min="1" max="200" value="15">
+        <input type="range" id="calcEmployees" min="1" max="2000" value="15" step="1">
         <div class="range-value"><span id="calcEmployeesValue">15</span> employees</div>
+        <label for="calcEmployeesInput" class="sr-only">Enter employee count</label>
+        <input type="number" id="calcEmployeesInput" min="1" max="2000" value="15" inputmode="numeric" style="margin-top:0.5rem;width:100%;max-width:8rem">
         <div class="calc-result">
           <div class="calc-result-label">Estimated monthly cost</div>
           <div class="calc-result-price" id="calcPrice">€1,011.50</div>

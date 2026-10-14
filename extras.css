@@ -1625,6 +1625,18 @@ button:focus-visible {
 .social-x .social-icon { background: #e7e9ea; }
 .social-tiktok .social-icon { background: #69c9d0; }
 .social-googleBusiness .social-icon { background: #4285f4; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 .social-whatsapp .social-icon { background: #25d366; }
 
 .footer-col-social .social-links {

@@ -22,6 +22,19 @@ curl -X POST https://suppixai-contact.suppix-ai.workers.dev/cron/reminders \
   -H "X-Cron-Key: $MARKETING_BOOKING_WEBHOOK_KEY"
 ```
 
+## Reminder- & Storno-Mails
+
+- Kunden-Erinnerung (~24h vorher): HTML mit Logo, Termin-Box, Buttons (Teams / Verwalten / Demo)
+- Absage (`termin.html` → POST cancel): Status `cancelled` in D1, Slot frei, HTML-Mail an Kunde + Owner (`STORNIERT:…` an OWNER_EMAIL und TO_EMAIL)
+
+## Microsoft Teams (kostenlos möglich)
+
+1. In Teams (App oder teams.microsoft.com) Meeting erstellen bzw. „Jetzt besprechen“ → Link kopieren  
+2. In `wrangler.toml` setzen: `TEAMS_MEETING_URL = "https://teams.microsoft.com/l/meetup-join/…"`  
+3. Worker neu deployen  
+
+Der Link erscheint in Bestätigung, Reminder und ICS. Ohne URL kein Teams-Button (Demo bleibt per Termin-Absprache).
+
 ## SMS (optional, Twilio)
 
 Secrets:

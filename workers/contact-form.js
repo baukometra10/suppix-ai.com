@@ -286,7 +286,14 @@ function json(body, status, headers) {
 export default {
   async scheduled(event, env, ctx) {
     ctx.waitUntil(
-      runDemoReminders(env, { sendResend }).then((r) => {
+      runDemoReminders(env, {
+        sendResend,
+        escapeHtml,
+        emailShell,
+        ctaButton,
+        logoAttachment,
+        ownerEmailHtml,
+      }).then((r) => {
         console.log("demo-reminders", JSON.stringify(r));
       })
     );
@@ -311,7 +318,14 @@ export default {
         return json({ ok: false, error: "Unauthorized" }, 401, cors);
       }
       try {
-        const result = await runDemoReminders(env, { sendResend });
+        const result = await runDemoReminders(env, {
+          sendResend,
+          escapeHtml,
+          emailShell,
+          ctaButton,
+          logoAttachment,
+          ownerEmailHtml,
+        });
         return json(result, 200, cors);
       } catch (err) {
         return json({ ok: false, error: String(err.message || err) }, 502, cors);
@@ -349,6 +363,10 @@ export default {
         return await handleManagePost(body, env, cors, {
           ownerEmailHtml,
           sendResend,
+          escapeHtml,
+          emailShell,
+          ctaButton,
+          logoAttachment,
         });
       } catch (err) {
         return json({ ok: false, error: String(err.message || err) }, 502, cors);
