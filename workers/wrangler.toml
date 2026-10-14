@@ -45,8 +45,7 @@ BOOKING_HORIZON_DAYS = "28"
 BOOKING_WEEKDAYS = "1,2,3,4,5"
 WORKPASS_BOOKING_WEBHOOK_URL = "https://suppix-ai-workpass.com/api/webhooks/marketing/demo-booking"
 # Microsoft Teams join link (free Meet now / recurring meeting). Empty = no Teams CTA in mails.
-# Example: "https://teams.microsoft.com/l/meetup-join/..."
-TEAMS_MEETING_URL = ""
+TEAMS_MEETING_URL = "https://teams.live.com/meet/9325309317666?p=Iu37dd2R4F2EYv2cTb"
 
 # Stündlich: ~24h-Reminder vor Demo (E-Mail an Kunde + Owner mit WhatsApp-Vorlage)
 [triggers]
