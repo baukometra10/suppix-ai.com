@@ -1652,6 +1652,15 @@ button:focus-visible {
   height: 220px;
   max-width: 100%;
 }
+
+.booking-manage-details.is-cancelled {
+  border-color: rgba(220, 38, 38, 0.35);
+  background: rgba(254, 242, 242, 0.08);
+}
+
+.booking-manage-details.is-cancelled strong {
+  color: #fca5a5;
+}
 .social-whatsapp .social-icon { background: #25d366; }
 
 .footer-col-social .social-links {

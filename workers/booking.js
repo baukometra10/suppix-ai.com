@@ -289,7 +289,19 @@ function newId() {
   return crypto.randomUUID();
 }
 
-function buildIcs({ uid, startIso, endIso, summary, description, organizerEmail, location, url }) {
+function buildIcs({
+  uid,
+  startIso,
+  endIso,
+  summary,
+  description,
+  organizerEmail,
+  location,
+  url,
+  method = "REQUEST",
+  status = "CONFIRMED",
+  sequence = 0,
+}) {
   const stamp = (iso) =>
     iso.replace(/[-:]/g, "").replace(/\.\d{3}/, "").replace(/Z$/, "Z");
   const escapeIcs = (s) =>
@@ -303,7 +315,7 @@ function buildIcs({ uid, startIso, endIso, summary, description, organizerEmail,
     "VERSION:2.0",
     "PRODID:-//Suppix AI//WorkPass Demo//EN",
     "CALSCALE:GREGORIAN",
-    "METHOD:REQUEST",
+    `METHOD:${method}`,
     "BEGIN:VEVENT",
     `UID:${uid}`,
     `DTSTAMP:${stamp(new Date().toISOString())}`,
@@ -311,12 +323,13 @@ function buildIcs({ uid, startIso, endIso, summary, description, organizerEmail,
     `DTEND:${stamp(endIso)}`,
     `SUMMARY:${escapeIcs(summary)}`,
     `DESCRIPTION:${escapeIcs(description)}`,
+    `SEQUENCE:${Number(sequence) || 0}`,
   ];
   if (location) lines.push(`LOCATION:${escapeIcs(location)}`);
   if (url) lines.push(`URL:${escapeIcs(url)}`);
   lines.push(
     `ORGANIZER:mailto:${organizerEmail}`,
-    "STATUS:CONFIRMED",
+    `STATUS:${status}`,
     "END:VEVENT",
     "END:VCALENDAR"
   );
@@ -837,6 +850,30 @@ ${ctaButton(bookUrl, rebook)}
       useImage: true,
     });
 
+    const cancelIcs = buildIcs({
+      uid: `${row.id}@suppixai.com`,
+      startIso: row.slot_start,
+      endIso: row.slot_end,
+      summary: `${platform} Demo (${de ? "storniert" : ar ? "ملغى" : "cancelled"})`,
+      description: de
+        ? `Dieser Termin wurde storniert. Neu buchen: ${bookUrl}`
+        : ar
+          ? `تم إلغاء هذا الموعد. حجز جديد: ${bookUrl}`
+          : `This appointment was cancelled. Rebook: ${bookUrl}`,
+      organizerEmail: toEmail,
+      method: "CANCEL",
+      status: "CANCELLED",
+      sequence: 1,
+    });
+
+    const cancelAttachments = [];
+    if (logoAttachment) cancelAttachments.push(logoAttachment(logo));
+    cancelAttachments.push({
+      filename: "workpass-demo-cancelled.ics",
+      content: toBase64(cancelIcs),
+      content_type: "text/calendar; method=CANCEL; charset=utf-8",
+    });
+
     await sendResend(env, {
       from: fromEmail,
       to: [row.email],
@@ -852,7 +889,7 @@ ${ctaButton(bookUrl, rebook)}
         : ar
           ? `تم إلغاء موعدك ${whenLabel}. حجز جديد: ${bookUrl}`
           : `Your appointment ${whenLabel} was cancelled. Rebook: ${bookUrl}`,
-      attachments: logoAttachment ? [logoAttachment(logo)] : undefined,
+      attachments: cancelAttachments,
     });
   }
 

@@ -81,7 +81,7 @@
           navBook: "Neu buchen",
           loading: "Termin wird geladen …",
           invalid: "Ungültiger Verwaltungslink.",
-          cancelled: "Dieser Termin wurde bereits abgesagt.",
+          cancelled: "Dieser Termin ist storniert.",
           yourBooking: "Ihr gebuchter Demo-Termin:",
           notFound: "Termin nicht gefunden oder Link abgelaufen.",
           cancelBtn: "Termin absagen",
@@ -89,11 +89,12 @@
           fallback: "Kein gültiger Link.",
           fallbackBook: "Demo neu buchen",
           or: "oder",
-          confirm: "Termin wirklich absagen?",
-          cancelling: "Wird abgesagt …",
-          cancelledOk: "Termin abgesagt.",
-          emailFollows: "Bestätigung per E-Mail folgt. Sie können einen neuen Termin buchen.",
+          confirm: "Termin wirklich absagen? Der Slot wird freigegeben.",
+          cancelling: "Wird storniert …",
+          cancelledOk: "Termin storniert.",
+          emailFollows: "Sie und wir erhalten eine Bestätigung per E-Mail. Sie können sofort einen neuen Termin buchen.",
           cancelFail: "Absage fehlgeschlagen. Bitte E-Mail an info@suppixai.com.",
+          cancelledHint: "Der Termin ist nicht mehr aktiv. Buchen Sie bei Bedarf einen neuen Slot.",
           imprint: "Impressum",
           privacy: "Datenschutz",
           htmlLang: "de",
@@ -107,7 +108,7 @@
           navBook: "Book again",
           loading: "Loading booking…",
           invalid: "Invalid management link.",
-          cancelled: "This booking was already cancelled.",
+          cancelled: "This booking is cancelled.",
           yourBooking: "Your booked demo:",
           notFound: "Booking not found or link expired.",
           cancelBtn: "Cancel booking",
@@ -115,11 +116,12 @@
           fallback: "No valid link.",
           fallbackBook: "Book a demo",
           or: "or",
-          confirm: "Really cancel this booking?",
+          confirm: "Really cancel this booking? The slot will open again.",
           cancelling: "Cancelling…",
           cancelledOk: "Booking cancelled.",
-          emailFollows: "Email confirmation will follow. You can book a new time.",
+          emailFollows: "You and we will get email confirmation. You can book a new time now.",
           cancelFail: "Cancel failed. Please email info@suppixai.com.",
+          cancelledHint: "This appointment is no longer active. Book a new slot if needed.",
           imprint: "Imprint",
           privacy: "Privacy",
           htmlLang: "en",
@@ -133,7 +135,7 @@
           navBook: "حجز جديد",
           loading: "جاري تحميل الموعد…",
           invalid: "رابط الإدارة غير صالح.",
-          cancelled: "تم إلغاء هذا الموعد مسبقاً.",
+          cancelled: "هذا الموعد ملغى.",
           yourBooking: "موعد العرض المحجوز:",
           notFound: "الموعد غير موجود أو انتهت صلاحية الرابط.",
           cancelBtn: "إلغاء الموعد",
@@ -141,11 +143,12 @@
           fallback: "لا يوجد رابط صالح.",
           fallbackBook: "احجز عرضاً",
           or: "أو",
-          confirm: "هل تريد إلغاء الموعد حقاً؟",
+          confirm: "هل تريد إلغاء الموعد حقاً؟ سيتم تحرير الموعد.",
           cancelling: "جاري الإلغاء…",
           cancelledOk: "تم إلغاء الموعد.",
-          emailFollows: "ستصلك رسالة تأكيد. يمكنك حجز موعد جديد.",
+          emailFollows: "ستصلك رسالة تأكيد ونحن أيضاً. يمكنك حجز موعد جديد الآن.",
           cancelFail: "فشل الإلغاء. راسل info@suppixai.com.",
+          cancelledHint: "الموعد لم يعد فعالاً. احجز موعداً جديداً عند الحاجة.",
           imprint: "البيانات القانونية",
           privacy: "الخصوصية",
           htmlLang: "ar",
@@ -215,9 +218,12 @@
           if (d.status === "cancelled") {
             lead.textContent = t.cancelled;
             whenEl.textContent = d.label || "";
-            details.hidden = !d.label;
+            metaEl.textContent = t.cancelledHint || "";
+            details.hidden = false;
+            details.classList.add("is-cancelled");
             actions.hidden = false;
             cancelBtn.hidden = true;
+            statusEl.textContent = t.emailFollows;
             return;
           }
           lead.textContent = t.yourBooking;
@@ -247,7 +253,11 @@
             if (!d.ok) throw new Error(d.error || "fail");
             lead.textContent = t.cancelledOk;
             statusEl.textContent = t.emailFollows;
+            metaEl.textContent = t.cancelledHint || "";
+            details.hidden = false;
+            details.classList.add("is-cancelled");
             cancelBtn.hidden = true;
+            cancelBtn.disabled = true;
           })
           .catch(function () {
             statusEl.textContent = t.cancelFail;
