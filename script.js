@@ -713,6 +713,18 @@ document.addEventListener("DOMContentLoaded", () => {
         if (cfg.phone) el.textContent = cfg.phone;
       }
     });
+    const mapsUrl = String(cfg.social?.googleBusiness || "").trim();
+    if (mapsUrl.startsWith("http")) {
+      document.querySelectorAll("[data-google-business]").forEach((el) => {
+        el.href = mapsUrl;
+      });
+    }
+    const embedSrc = String(cfg.googleMapsEmbed || "").trim();
+    if (embedSrc.startsWith("http")) {
+      document.querySelectorAll("[data-google-maps-embed] iframe").forEach((iframe) => {
+        iframe.src = embedSrc;
+      });
+    }
     document.querySelectorAll("[data-login]").forEach((el) => {
       const url = cfg.appLoginUrl || "index.html#vorschau";
       el.href = url;

@@ -1637,6 +1637,21 @@ button:focus-visible {
   white-space: nowrap;
   border: 0;
 }
+
+.contact-map {
+  margin-top: 1.25rem;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.contact-map iframe {
+  display: block;
+  width: 100%;
+  height: 220px;
+  max-width: 100%;
+}
 .social-whatsapp .social-icon { background: #25d366; }
 
 .footer-col-social .social-links {

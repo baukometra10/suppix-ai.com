@@ -22,9 +22,14 @@ window.SITE_CONFIG = {
     youtube: "",
     x: "",
     tiktok: "",
-    /** Öffentlicher Google-Business / Maps-Link, sobald verfügbar */
-    googleBusiness: "",
+    /** Öffentlicher Google-Business / Maps-Link */
+    googleBusiness:
+      "https://www.google.com/maps/place/Suppix+AI+UG/@52.535222,13.404971,17z/data=!4m6!3m5!1s0x47a8514752d130e9:0x121f76063e00f284!8m2!3d52.535221972065116!4d13.404971276502327",
   },
+
+  /** Google Maps Embed (Kontaktseite). */
+  googleMapsEmbed:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2426.9011868580797!2d13.404971276502327!3d52.535221972065116!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a8514752d130e9%3A0x121f76063e00f284!2sSuppix%20AI%20UG!5e0!3m2!1sde!2sde!4v1791956936213!5m2!1sde!2sde",
 
   /**
    * Öffentliche Bewertungs-API (JSON, ohne Login).
