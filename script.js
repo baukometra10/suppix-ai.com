@@ -1709,19 +1709,54 @@ document.addEventListener("DOMContentLoaded", () => {
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
 
+  function reviewsPageHref() {
+    const lang = pageLang();
+    const map = cfg.reviewsPage || {};
+    const path = map[lang] || map.de || "bewertungen.html";
+    if (/^https?:\/\//i.test(path)) return path;
+    // From /en/ or /ar/ index → relative file in same folder; from DE root → bewertungen.html
+    if (lang === "en" || lang === "ar") {
+      if (path.includes("/")) return path;
+      return path;
+    }
+    return path;
+  }
+
+  function reviewsDisplayLimit(grid) {
+    const mode = String(grid?.dataset?.reviewsMode || "teaser").toLowerCase();
+    if (mode === "page" || mode === "full") {
+      return Math.max(1, Number(grid.dataset.reviewsLimit || cfg.reviewsPageLimit || cfg.reviewsLimit || 48));
+    }
+    return Math.max(1, Number(grid.dataset.reviewsLimit || cfg.reviewsHomeLimit || 3));
+  }
+
   function renderReviews(reviews, source) {
     const grid = document.getElementById("testimonialsGrid");
     if (!grid || !reviews.length) return;
-    const limit = Math.max(1, Number(cfg.reviewsLimit) || 6);
+    const isPage = String(grid.dataset.reviewsMode || "teaser").toLowerCase() === "page";
+    const limit = reviewsDisplayLimit(grid);
     const slice = reviews.slice(0, limit);
+    const total = reviews.length;
     const avg =
-      slice.reduce((sum, r) => sum + (Number(r.rating) || 0), 0) / Math.max(1, slice.length);
+      reviews.reduce((sum, r) => sum + (Number(r.rating) || 0), 0) / Math.max(1, reviews.length);
+    const pageUrl = reviewsPageHref();
+    const showMoreCta = !isPage && total > 0;
+    const summaryCountLabel = isPage
+      ? `${total} ${t("Kundenstimmen", "customer reviews", "تقييمات")}`
+      : total > slice.length
+        ? t(
+            `${slice.length} von ${total} Stimmen`,
+            `${slice.length} of ${total} reviews`,
+            `${slice.length} من ${total} تقييمات`
+          )
+        : `${total} ${t("Kundenstimmen", "customer reviews", "تقييمات")}`;
+
     grid.innerHTML = `
       <div class="testimonials-summary" aria-label="${t("Durchschnitt", "Average", "المتوسط")}">
         <div class="testimonials-summary-score">${avg.toFixed(1).replace(".", ",")}</div>
         <div class="testimonials-summary-meta">
           <div class="testimonial-stars" aria-hidden="true">${starsFromRating(avg)}</div>
-          <span>${slice.length} ${t("Kundenstimmen", "customer reviews", "تقييمات")}</span>
+          <span>${summaryCountLabel}</span>
         </div>
       </div>
       <div class="testimonials-cards">
@@ -1771,7 +1806,23 @@ document.addEventListener("DOMContentLoaded", () => {
       </article>`;
         })
         .join("")}
-      </div>`;
+      </div>
+      ${
+        showMoreCta
+          ? `<div class="testimonials-cta">
+        <a href="${escapeHtml(pageUrl)}" class="btn btn-primary">${t(
+            total > slice.length ? "Alle Bewertungen ansehen" : "Bewertungsseite öffnen",
+            total > slice.length ? "See all reviews" : "Open reviews page",
+            total > slice.length ? "عرض كل التقييمات" : "فتح صفحة التقييمات"
+          )}</a>
+        <p class="testimonials-cta-note">${t(
+          "Alle Stimmen aus der WorkPass-Plattform – mit Firmennamen und Details.",
+          "All voices from the WorkPass platform – with company names and details.",
+          "كل الآراء من منصة WorkPass – مع أسماء الشركات والتفاصيل."
+        )}</p>
+      </div>`
+          : ""
+      }`;
     const note = document.getElementById("testimonialsNote");
     if (note) {
       if (source === "live") {
@@ -1803,17 +1854,30 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showReviewsEmpty(grid, note) {
+    const isPage = String(grid?.dataset?.reviewsMode || "teaser").toLowerCase() === "page";
+    const pageUrl = reviewsPageHref();
     grid.innerHTML = `<div class="reviews-empty">
       <p>${t(
         "Noch keine öffentlichen Kundenstimmen freigegeben.",
         "No public customer reviews published yet.",
         "لا توجد تقييمات عملاء عامة بعد."
       )}</p>
-      <a href="#bookingSection" class="btn btn-primary btn-sm" data-booking>${t(
-        "Demo-Termin wählen",
-        "Book a demo",
-        "احجز موعداً"
-      )}</a>
+      <div class="reviews-empty-actions">
+        ${
+          isPage
+            ? ""
+            : `<a href="${escapeHtml(pageUrl)}" class="btn btn-outline btn-sm">${t(
+                "Bewertungsseite",
+                "Reviews page",
+                "صفحة التقييمات"
+              )}</a>`
+        }
+        <a href="#bookingSection" class="btn btn-primary btn-sm" data-booking>${t(
+          "Demo-Termin wählen",
+          "Book a demo",
+          "احجز موعداً"
+        )}</a>
+      </div>
     </div>`;
     if (note) {
       note.textContent = t(

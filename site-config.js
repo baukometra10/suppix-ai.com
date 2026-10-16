@@ -37,8 +37,22 @@ window.SITE_CONFIG = {
    * CORS muss https://suppixai.com erlauben.
    * Keine Fake-Fallback-Stimmen: leer = leerer Zustand auf der Website.
    */
-  reviewsApiUrl: "https://suppix-ai-workpass.com/api/public/reviews?limit=12",
-  reviewsLimit: 12,
+  reviewsApiUrl: "https://suppix-ai-workpass.com/api/public/reviews?limit=50",
+  /** Max. Karten auf Startseite (Teaser). */
+  reviewsHomeLimit: 3,
+  /** Max. Karten auf der Bewertungsseite. */
+  reviewsPageLimit: 48,
+  reviewsLimit: 48,
+
+  /**
+   * Dedizierte Bewertungsseiten (relativ zur jeweiligen HTML-Datei).
+   * Startseite zeigt Teaser + Button → diese Seiten.
+   */
+  reviewsPage: {
+    de: "bewertungen.html",
+    en: "reviews.html",
+    ar: "reviews.html",
+  },
 
   /** Optional: echte freigegebene Stimmen. Leer lassen = nur Live-API. */
   reviewsFallback: [],

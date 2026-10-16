@@ -558,6 +558,54 @@ html[dir="rtl"] .feature-card p {
   color: var(--gray-500, #64748b);
 }
 
+.testimonials-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1.75rem;
+  text-align: center;
+}
+
+.testimonials-cta-static {
+  margin-top: 1.25rem;
+}
+
+.testimonials-grid.is-live ~ .testimonials-cta-static,
+.testimonials-grid:not(:empty) ~ .testimonials-cta-static {
+  display: none;
+}
+
+.testimonials-cta-note {
+  margin: 0;
+  max-width: 36rem;
+  font-size: 0.88rem;
+  color: var(--gray-400, #94a3b8);
+}
+
+.reviews-empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: center;
+}
+
+.testimonials-page {
+  padding-top: 1rem;
+}
+
+.testimonials-page-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.testimonials-page .testimonials-cards {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
 /* ── FAQ ── */
 .faq {
   background: var(--bg);
