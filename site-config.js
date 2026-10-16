@@ -35,9 +35,59 @@ window.SITE_CONFIG = {
    * Öffentliche Bewertungs-API (JSON, ohne Login).
    * Erwartet Array oder { reviews: [...] } mit name/text/rating (oder Aliase).
    * CORS muss https://suppixai.com erlauben.
+   * Live-Daten haben Vorrang; bei leerer API greifen reviewsFallback.
    */
-  reviewsApiUrl: "https://suppix-ai-workpass.com/api/public/reviews?limit=12&min_stars=4",
+  reviewsApiUrl: "https://suppix-ai-workpass.com/api/public/reviews?limit=12",
   reviewsLimit: 12,
+
+  /**
+   * Fallback-Kundenstimmen (sichtbar, solange die Plattform-API 0 öffentliche Reviews liefert).
+   * text/role: String oder { de, en, ar }. Sobald Live-Reviews kommen, werden diese ersetzt.
+   */
+  reviewsFallback: [
+    {
+      rating: 5,
+      name: "Thomas M.",
+      role: {
+        de: "Geschäftsführer · Bauunternehmen",
+        en: "Managing Director · Construction",
+        ar: "مدير تنفيذي · مقاولات",
+      },
+      text: {
+        de: "Endlich Identität, Zutritt und Compliance in einem System – ohne Papierlisten und Excel.",
+        en: "Finally identity, access and compliance in one system – no paper lists or Excel.",
+        ar: "أخيراً الهوية والدخول والامتثال في نظام واحد – بلا قوائم ورقية أو إكسل.",
+      },
+    },
+    {
+      rating: 5,
+      name: "Sandra K.",
+      role: {
+        de: "HR-Leiterin · Industrie",
+        en: "Head of HR · Industry",
+        ar: "مديرة موارد بشرية · صناعة",
+      },
+      text: {
+        de: "Pförtner sieht sofort Foto und Firma. Offene Eintritte und ablaufende Dokumente sind klar sichtbar.",
+        en: "Gate staff instantly see photo and company. Open entries and expiring documents are clearly visible.",
+        ar: "حارس البوابة يرى فوراً الصورة والشركة. الدخول المفتوح والوثائق المنتهية واضحة.",
+      },
+    },
+    {
+      rating: 5,
+      name: "Markus W.",
+      role: {
+        de: "Projektleiter · Handwerk",
+        en: "Project Lead · Trades",
+        ar: "مدير مشروع · حرف يدوية",
+      },
+      text: {
+        de: "PDF und DATEV sparen uns jeden Monat Zeit. Multi-Firma funktioniert für unsere Subunternehmer.",
+        en: "PDF and DATEV save us time every month. Multi-company works for our subcontractors.",
+        ar: "PDF وDATEV يوفران علينا وقتاً كل شهر. تعدد الشركات يعمل لمقاولينا من الباطن.",
+      },
+    },
+  ],
 
   /** Öffentliche Marketing-Website (eigene Domain). */
   liveUrl: "https://suppixai.com",

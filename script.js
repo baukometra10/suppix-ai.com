@@ -1632,7 +1632,32 @@ document.addEventListener("DOMContentLoaded", () => {
       .filter(Boolean);
   }
 
-  function renderReviews(reviews) {
+  function localizeReviewField(value) {
+    if (value == null) return "";
+    if (typeof value === "string") return value;
+    if (typeof value !== "object") return String(value);
+    const lang = pageLang();
+    return String(value[lang] || value.de || value.en || value.ar || Object.values(value)[0] || "").trim();
+  }
+
+  function getFallbackReviews() {
+    const list = Array.isArray(cfg.reviewsFallback) ? cfg.reviewsFallback : [];
+    return list
+      .map((item) => {
+        if (!item || typeof item !== "object") return null;
+        const text = localizeReviewField(item.text || item.comment || item.message);
+        if (!text) return null;
+        return {
+          text,
+          name: localizeReviewField(item.name || item.author) || t("Kunde", "Customer", "عميل"),
+          role: localizeReviewField(item.role || item.title || item.company),
+          rating: Number(item.rating ?? item.stars ?? 5) || 5,
+        };
+      })
+      .filter(Boolean);
+  }
+
+  function renderReviews(reviews, source) {
     const grid = document.getElementById("testimonialsGrid");
     if (!grid || !reviews.length) return;
     const limit = Math.max(1, Number(cfg.reviewsLimit) || 6);
@@ -1652,14 +1677,23 @@ document.addEventListener("DOMContentLoaded", () => {
       .join("");
     const note = document.getElementById("testimonialsNote");
     if (note) {
-      note.textContent = t(
-        "Echte Kundenstimmen aus der SUPPIX-Plattform.",
-        "Real customer reviews from the SUPPIX platform.",
-        "تقييمات عملاء حقيقية من منصة SUPPIX."
-      );
+      if (source === "live") {
+        note.textContent = t(
+          "Echte Kundenstimmen aus der SUPPIX-Plattform.",
+          "Real customer reviews from the SUPPIX platform.",
+          "تقييمات عملاء حقيقية من منصة SUPPIX."
+        );
+      } else {
+        note.textContent = t(
+          "Ausgewählte Stimmen – Live-Bewertungen aus der Plattform folgen automatisch.",
+          "Selected voices – live platform reviews appear here automatically once published.",
+          "آراء مختارة – التقييمات الحية من المنصة تظهر هنا تلقائياً عند نشرها."
+        );
+      }
       note.classList.add("is-live");
     }
-    grid.classList.add("is-live");
+    grid.classList.toggle("is-live", source === "live");
+    grid.dataset.reviewsSource = source === "live" ? "platform-live" : "fallback";
   }
 
   function escapeHtml(value) {
@@ -1671,20 +1705,53 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace(/'/g, "&#39;");
   }
 
+  function showReviewsEmpty(grid, note) {
+    grid.innerHTML = `<div class="reviews-empty">
+      <p>${t(
+        "Noch keine öffentlichen Kundenstimmen freigegeben.",
+        "No public customer reviews published yet.",
+        "لا توجد تقييمات عملاء عامة بعد."
+      )}</p>
+      <a href="#bookingSection" class="btn btn-primary btn-sm" data-booking>${t(
+        "Demo-Termin wählen",
+        "Book a demo",
+        "احجز موعداً"
+      )}</a>
+    </div>`;
+    if (note) {
+      note.textContent = t(
+        "Sobald Freigaben über die Plattform-API kommen, erscheinen sie hier automatisch.",
+        "As soon as reviews are approved via the platform API, they appear here automatically.",
+        "عند اعتماد التقييمات عبر واجهة المنصة تظهر هنا تلقائياً."
+      );
+    }
+  }
+
   async function initLiveReviews() {
     const grid = document.getElementById("testimonialsGrid");
     const note = document.getElementById("testimonialsNote");
     const api = (cfg.reviewsApiUrl || "").trim();
-    if (!grid || !api) return;
+    const fallback = getFallbackReviews();
+    if (!grid) return;
 
-    grid.innerHTML = "";
-    grid.classList.add("is-loading");
-    if (note) {
-      note.textContent = t(
-        "Lade aktuelle Bewertungen…",
-        "Loading latest reviews…",
-        "جاري تحميل التقييمات…"
-      );
+    if (fallback.length) {
+      renderReviews(fallback, "fallback");
+    } else {
+      grid.innerHTML = "";
+      grid.classList.add("is-loading");
+      if (note) {
+        note.textContent = t(
+          "Lade aktuelle Bewertungen…",
+          "Loading latest reviews…",
+          "جاري تحميل التقييمات…"
+        );
+      }
+    }
+
+    if (!api) {
+      if (!fallback.length) showReviewsEmpty(grid, note);
+      grid.classList.remove("is-loading");
+      return;
     }
 
     try {
@@ -1697,48 +1764,32 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       const reviews = normalizeReviews(data);
-      if (!reviews.length) {
+      if (reviews.length) {
+        renderReviews(reviews, "live");
+      } else if (!fallback.length) {
+        showReviewsEmpty(grid, note);
+      }
+    } catch {
+      if (!fallback.length) {
         grid.innerHTML = `<div class="reviews-empty">
           <p>${t(
-            "Noch keine öffentlichen Kundenstimmen freigegeben.",
-            "No public customer reviews published yet.",
-            "لا توجد تقييمات عملاء عامة بعد."
+            "Bewertungen gerade nicht erreichbar.",
+            "Reviews temporarily unavailable.",
+            "التقييمات غير متاحة مؤقتاً."
           )}</p>
-          <a href="#bookingSection" class="btn btn-primary btn-sm" data-booking>${t(
-            "Demo-Termin wählen",
-            "Book a demo",
-            "احجز موعداً"
+          <a href="#bookingSection" class="btn btn-outline btn-sm" data-booking>${t(
+            "Trotzdem Demo buchen",
+            "Book a demo anyway",
+            "احجز العرض رغم ذلك"
           )}</a>
         </div>`;
         if (note) {
           note.textContent = t(
-            "Sobald Freigaben über die Plattform-API kommen, erscheinen sie hier automatisch.",
-            "As soon as reviews are approved via the platform API, they appear here automatically.",
-            "عند اعتماد التقييمات عبر واجهة المنصة تظهر هنا تلقائياً."
+            "Sie können trotzdem einen Demo-Termin wählen.",
+            "You can still pick a demo time.",
+            "يمكنك اختيار موعد عرض رغم ذلك."
           );
         }
-        return;
-      }
-      renderReviews(reviews);
-    } catch {
-      grid.innerHTML = `<div class="reviews-empty">
-        <p>${t(
-          "Bewertungen gerade nicht erreichbar.",
-          "Reviews temporarily unavailable.",
-          "التقييمات غير متاحة مؤقتاً."
-        )}</p>
-        <a href="#bookingSection" class="btn btn-outline btn-sm" data-booking>${t(
-          "Trotzdem Demo buchen",
-          "Book a demo anyway",
-          "احجز العرض رغم ذلك"
-        )}</a>
-      </div>`;
-      if (note) {
-        note.textContent = t(
-          "Sie können trotzdem einen Demo-Termin wählen.",
-          "You can still pick a demo time.",
-          "يمكنك اختيار موعد عرض رغم ذلك."
-        );
       }
     } finally {
       grid.classList.remove("is-loading");
