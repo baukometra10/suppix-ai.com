@@ -320,6 +320,14 @@
   opacity: 0.7;
 }
 
+.theme-premium .testimonials-summary {
+  border-color: rgba(94, 184, 232, 0.3);
+}
+
+.theme-premium .testimonial-avatar {
+  box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.35);
+}
+
 .theme-premium .media-slot {
   min-height: 180px;
   border: 1px dashed rgba(94, 184, 232, 0.28);

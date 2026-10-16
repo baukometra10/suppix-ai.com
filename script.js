@@ -1622,34 +1622,32 @@ document.addEventListener("DOMContentLoaded", () => {
           item.review ||
           item.content ||
           "";
-        const name =
-          item.name ||
-          item.reviewer_name ||
-          item.author ||
-          item.customer ||
-          item.company_name ||
-          item.display_name ||
-          item.user ||
-          "";
+        const companyName = String(
+          item.company_name || item.company || item.organisation || item.organization || ""
+        ).trim();
+        const personName = String(
+          item.reviewer_name || item.name || item.author || item.customer || item.display_name || item.user || ""
+        ).trim();
         const role =
-          item.role ||
-          item.title ||
-          item.position ||
-          item.job_title ||
-          item.company ||
-          item.company_name ||
-          item.sector ||
-          "";
+          item.role || item.title || item.position || item.job_title || item.sector || "";
         const rating = item.rating ?? item.stars ?? item.score ?? 5;
         const published = item.published !== false && item.public !== false && item.approved !== false && item.visible !== false;
         if (!text || !published) return null;
-        const displayName = String(name || t("Kunde", "Customer", "عميل")).trim();
+        // Company name is the primary public label on the marketing site.
+        const displayName =
+          companyName ||
+          personName ||
+          t("Kunde", "Customer", "عميل");
         let displayRole = String(role || "").trim();
+        if (!displayRole && personName && companyName && personName !== companyName) {
+          displayRole = personName;
+        }
         if (displayRole && displayRole === displayName) displayRole = "";
         return {
           text: String(text).trim(),
           name: displayName,
           role: displayRole,
+          company: companyName || displayName,
           rating: Number(rating) || 5,
         };
       })
@@ -1671,34 +1669,65 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!item || typeof item !== "object") return null;
         const text = localizeReviewField(item.text || item.comment || item.message);
         if (!text) return null;
+        const name = localizeReviewField(item.name || item.author) || t("Kunde", "Customer", "عميل");
+        const company = localizeReviewField(item.company || item.company_name) || name;
         return {
           text,
-          name: localizeReviewField(item.name || item.author) || t("Kunde", "Customer", "عميل"),
-          role: localizeReviewField(item.role || item.title || item.company),
+          name,
+          company,
+          role: localizeReviewField(item.role || item.title),
           rating: Number(item.rating ?? item.stars ?? 5) || 5,
         };
       })
       .filter(Boolean);
   }
 
+  function reviewInitials(name) {
+    const parts = String(name || "")
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+    if (!parts.length) return "S";
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+
   function renderReviews(reviews, source) {
     const grid = document.getElementById("testimonialsGrid");
     if (!grid || !reviews.length) return;
     const limit = Math.max(1, Number(cfg.reviewsLimit) || 6);
-    grid.innerHTML = reviews
-      .slice(0, limit)
-      .map(
-        (r) => `
+    const slice = reviews.slice(0, limit);
+    const avg =
+      slice.reduce((sum, r) => sum + (Number(r.rating) || 0), 0) / Math.max(1, slice.length);
+    grid.innerHTML = `
+      <div class="testimonials-summary" aria-label="${t("Durchschnitt", "Average", "المتوسط")}">
+        <div class="testimonials-summary-score">${avg.toFixed(1).replace(".", ",")}</div>
+        <div class="testimonials-summary-meta">
+          <div class="testimonial-stars" aria-hidden="true">${starsFromRating(avg)}</div>
+          <span>${slice.length} ${t("Kundenstimmen", "customer reviews", "تقييمات")}</span>
+        </div>
+      </div>
+      <div class="testimonials-cards">
+      ${slice
+        .map(
+          (r) => `
       <article class="testimonial-card">
-        <div class="testimonial-stars" aria-label="${r.rating} / 5">${starsFromRating(r.rating)}</div>
+        <div class="testimonial-card-top">
+          <div class="testimonial-stars" aria-label="${r.rating} / 5">${starsFromRating(r.rating)}</div>
+          <span class="testimonial-quote" aria-hidden="true">“</span>
+        </div>
         <blockquote>${escapeHtml(r.text)}</blockquote>
         <div class="testimonial-author">
-          <strong>${escapeHtml(r.name)}</strong>
-          ${r.role ? `<span>${escapeHtml(r.role)}</span>` : ""}
+          <span class="testimonial-avatar" aria-hidden="true">${escapeHtml(reviewInitials(r.company || r.name))}</span>
+          <div class="testimonial-author-text">
+            <strong>${escapeHtml(r.company || r.name)}</strong>
+            ${r.role ? `<span>${escapeHtml(r.role)}</span>` : `<span>${t("WorkPass-Kunde", "WorkPass customer", "عميل WorkPass")}</span>`}
+          </div>
         </div>
       </article>`
-      )
-      .join("");
+        )
+        .join("")}
+      </div>`;
     const note = document.getElementById("testimonialsNote");
     if (note) {
       if (source === "live") {
