@@ -447,6 +447,14 @@ html[dir="rtl"] .feature-card p {
   user-select: none;
 }
 
+.testimonial-highlight {
+  margin: 0 0 0.85rem;
+  color: #e2e8f0;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  font-weight: 550;
+}
+
 .testimonial-card blockquote {
   color: #cbd5e1;
   font-size: 1rem;
@@ -454,6 +462,60 @@ html[dir="rtl"] .feature-card p {
   margin: 0 0 1.35rem;
   font-style: normal;
   flex: 1;
+  white-space: pre-line;
+}
+
+.testimonial-details {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  flex: 1;
+}
+
+.testimonial-details li {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.testimonial-detail-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #7dd3fc;
+  font-weight: 600;
+}
+
+.testimonial-detail-value {
+  color: #e2e8f0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.testimonial-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1rem;
+}
+
+.testimonial-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #e0f2fe;
+  background: rgba(56, 189, 248, 0.14);
+  border: 1px solid rgba(125, 211, 252, 0.28);
 }
 
 .testimonial-author {

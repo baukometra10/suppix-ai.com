@@ -1633,22 +1633,39 @@ document.addEventListener("DOMContentLoaded", () => {
         const rating = item.rating ?? item.stars ?? item.score ?? 5;
         const published = item.published !== false && item.public !== false && item.approved !== false && item.visible !== false;
         if (!text || !published) return null;
-        // Company name is the primary public label on the marketing site.
-        const displayName =
-          companyName ||
-          personName ||
-          t("Kunde", "Customer", "عميل");
+        const blocked = new Set(["kunde", "customer", "admin", "superadmin", "user", "test", "demo"]);
+        let displayName = companyName || personName || t("Kunde", "Customer", "عميل");
+        if (blocked.has(String(displayName).toLowerCase()) && companyName && !blocked.has(companyName.toLowerCase())) {
+          displayName = companyName;
+        }
+        if (blocked.has(String(displayName).toLowerCase()) && personName && !blocked.has(personName.toLowerCase())) {
+          displayName = personName;
+        }
         let displayRole = String(role || "").trim();
-        if (!displayRole && personName && companyName && personName !== companyName) {
+        if (!displayRole && personName && companyName && personName !== companyName && !blocked.has(personName.toLowerCase())) {
           displayRole = personName;
         }
         if (displayRole && displayRole === displayName) displayRole = "";
+        const details = Array.isArray(item.details)
+          ? item.details
+              .map((d) => ({
+                label: String(d?.label || d?.key || "").trim(),
+                value: String(d?.value || "").trim(),
+              }))
+              .filter((d) => d.label && d.value)
+          : [];
+        const highlight = String(item.highlight || "").trim() || String(text).trim().split("\n")[0];
         return {
           text: String(text).trim(),
+          highlight,
+          details,
           name: displayName,
           role: displayRole,
-          company: companyName || displayName,
+          company: blocked.has(String(companyName || "").toLowerCase()) ? displayName : companyName || displayName,
           rating: Number(rating) || 5,
+          wouldRecommend: item.would_recommend === true || item.wouldRecommend === true,
+          timeSaved: item.time_saved_hours ?? item.timeSavedHours ?? null,
+          costSaved: item.cost_saved_estimate ?? item.costSavedEstimate ?? null,
         };
       })
       .filter(Boolean);
@@ -1709,14 +1726,41 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
       <div class="testimonials-cards">
       ${slice
-        .map(
-          (r) => `
+        .map((r) => {
+          const detailsHtml =
+            Array.isArray(r.details) && r.details.length
+              ? `<ul class="testimonial-details">${r.details
+                  .map(
+                    (d) =>
+                      `<li><span class="testimonial-detail-label">${escapeHtml(d.label)}</span><span class="testimonial-detail-value">${escapeHtml(d.value)}</span></li>`
+                  )
+                  .join("")}</ul>`
+              : `<blockquote>${escapeHtml(r.text)}</blockquote>`;
+          const chips = [];
+          if (r.wouldRecommend) {
+            chips.push(
+              `<span class="testimonial-chip">${t("Empfohlen", "Recommended", "موصى به")}</span>`
+            );
+          }
+          if (r.timeSaved != null && Number(r.timeSaved) > 0) {
+            chips.push(
+              `<span class="testimonial-chip">${escapeHtml(String(r.timeSaved).replace(".", ","))} Std./Woche</span>`
+            );
+          }
+          if (r.costSaved != null && Number(r.costSaved) > 0) {
+            chips.push(
+              `<span class="testimonial-chip">${escapeHtml(String(Math.round(Number(r.costSaved))))} €/Monat</span>`
+            );
+          }
+          return `
       <article class="testimonial-card">
         <div class="testimonial-card-top">
           <div class="testimonial-stars" aria-label="${r.rating} / 5">${starsFromRating(r.rating)}</div>
           <span class="testimonial-quote" aria-hidden="true">“</span>
         </div>
-        <blockquote>${escapeHtml(r.text)}</blockquote>
+        ${r.highlight ? `<p class="testimonial-highlight">${escapeHtml(r.highlight)}</p>` : ""}
+        ${detailsHtml}
+        ${chips.length ? `<div class="testimonial-chips">${chips.join("")}</div>` : ""}
         <div class="testimonial-author">
           <span class="testimonial-avatar" aria-hidden="true">${escapeHtml(reviewInitials(r.company || r.name))}</span>
           <div class="testimonial-author-text">
@@ -1724,8 +1768,8 @@ document.addEventListener("DOMContentLoaded", () => {
             ${r.role ? `<span>${escapeHtml(r.role)}</span>` : `<span>${t("WorkPass-Kunde", "WorkPass customer", "عميل WorkPass")}</span>`}
           </div>
         </div>
-      </article>`
-        )
+      </article>`;
+        })
         .join("")}
       </div>`;
     const note = document.getElementById("testimonialsNote");
