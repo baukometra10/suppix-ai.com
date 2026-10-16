@@ -1761,7 +1761,7 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
       <div class="testimonials-cards">
       ${slice
-        .map((r) => {
+        .map((r, idx) => {
           const detailsHtml =
             Array.isArray(r.details) && r.details.length
               ? `<ul class="testimonial-details">${r.details
@@ -1787,23 +1787,46 @@ document.addEventListener("DOMContentLoaded", () => {
               `<span class="testimonial-chip">${escapeHtml(String(Math.round(Number(r.costSaved))))} €/Monat</span>`
             );
           }
+          const preview = String(r.highlight || r.text || "")
+            .replace(/\s+/g, " ")
+            .trim()
+            .slice(0, 110);
+          const previewMore = String(r.highlight || r.text || "").trim().length > 110 ? "…" : "";
+          const company = r.company || r.name;
+          const role =
+            r.role || t("WorkPass-Kunde", "WorkPass customer", "عميل WorkPass");
+          const foldId = `review-fold-${idx}`;
           return `
-      <article class="testimonial-card">
-        <div class="testimonial-card-top">
-          <div class="testimonial-stars" aria-label="${r.rating} / 5">${starsFromRating(r.rating)}</div>
-          <span class="testimonial-quote" aria-hidden="true">“</span>
-        </div>
-        ${r.highlight ? `<p class="testimonial-highlight">${escapeHtml(r.highlight)}</p>` : ""}
-        ${detailsHtml}
-        ${chips.length ? `<div class="testimonial-chips">${chips.join("")}</div>` : ""}
-        <div class="testimonial-author">
-          <span class="testimonial-avatar" aria-hidden="true">${escapeHtml(reviewInitials(r.company || r.name))}</span>
-          <div class="testimonial-author-text">
-            <strong>${escapeHtml(r.company || r.name)}</strong>
-            ${r.role ? `<span>${escapeHtml(r.role)}</span>` : `<span>${t("WorkPass-Kunde", "WorkPass customer", "عميل WorkPass")}</span>`}
+      <details class="testimonial-card testimonial-fold">
+        <summary class="testimonial-fold-summary" id="${foldId}">
+          <div class="testimonial-fold-main">
+            <span class="testimonial-avatar" aria-hidden="true">${escapeHtml(reviewInitials(company))}</span>
+            <div class="testimonial-author-text">
+              <strong>${escapeHtml(company)}</strong>
+              <span>${escapeHtml(role)}</span>
+            </div>
+            <div class="testimonial-fold-meta">
+              <div class="testimonial-stars" aria-label="${r.rating} / 5">${starsFromRating(r.rating)}</div>
+              <span class="testimonial-fold-chevron" aria-hidden="true"></span>
+            </div>
           </div>
+          ${
+            preview
+              ? `<p class="testimonial-fold-preview">${escapeHtml(preview)}${previewMore}</p>`
+              : ""
+          }
+          <span class="testimonial-fold-hint">${t(
+            "Tippen zum Öffnen",
+            "Tap to open",
+            "انقر للفتح"
+          )}</span>
+        </summary>
+        <div class="testimonial-fold-body">
+          ${r.highlight ? `<p class="testimonial-highlight">${escapeHtml(r.highlight)}</p>` : ""}
+          ${detailsHtml}
+          ${chips.length ? `<div class="testimonial-chips">${chips.join("")}</div>` : ""}
         </div>
-      </article>`;
+      </details>`;
         })
         .join("")}
       </div>
@@ -1842,6 +1865,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     grid.classList.toggle("is-live", source === "live");
     grid.dataset.reviewsSource = source === "live" ? "platform-live" : "fallback";
+    bindTestimonialFolds(grid);
+  }
+
+  function bindTestimonialFolds(grid) {
+    if (!grid || grid.dataset.foldsBound === "1") return;
+    grid.dataset.foldsBound = "1";
+    const openLabel = t("Tippen zum Schließen", "Tap to close", "انقر للإغلاق");
+    const closedLabel = t("Tippen zum Öffnen", "Tap to open", "انقر للفتح");
+    grid.addEventListener("toggle", (ev) => {
+      const fold = ev.target;
+      if (!(fold instanceof HTMLDetailsElement) || !fold.classList.contains("testimonial-fold")) return;
+      const hint = fold.querySelector(".testimonial-fold-hint");
+      if (hint) hint.textContent = fold.open ? openLabel : closedLabel;
+    }, true);
   }
 
   function escapeHtml(value) {
