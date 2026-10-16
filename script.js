@@ -1614,18 +1614,42 @@ document.addEventListener("DOMContentLoaded", () => {
       .map((item) => {
         if (!item || typeof item !== "object") return null;
         const text =
-          item.text || item.comment || item.message || item.body || item.review || item.content || "";
+          item.text ||
+          item.review_text ||
+          item.comment ||
+          item.message ||
+          item.body ||
+          item.review ||
+          item.content ||
+          "";
         const name =
-          item.name || item.author || item.customer || item.company_name || item.display_name || item.user || "";
+          item.name ||
+          item.reviewer_name ||
+          item.author ||
+          item.customer ||
+          item.company_name ||
+          item.display_name ||
+          item.user ||
+          "";
         const role =
-          item.role || item.title || item.position || item.job_title || item.company || item.sector || "";
+          item.role ||
+          item.title ||
+          item.position ||
+          item.job_title ||
+          item.company ||
+          item.company_name ||
+          item.sector ||
+          "";
         const rating = item.rating ?? item.stars ?? item.score ?? 5;
         const published = item.published !== false && item.public !== false && item.approved !== false && item.visible !== false;
         if (!text || !published) return null;
+        const displayName = String(name || t("Kunde", "Customer", "عميل")).trim();
+        let displayRole = String(role || "").trim();
+        if (displayRole && displayRole === displayName) displayRole = "";
         return {
           text: String(text).trim(),
-          name: String(name || t("Kunde", "Customer", "عميل")).trim(),
-          role: String(role || "").trim(),
+          name: displayName,
+          role: displayRole,
           rating: Number(rating) || 5,
         };
       })
