@@ -670,7 +670,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function brandVideoPosterSrc() {
     const raw = resolveAssetPath(cfg.media?.demoPoster || "assets/video-poster.jpg");
-    return raw.includes("?") ? raw : `${raw}?v=20261019c`;
+    return raw.includes("?") ? raw : `${raw}?v=20261019d`;
   }
 
   function initDemoVideo() {
@@ -724,11 +724,37 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!stage || !video || !cover || cover.dataset.bound === "1") return;
     cover.dataset.bound = "1";
 
+    const hint = cover.querySelector(".video-poster-hint");
+    const playLabel = t("Tippen zum Abspielen", "Tap to play", "انقر للتشغيل");
+    const againLabel = t("Nochmal abspielen", "Play again", "إعادة التشغيل");
+
+    const showPosterEnd = () => {
+      try {
+        video.pause();
+      } catch (_) {
+        /* ignore */
+      }
+      stage.classList.remove("is-playing");
+      stage.classList.add("is-poster");
+      cover.hidden = false;
+      if (hint) hint.textContent = againLabel;
+      cover.setAttribute(
+        "aria-label",
+        t("Video nochmal abspielen", "Play video again", "إعادة تشغيل الفيديو")
+      );
+    };
+
     const start = () => {
       stage.classList.add("is-playing");
       stage.classList.remove("is-poster");
       cover.hidden = true;
+      if (hint) hint.textContent = playLabel;
       video.preload = "auto";
+      try {
+        if (video.ended || video.currentTime > 0.15) video.currentTime = 0;
+      } catch (_) {
+        /* ignore seek errors before ready */
+      }
       const play = () => {
         const p = video.play();
         if (p && typeof p.catch === "function") p.catch(() => {});
@@ -747,6 +773,7 @@ document.addEventListener("DOMContentLoaded", () => {
         start();
       }
     });
+    video.addEventListener("ended", showPosterEnd);
   }
 
   function ensureVideoPosterHost(video) {

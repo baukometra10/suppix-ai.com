@@ -111,7 +111,7 @@ window.SITE_CONFIG = {
   bookingUrl: "",
 
   media: {
-    demoPoster: "assets/video-poster.jpg?v=20261019c",
+    demoPoster: "assets/video-poster.jpg?v=20261019d",
     heroCards: true,
   },
 
