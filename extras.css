@@ -272,6 +272,28 @@ html[dir="rtl"] .feature-card p {
   display: none;
 }
 
+.video-poster-host {
+  position: relative;
+  overflow: hidden;
+}
+
+.video-poster-host-auto {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #050508;
+  border-radius: inherit;
+}
+
+.video-poster-host-auto > video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: #050508;
+}
+
 .video-poster-cover {
   position: absolute;
   inset: 0;
@@ -346,7 +368,9 @@ html[dir="rtl"] .feature-card p {
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);
 }
 
-.video-wrapper-real.is-playing .video-poster-cover {
+.video-poster-host.is-playing > .video-poster-cover,
+.video-wrapper-real.is-playing > .video-poster-cover,
+.lohn-video-frame.is-playing > .video-poster-cover {
   display: none !important;
 }
 
