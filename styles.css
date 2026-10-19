@@ -123,15 +123,15 @@ ul {
 }
 
 .logo-img {
-  height: 52px;
+  height: 48px;
   width: auto;
-  max-width: min(280px, 55vw);
-  border-radius: 12px;
+  max-width: min(240px, 58vw);
+  border-radius: 0;
   flex-shrink: 0;
   object-fit: contain;
-  background: linear-gradient(90deg, #dff5fb 0%, #f0e8ff 100%);
-  padding: 4px 8px;
-  box-shadow: 0 0 0 1px rgba(94, 184, 232, 0.25), 0 8px 24px rgba(94, 184, 232, 0.15);
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
 }
 
 .logo-text {
@@ -1289,7 +1289,10 @@ section {
 }
 
 .footer-brand .logo-img {
-  height: 64px;
+  height: auto;
+  width: auto;
+  max-width: min(220px, 70vw);
+  max-height: 88px;
   margin-bottom: 0.75rem;
 }
 

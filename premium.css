@@ -262,8 +262,9 @@
 }
 
 .theme-premium .footer .logo-img {
-  height: 56px;
-  max-width: 320px;
+  height: auto;
+  max-height: 72px;
+  max-width: min(220px, 70vw);
 }
 
 .theme-premium .btn {
@@ -830,8 +831,8 @@
 
   .theme-premium .logo-img {
     height: 40px;
-    max-width: min(148px, 40vw);
-    padding: 3px 6px;
+    max-width: min(168px, 46vw);
+    padding: 0;
   }
 
   .theme-premium .demo-video-soon {
