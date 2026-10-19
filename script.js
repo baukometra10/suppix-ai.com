@@ -671,12 +671,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const video = document.getElementById("demoVideo");
     const stage = document.getElementById("demoVideoStage");
     const soon = document.getElementById("demoVideoSoon");
+    const cover = document.getElementById("demoVideoCover");
     if (!video || !stage) return;
     const lang = pageLang();
     const byLang = cfg.demoVideoByLang || {};
     const src = resolveAssetPath(byLang[lang] || byLang.de || cfg.demoVideoSrc || "");
+    const poster = resolveAssetPath(cfg.media?.demoPoster || "assets/video-poster.jpg");
     if (src) {
       stage.classList.remove("is-soon");
+      stage.classList.add("is-poster");
+      stage.classList.remove("is-playing");
       const source = video.querySelector("source");
       if (source) source.setAttribute("src", src);
       else {
@@ -685,14 +689,92 @@ document.addEventListener("DOMContentLoaded", () => {
         s.type = "video/mp4";
         video.appendChild(s);
       }
+      if (poster) {
+        video.setAttribute("poster", poster.includes("?") ? poster : `${poster}?v=20261019b`);
+        const coverImg = cover?.querySelector(".video-poster-cover-img");
+        if (coverImg) coverImg.src = video.getAttribute("poster");
+      }
+      video.preload = "none";
+      video.removeAttribute("autoplay");
       video.load();
       if (soon) soon.hidden = true;
       video.hidden = false;
+      if (cover) {
+        cover.hidden = false;
+        bindVideoPosterCover(stage, video, cover);
+      }
     } else {
       stage.classList.add("is-soon");
+      stage.classList.remove("is-poster", "is-playing");
       video.hidden = true;
+      if (cover) cover.hidden = true;
       if (soon) soon.hidden = false;
     }
+    document
+      .querySelectorAll(".video-wrapper-real video, .lohn-video-frame video")
+      .forEach((el) => {
+        if (el === video) return;
+        ensureClickToPlay(el);
+      });
+  }
+
+  function bindVideoPosterCover(stage, video, cover) {
+    if (!stage || !video || !cover || cover.dataset.bound === "1") return;
+    cover.dataset.bound = "1";
+
+    const start = () => {
+      stage.classList.add("is-playing");
+      stage.classList.remove("is-poster");
+      cover.hidden = true;
+      video.preload = "auto";
+      const play = () => {
+        const p = video.play();
+        if (p && typeof p.catch === "function") p.catch(() => {});
+      };
+      if (video.readyState >= 2) play();
+      else {
+        video.addEventListener("loadeddata", play, { once: true });
+        video.load();
+      }
+    };
+
+    cover.addEventListener("click", start);
+    cover.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter" || ev.key === " ") {
+        ev.preventDefault();
+        start();
+      }
+    });
+  }
+
+  function ensureClickToPlay(video) {
+    if (!(video instanceof HTMLVideoElement)) return;
+    const wrap = video.closest(".video-wrapper-real, .lohn-video-frame");
+    if (!wrap || wrap.querySelector(".video-poster-cover")) return;
+    if (wrap.dataset.clickPlayBound === "1") return;
+    wrap.dataset.clickPlayBound = "1";
+
+    const rawPoster =
+      video.getAttribute("poster") ||
+      resolveAssetPath(cfg.media?.demoPoster || "assets/video-poster.jpg");
+    const posterSrc = rawPoster.includes("?") ? rawPoster : `${rawPoster}?v=20261019b`;
+    const cover = document.createElement("button");
+    cover.type = "button";
+    cover.className = "video-poster-cover";
+    cover.setAttribute(
+      "aria-label",
+      t("Video abspielen", "Play video", "تشغيل الفيديو")
+    );
+    cover.innerHTML = `
+      <img src="${escapeHtml(posterSrc)}" alt="" class="video-poster-cover-img" width="1920" height="1080" decoding="async">
+      <span class="video-poster-play" aria-hidden="true"></span>
+      <span class="video-poster-hint">${t("Tippen zum Abspielen", "Tap to play", "انقر للتشغيل")}</span>
+    `;
+    wrap.insertBefore(cover, video);
+    wrap.classList.add("is-poster");
+    video.preload = "none";
+    video.removeAttribute("autoplay");
+    bindVideoPosterCover(wrap, video, cover);
   }
 
   function applySiteConfig() {
