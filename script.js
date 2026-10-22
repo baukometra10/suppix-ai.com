@@ -670,7 +670,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function brandVideoPosterSrc() {
     const raw = resolveAssetPath(cfg.media?.demoPoster || "assets/video-poster.jpg");
-    return raw.includes("?") ? raw : `${raw}?v=20261019d`;
+    return raw.includes("?") ? raw : `${raw}?v=20261022a`;
   }
 
   function initDemoVideo() {
@@ -727,6 +727,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const hint = cover.querySelector(".video-poster-hint");
     const playLabel = t("Tippen zum Abspielen", "Tap to play", "انقر للتشغيل");
     const againLabel = t("Nochmal abspielen", "Play again", "إعادة التشغيل");
+    const introMs = Math.max(
+      4000,
+      Math.min(10000, Number(cfg.media?.videoIntroMs || 6500))
+    );
 
     const showPosterEnd = () => {
       try {
@@ -734,7 +738,8 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (_) {
         /* ignore */
       }
-      stage.classList.remove("is-playing");
+      clearVideoIntro(stage);
+      stage.classList.remove("is-playing", "is-intro");
       stage.classList.add("is-poster");
       cover.hidden = false;
       if (hint) hint.textContent = againLabel;
@@ -744,9 +749,10 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     };
 
-    const start = () => {
+    const playVideo = () => {
+      clearVideoIntro(stage);
+      stage.classList.remove("is-intro");
       stage.classList.add("is-playing");
-      stage.classList.remove("is-poster");
       cover.hidden = true;
       if (hint) hint.textContent = playLabel;
       video.preload = "auto";
@@ -766,6 +772,19 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     };
 
+    const start = () => {
+      // Replay after end: skip intro; first play: brand intro then video
+      if (video.ended || Number(video.dataset.playedOnce || "0") === 1) {
+        playVideo();
+        video.dataset.playedOnce = "1";
+        return;
+      }
+      runVideoIntro(stage, introMs, () => {
+        video.dataset.playedOnce = "1";
+        playVideo();
+      });
+    };
+
     cover.addEventListener("click", start);
     cover.addEventListener("keydown", (ev) => {
       if (ev.key === "Enter" || ev.key === " ") {
@@ -774,6 +793,67 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
     video.addEventListener("ended", showPosterEnd);
+  }
+
+  function clearVideoIntro(stage) {
+    if (!stage) return;
+    if (stage._introTimer) {
+      clearTimeout(stage._introTimer);
+      stage._introTimer = null;
+    }
+    const intro = stage.querySelector(".video-brand-intro");
+    if (intro) intro.remove();
+  }
+
+  function runVideoIntro(stage, durationMs, onDone) {
+    if (!stage) {
+      onDone();
+      return;
+    }
+    clearVideoIntro(stage);
+    stage.classList.add("is-intro");
+    stage.classList.remove("is-poster");
+    const cover = stage.querySelector(".video-poster-cover");
+    if (cover) cover.hidden = true;
+
+    const poster = brandVideoPosterSrc();
+    const intro = document.createElement("div");
+    intro.className = "video-brand-intro";
+    intro.setAttribute("role", "dialog");
+    intro.setAttribute(
+      "aria-label",
+      t("SUPPIX.AI Intro", "SUPPIX.AI intro", "مقدمة SUPPIX.AI")
+    );
+    intro.innerHTML = `
+      <img src="${escapeHtml(poster)}" alt="" class="video-brand-intro-bg" width="1920" height="1080" decoding="async">
+      <div class="video-brand-intro-content">
+        <p class="video-brand-intro-kicker">${t("SUPPIX.AI", "SUPPIX.AI", "SUPPIX.AI")}</p>
+        <p class="video-brand-intro-tag">${t(
+          "Smart WorkPass & Automation",
+          "Smart WorkPass & Automation",
+          "Smart WorkPass & Automation"
+        )}</p>
+        <div class="video-brand-intro-bar" aria-hidden="true"><span style="animation-duration:${Math.round(
+          durationMs
+        )}ms"></span></div>
+        <button type="button" class="video-brand-intro-skip">${t(
+          "Überspringen",
+          "Skip",
+          "تخطي"
+        )}</button>
+      </div>
+    `;
+    stage.appendChild(intro);
+
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      clearVideoIntro(stage);
+      onDone();
+    };
+    intro.querySelector(".video-brand-intro-skip")?.addEventListener("click", finish);
+    stage._introTimer = setTimeout(finish, durationMs);
   }
 
   function ensureVideoPosterHost(video) {
@@ -1869,19 +1949,42 @@ document.addEventListener("DOMContentLoaded", () => {
     return Math.max(1, Number(grid.dataset.reviewsLimit || cfg.reviewsHomeLimit || 3));
   }
 
-  function renderReviews(reviews, source) {
+  function googleReviewsHref() {
+    return String(cfg.social?.googleBusiness || "").trim();
+  }
+
+  function renderReviews(reviews, source, filterStars) {
     const grid = document.getElementById("testimonialsGrid");
     if (!grid || !reviews.length) return;
     const isPage = String(grid.dataset.reviewsMode || "teaser").toLowerCase() === "page";
+    grid._allReviews = reviews;
+    grid._reviewsSource = source;
+    const activeFilter = filterStars == null
+      ? Number(grid.dataset.reviewsFilter || "0") || 0
+      : Number(filterStars) || 0;
+    grid.dataset.reviewsFilter = String(activeFilter);
+
+    const filtered =
+      activeFilter > 0
+        ? reviews.filter((r) => Math.round(Number(r.rating) || 0) >= activeFilter)
+        : reviews;
     const limit = reviewsDisplayLimit(grid);
-    const slice = reviews.slice(0, limit);
+    const slice = filtered.slice(0, limit);
     const total = reviews.length;
+    const shown = filtered.length;
     const avg =
       reviews.reduce((sum, r) => sum + (Number(r.rating) || 0), 0) / Math.max(1, reviews.length);
     const pageUrl = reviewsPageHref();
+    const googleUrl = googleReviewsHref();
     const showMoreCta = !isPage && total > 0;
     const summaryCountLabel = isPage
-      ? `${total} ${t("Kundenstimmen", "customer reviews", "تقييمات")}`
+      ? activeFilter > 0
+        ? t(
+            `${shown} von ${total} Stimmen`,
+            `${shown} of ${total} reviews`,
+            `${shown} من ${total} تقييمات`
+          )
+        : `${total} ${t("Kundenstimmen", "customer reviews", "تقييمات")}`
       : total > slice.length
         ? t(
             `${slice.length} von ${total} Stimmen`,
@@ -1890,52 +1993,158 @@ document.addEventListener("DOMContentLoaded", () => {
           )
         : `${total} ${t("Kundenstimmen", "customer reviews", "تقييمات")}`;
 
+    const filterHtml = isPage
+      ? `<div class="reviews-filter" role="group" aria-label="${t(
+          "Nach Sternen filtern",
+          "Filter by stars",
+          "تصفية حسب النجوم"
+        )}">
+        ${[0, 5, 4, 3]
+          .map((n) => {
+            const label =
+              n === 0
+                ? t("Alle", "All", "الكل")
+                : t(`ab ${n}★`, `${n}+★`, `${n}+★`);
+            const pressed = activeFilter === n ? "true" : "false";
+            return `<button type="button" class="reviews-filter-btn${
+              activeFilter === n ? " is-active" : ""
+            }" data-stars="${n}" aria-pressed="${pressed}">${label}</button>`;
+          })
+          .join("")}
+      </div>`
+      : "";
+
+    const googleHtml = googleUrl
+      ? `<a class="reviews-google-link" href="${escapeHtml(
+          googleUrl
+        )}" target="_blank" rel="noopener noreferrer">${t(
+          "Auch auf Google ansehen",
+          "Also see us on Google",
+          "شاهدنا أيضاً على Google"
+        )}</a>`
+      : "";
+
     grid.innerHTML = `
-      <div class="testimonials-summary" aria-label="${t("Durchschnitt", "Average", "المتوسط")}">
+      <div class="testimonials-summary${isPage ? " testimonials-summary-hero" : ""}" aria-label="${t(
+        "Durchschnitt",
+        "Average",
+        "المتوسط"
+      )}">
         <div class="testimonials-summary-score">${avg.toFixed(1).replace(".", ",")}</div>
         <div class="testimonials-summary-meta">
           <div class="testimonial-stars" aria-hidden="true">${starsFromRating(avg)}</div>
           <span>${summaryCountLabel}</span>
+          ${
+            isPage
+              ? `<span class="testimonials-summary-sub">${t(
+                  "Durchschnitt aus der WorkPass-Plattform",
+                  "Average from the WorkPass platform",
+                  "المتوسط من منصة WorkPass"
+                )}</span>`
+              : ""
+          }
+          ${isPage || !showMoreCta ? googleHtml : ""}
         </div>
       </div>
+      ${filterHtml}
       <div class="testimonials-cards">
-      ${slice
-        .map((r, idx) => {
-          const detailsHtml =
-            Array.isArray(r.details) && r.details.length
-              ? `<ul class="testimonial-details">${r.details
-                  .map(
-                    (d) =>
-                      `<li><span class="testimonial-detail-label">${escapeHtml(d.label)}</span><span class="testimonial-detail-value">${escapeHtml(d.value)}</span></li>`
-                  )
-                  .join("")}</ul>`
-              : `<blockquote>${escapeHtml(r.text)}</blockquote>`;
-          const chips = [];
-          if (r.wouldRecommend) {
-            chips.push(
-              `<span class="testimonial-chip">${t("Empfohlen", "Recommended", "موصى به")}</span>`
-            );
-          }
-          if (r.timeSaved != null && Number(r.timeSaved) > 0) {
-            chips.push(
-              `<span class="testimonial-chip">${escapeHtml(String(r.timeSaved).replace(".", ","))} Std./Woche</span>`
-            );
-          }
-          if (r.costSaved != null && Number(r.costSaved) > 0) {
-            chips.push(
-              `<span class="testimonial-chip">${escapeHtml(String(Math.round(Number(r.costSaved))))} €/Monat</span>`
-            );
-          }
-          const preview = String(r.highlight || r.text || "")
-            .replace(/\s+/g, " ")
-            .trim()
-            .slice(0, 110);
-          const previewMore = String(r.highlight || r.text || "").trim().length > 110 ? "…" : "";
-          const company = r.company || r.name;
-          const role =
-            r.role || t("WorkPass-Kunde", "WorkPass customer", "عميل WorkPass");
-          const foldId = `review-fold-${idx}`;
-          return `
+      ${
+        slice.length
+          ? slice
+              .map((r, idx) => renderReviewCard(r, idx))
+              .join("")
+          : `<div class="reviews-empty reviews-empty-inline"><p>${t(
+              "Keine Stimmen für diesen Filter.",
+              "No reviews for this filter.",
+              "لا توجد تقييمات لهذا الفلتر."
+            )}</p></div>`
+      }
+      </div>
+      ${
+        showMoreCta
+          ? `<div class="testimonials-cta">
+        <a href="${escapeHtml(pageUrl)}" class="btn btn-primary">${t(
+            total > slice.length ? "Alle Bewertungen ansehen" : "Bewertungsseite öffnen",
+            total > slice.length ? "See all reviews" : "Open reviews page",
+            total > slice.length ? "عرض كل التقييمات" : "فتح صفحة التقييمات"
+          )}</a>
+        ${
+          googleUrl
+            ? `<a href="${escapeHtml(
+                googleUrl
+              )}" class="btn btn-outline" target="_blank" rel="noopener noreferrer">${t(
+                "Google-Bewertungen",
+                "Google reviews",
+                "تقييمات Google"
+              )}</a>`
+            : ""
+        }
+        <p class="testimonials-cta-note">${t(
+          "Alle Stimmen aus der WorkPass-Plattform – mit Firmennamen und Details.",
+          "All voices from the WorkPass platform – with company names and details.",
+          "كل الآراء من منصة WorkPass – مع أسماء الشركات والتفاصيل."
+        )}</p>
+      </div>`
+          : ""
+      }`;
+    const note = document.getElementById("testimonialsNote");
+    if (note) {
+      if (source === "live") {
+        note.textContent = t(
+          "Echte Kundenstimmen aus der SUPPIX-Plattform.",
+          "Real customer reviews from the SUPPIX platform.",
+          "تقييمات عملاء حقيقية من منصة SUPPIX."
+        );
+      } else {
+        note.textContent = t(
+          "Ausgewählte Stimmen – Live-Bewertungen aus der Plattform folgen automatisch.",
+          "Selected voices – live platform reviews appear here automatically once published.",
+          "آراء مختارة – التقييمات الحية من المنصة تظهر هنا تلقائياً عند نشرها."
+        );
+      }
+      note.classList.add("is-live");
+    }
+    grid.classList.toggle("is-live", source === "live");
+    grid.dataset.reviewsSource = source === "live" ? "platform-live" : "fallback";
+    bindTestimonialFolds(grid);
+    bindReviewsFilter(grid);
+  }
+
+  function renderReviewCard(r, idx) {
+    const detailsHtml =
+      Array.isArray(r.details) && r.details.length
+        ? `<ul class="testimonial-details">${r.details
+            .map(
+              (d) =>
+                `<li><span class="testimonial-detail-label">${escapeHtml(d.label)}</span><span class="testimonial-detail-value">${escapeHtml(d.value)}</span></li>`
+            )
+            .join("")}</ul>`
+        : `<blockquote>${escapeHtml(r.text)}</blockquote>`;
+    const chips = [];
+    if (r.wouldRecommend) {
+      chips.push(
+        `<span class="testimonial-chip">${t("Empfohlen", "Recommended", "موصى به")}</span>`
+      );
+    }
+    if (r.timeSaved != null && Number(r.timeSaved) > 0) {
+      chips.push(
+        `<span class="testimonial-chip">${escapeHtml(String(r.timeSaved).replace(".", ","))} Std./Woche</span>`
+      );
+    }
+    if (r.costSaved != null && Number(r.costSaved) > 0) {
+      chips.push(
+        `<span class="testimonial-chip">${escapeHtml(String(Math.round(Number(r.costSaved))))} €/Monat</span>`
+      );
+    }
+    const preview = String(r.highlight || r.text || "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 110);
+    const previewMore = String(r.highlight || r.text || "").trim().length > 110 ? "…" : "";
+    const company = r.company || r.name;
+    const role = r.role || t("WorkPass-Kunde", "WorkPass customer", "عميل WorkPass");
+    const foldId = `review-fold-${idx}`;
+    return `
       <details class="testimonial-card testimonial-fold">
         <summary class="testimonial-fold-summary" id="${foldId}">
           <div class="testimonial-fold-main">
@@ -1966,45 +2175,21 @@ document.addEventListener("DOMContentLoaded", () => {
           ${chips.length ? `<div class="testimonial-chips">${chips.join("")}</div>` : ""}
         </div>
       </details>`;
-        })
-        .join("")}
-      </div>
-      ${
-        showMoreCta
-          ? `<div class="testimonials-cta">
-        <a href="${escapeHtml(pageUrl)}" class="btn btn-primary">${t(
-            total > slice.length ? "Alle Bewertungen ansehen" : "Bewertungsseite öffnen",
-            total > slice.length ? "See all reviews" : "Open reviews page",
-            total > slice.length ? "عرض كل التقييمات" : "فتح صفحة التقييمات"
-          )}</a>
-        <p class="testimonials-cta-note">${t(
-          "Alle Stimmen aus der WorkPass-Plattform – mit Firmennamen und Details.",
-          "All voices from the WorkPass platform – with company names and details.",
-          "كل الآراء من منصة WorkPass – مع أسماء الشركات والتفاصيل."
-        )}</p>
-      </div>`
-          : ""
-      }`;
-    const note = document.getElementById("testimonialsNote");
-    if (note) {
-      if (source === "live") {
-        note.textContent = t(
-          "Echte Kundenstimmen aus der SUPPIX-Plattform.",
-          "Real customer reviews from the SUPPIX platform.",
-          "تقييمات عملاء حقيقية من منصة SUPPIX."
-        );
-      } else {
-        note.textContent = t(
-          "Ausgewählte Stimmen – Live-Bewertungen aus der Plattform folgen automatisch.",
-          "Selected voices – live platform reviews appear here automatically once published.",
-          "آراء مختارة – التقييمات الحية من المنصة تظهر هنا تلقائياً عند نشرها."
-        );
-      }
-      note.classList.add("is-live");
-    }
-    grid.classList.toggle("is-live", source === "live");
-    grid.dataset.reviewsSource = source === "live" ? "platform-live" : "fallback";
-    bindTestimonialFolds(grid);
+  }
+
+  function bindReviewsFilter(grid) {
+    if (!grid || grid.dataset.filterBound === "1") return;
+    grid.dataset.filterBound = "1";
+    grid.addEventListener("click", (ev) => {
+      const btn = ev.target.closest(".reviews-filter-btn");
+      if (!btn || !grid.contains(btn)) return;
+      const stars = Number(btn.getAttribute("data-stars") || "0") || 0;
+      const current = Number(grid.dataset.reviewsFilter || "0") || 0;
+      if (stars === current) return;
+      const all = Array.isArray(grid._allReviews) ? grid._allReviews : [];
+      if (!all.length) return;
+      renderReviews(all, grid._reviewsSource || "live", stars);
+    });
   }
 
   function bindTestimonialFolds(grid) {

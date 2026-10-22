@@ -19,10 +19,11 @@ window.SITE_CONFIG = {
     facebook: "https://www.facebook.com/profile.php?id=61594787245415",
     instagram: "https://www.instagram.com/suppix.workpass.ai/",
     linkedin: "https://www.linkedin.com/in/suppix-ai-8b1758443",
-    youtube: "",
-    x: "",
+    /** Kanäle ergänzen, sobald URLs feststehen – leer = ausgeblendet */
+    youtube: "", // https://www.youtube.com/@…
+    x: "", // https://x.com/…
     tiktok: "",
-    /** Öffentlicher Google-Business / Maps-Link */
+    /** Öffentlicher Google-Business / Maps-Link (auch Bewertungsseite) */
     googleBusiness:
       "https://www.google.com/maps/place/Suppix+AI+UG/@52.535222,13.404971,17z/data=!4m6!3m5!1s0x47a8514752d130e9:0x121f76063e00f284!8m2!3d52.535221972065116!4d13.404971276502327",
   },
@@ -64,11 +65,12 @@ window.SITE_CONFIG = {
    * Analytics / Ads (Conversion bei Demo-Buchung).
    * gtagId: GA4 (G-…) und/oder Google Ads (AW-…) – kommasepariert möglich.
    * adsSendTo: optional Google Ads Conversion-Label, z. B. "AW-123/AbCdef".
-   * Leer lassen = kein Tracking-Skript.
+   * Leer lassen = kein Tracking-Skript (erst IDs eintragen, dann live).
+   * Events: demo_booking + optional conversion.
    */
   analytics: {
-    gtagId: "",
-    adsSendTo: "",
+    gtagId: "", // z. B. "G-XXXXXXXXXX" oder "G-XXX,AW-YYYY"
+    adsSendTo: "", // z. B. "AW-YYYY/AbCdef"
   },
 
   /**
@@ -111,7 +113,9 @@ window.SITE_CONFIG = {
   bookingUrl: "",
 
   media: {
-    demoPoster: "assets/video-poster.jpg?v=20261019d",
+    demoPoster: "assets/video-poster.jpg?v=20261022a",
+    /** Logo-Intro vor dem ersten Abspielen (ms), Skip-Button inklusive */
+    videoIntroMs: 6500,
     heroCards: true,
   },
 
