@@ -69,6 +69,7 @@ window.SITE_CONFIG = {
    * Events: demo_booking + optional conversion.
    */
   analytics: {
+    // Sobald IDs da sind eintragen – Demo-Buchungen feuern dann automatisch Events.
     gtagId: "", // z. B. "G-XXXXXXXXXX" oder "G-XXX,AW-YYYY"
     adsSendTo: "", // z. B. "AW-YYYY/AbCdef"
   },
@@ -113,7 +114,7 @@ window.SITE_CONFIG = {
   bookingUrl: "",
 
   media: {
-    demoPoster: "assets/video-poster.jpg?v=20261022a",
+    demoPoster: "assets/video-poster.jpg?v=20261022b",
     /** Logo-Intro vor dem ersten Abspielen (ms), Skip-Button inklusive */
     videoIntroMs: 6500,
     heroCards: true,

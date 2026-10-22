@@ -4214,3 +4214,135 @@ html[dir="rtl"] .livemap-zone-b {
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Marketing polish 2026-10-22 ── */
+.hero-short-video {
+  padding: 2.5rem 0 3rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(56, 189, 248, 0.08), transparent 60%),
+    var(--bg, #070b14);
+}
+
+.hero-short-video .video-wrapper {
+  max-width: 820px;
+}
+
+.hero-short-stage {
+  margin: 0 auto;
+}
+
+.industry-cards-cta .industry-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.industry-benefit {
+  margin: 0;
+  color: var(--gray-400, #94a3b8);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.pilot-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.cases-before-after {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.case-before {
+  border-color: rgba(248, 113, 113, 0.28);
+}
+
+.case-after {
+  border-color: rgba(56, 189, 248, 0.35);
+  background: linear-gradient(165deg, rgba(14, 165, 233, 0.1), rgba(15, 23, 42, 0.55));
+}
+
+.case-metrics {
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.case-metrics li {
+  color: var(--gray-300, #cbd5e1);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.cases-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.flyer-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.error-page-inner {
+  max-width: 40rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.error-brand {
+  width: min(280px, 70vw);
+  height: auto;
+  margin: 0 auto 1.25rem;
+  display: block;
+}
+
+.error-links {
+  margin-top: 1.5rem;
+  font-size: 0.92rem;
+  color: var(--gray-400, #94a3b8);
+}
+
+.error-links a {
+  color: #7dd3fc;
+}
+
+/* Blog brand strip */
+.blog-article .page-hero,
+body.blog-page .page-hero {
+  background:
+    radial-gradient(ellipse 70% 60% at 20% 0%, rgba(56, 189, 248, 0.14), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 90% 20%, rgba(167, 139, 250, 0.1), transparent 50%),
+    var(--bg, #070b14);
+}
+
+.blog-article .page-hero::after,
+body.blog-page .page-hero::after {
+  content: "SUPPIX.AI · WorkPass";
+  display: block;
+  margin-top: 0.85rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #7dd3fc;
+  font-weight: 600;
+}
+
+@media (max-width: 800px) {
+  .cases-before-after {
+    grid-template-columns: 1fr;
+  }
+}

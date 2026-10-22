@@ -717,7 +717,28 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function initAllVideoPosters() {
-    document.querySelectorAll("video").forEach((el) => ensureClickToPlay(el));
+    document.querySelectorAll("video").forEach((el) => {
+      ensureClickToPlay(el);
+      bindShortClipLimit(el);
+    });
+  }
+
+  function bindShortClipLimit(video) {
+    if (!(video instanceof HTMLVideoElement) || video.dataset.shortBound === "1") return;
+    if (video.getAttribute("data-short-clip") !== "1") return;
+    video.dataset.shortBound = "1";
+    const maxSec = 45;
+    video.addEventListener("timeupdate", () => {
+      if (video.currentTime >= maxSec - 0.05) {
+        try {
+          video.pause();
+          video.currentTime = maxSec;
+        } catch (_) {
+          /* ignore */
+        }
+        video.dispatchEvent(new Event("ended"));
+      }
+    });
   }
 
   function bindVideoPosterCover(stage, video, cover) {
@@ -1799,24 +1820,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function initFlyerQr() {
     const img = document.getElementById("flyerQr");
-    if (!img) return;
-    const url = flyerLandingUrl();
-    const asset = flyerQrAssetPath();
-    img.src = `${asset}?v=2`;
-    img.decoding = "async";
-    if (url) {
-      img.alt = t(
-        `QR-Code zur Website: ${url}`,
-        `QR code to website: ${url}`,
-        `رمز QR للموقع: ${url}`
-      );
-      img.title = url;
+    if (img) {
+      const url = flyerLandingUrl();
+      const asset = flyerQrAssetPath();
+      img.src = `${asset}?v=2`;
+      img.decoding = "async";
+      if (url) {
+        img.alt = t(
+          `QR-Code zur Website: ${url}`,
+          `QR code to website: ${url}`,
+          `رمز QR للموقع: ${url}`
+        );
+        img.title = url;
+      }
+      img.onerror = () => {
+        if (!url) return;
+        img.onerror = null;
+        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=176x176&margin=0&data=${encodeURIComponent(url)}`;
+      };
     }
-    img.onerror = () => {
-      if (!url) return;
-      img.onerror = null;
-      img.src = `https://api.qrserver.com/v1/create-qr-code/?size=176x176&margin=0&data=${encodeURIComponent(url)}`;
-    };
+    const pdfBtn = document.getElementById("flyerPdfBtn");
+    if (pdfBtn && pdfBtn.dataset.bound !== "1") {
+      pdfBtn.dataset.bound = "1";
+      pdfBtn.addEventListener("click", () => {
+        const prev = document.title;
+        document.title = "WorkPass-Flyer-SUPPIX-AI";
+        window.print();
+        setTimeout(() => {
+          document.title = prev;
+        }, 500);
+      });
+    }
   }
 
   function starsFromRating(rating) {
@@ -1951,6 +1985,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function googleReviewsHref() {
     return String(cfg.social?.googleBusiness || "").trim();
+  }
+
+  function formatReviewsSyncedAt(iso) {
+    if (!iso) return "";
+    try {
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return "";
+      const stamp = d.toLocaleString(
+        pageLang() === "en" ? "en-GB" : pageLang() === "ar" ? "ar" : "de-DE",
+        { dateStyle: "short", timeStyle: "short" }
+      );
+      return t(
+        `Zuletzt aktualisiert ${stamp}`,
+        `Last updated ${stamp}`,
+        `آخر تحديث ${stamp}`
+      );
+    } catch {
+      return "";
+    }
   }
 
   function renderReviews(reviews, source, filterStars) {
@@ -2101,6 +2154,10 @@ document.addEventListener("DOMContentLoaded", () => {
           "Selected voices – live platform reviews appear here automatically once published.",
           "آراء مختارة – التقييمات الحية من المنصة تظهر هنا تلقائياً عند نشرها."
         );
+      }
+      const synced = formatReviewsSyncedAt(grid.dataset.reviewsSyncedAt);
+      if (synced) {
+        note.textContent = `${note.textContent} · ${synced}`;
       }
       note.classList.add("is-live");
     }
@@ -2286,6 +2343,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       const reviews = normalizeReviews(data);
+      const headerDate = res.headers.get("date");
+      grid.dataset.reviewsSyncedAt = new Date(headerDate || Date.now()).toISOString();
       if (reviews.length) {
         renderReviews(reviews, "live");
       } else if (!fallback.length) {
