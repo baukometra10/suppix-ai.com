@@ -1587,10 +1587,18 @@ body.has-site-notice {
 .booking-panel .form-group label {
   color: var(--gray-400, #94a3b8);
 }
+.booking-panel .form-group {
+  min-width: 0;
+  max-width: 100%;
+}
+
 .booking-panel .form-group input,
 .booking-panel .form-group select,
 .booking-panel .form-group textarea {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   background: rgba(2, 8, 23, 0.55);
   border: 1px solid rgba(148, 163, 184, 0.28);
   color: var(--white, #fff);
@@ -1660,22 +1668,32 @@ body.has-site-notice {
   color: var(--white, #fff);
 }
 .booking-panel .form-group input[type="date"] {
+  /* Match other fields; iOS needs min-width:0 or the control spills past the card */
+  display: block;
   width: 100%;
   max-width: 100%;
-  min-height: 2.85rem;
-  padding: 0.7rem 0.85rem;
-  font-size: 1rem;
-  line-height: 1.35;
+  min-width: 0;
   box-sizing: border-box;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.booking-panel .form-group input[type="date"]::-webkit-date-and-time-value {
+  text-align: start;
 }
 
 .booking-panel .form-group input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  padding: 0.25rem;
-  margin-inline-start: 0.35rem;
+  width: 1.15rem;
+  height: 1.15rem;
+  padding: 0;
+  margin: 0;
   opacity: 1;
   /* dark native icon → white on dark theme */
-  filter: invert(1) brightness(1.15);
+  filter: invert(1) brightness(1.2);
 }
 
 @media (max-width: 768px) {
@@ -1685,23 +1703,21 @@ body.has-site-notice {
   .booking-panel {
     border-radius: 14px;
     padding: 1.15rem 0.95rem 1.35rem;
+    overflow-x: clip;
   }
   .booking-grid,
   .booking-grid-2 {
     grid-template-columns: 1fr;
-  }
-  .booking-panel .form-group input[type="date"] {
     width: 100%;
-    max-width: 100%;
-    min-height: 3rem;
-    padding: 0.85rem 1rem;
-    font-size: 1.05rem;
+    min-width: 0;
   }
+  .booking-panel .form-group input[type="date"],
   .booking-panel .form-group select#bookingSlot {
     width: 100%;
-    min-height: 3rem;
-    padding: 0.85rem 1rem;
-    font-size: 1.05rem;
+    max-width: 100%;
+    min-width: 0;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
   }
   .booking-perks {
     gap: 0.55rem 1.1rem;
