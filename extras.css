@@ -1670,10 +1670,12 @@ body.has-site-notice {
 }
 
 .booking-panel .form-group input[type="date"]::-webkit-calendar-picker-indicator {
-  opacity: 0.85;
   cursor: pointer;
-  padding: 0.2rem;
+  padding: 0.25rem;
   margin-inline-start: 0.35rem;
+  opacity: 1;
+  /* dark native icon → white on dark theme */
+  filter: invert(1) brightness(1.15);
 }
 
 @media (max-width: 768px) {
