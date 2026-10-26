@@ -218,16 +218,33 @@ document.addEventListener("DOMContentLoaded", () => {
     return true;
   }
 
+  /** Booking CTA target: same-page hash, or locale/home index when the form is not on this page. */
+  function bookingCtaHref() {
+    const id = bookingSectionId();
+    if (id) return `#${id}`;
+    const path = String(window.location.pathname || "").replace(/\\/g, "/");
+    const segments = path.split("/").filter(Boolean);
+    if (segments.length && /\.html?$/i.test(segments[segments.length - 1])) {
+      segments.pop();
+    }
+    if (segments[0] === "en" || segments[0] === "ar" || segments[0] === "pl") {
+      const localeUps = Math.max(0, segments.length - 1);
+      return `${"../".repeat(localeUps)}index.html#bookingSection`;
+    }
+    const ups = segments.length;
+    return `${ups > 0 ? "../".repeat(ups) : ""}index.html#bookingSection`;
+  }
+
   function initBookingLinks() {
     const booking = String(cfg.bookingUrl || "").trim();
     const useOwn = ownBookingEnabled();
     const useCalendly = !useOwn && Boolean(booking) && isCalendlyUrl(booking);
     const useExternal = !useOwn && Boolean(booking) && !isCalendlyUrl(booking);
-    const sectionHash = bookingSectionId() ? `#${bookingSectionId()}` : "#kontakt";
+    const sectionHref = bookingCtaHref();
 
     document.querySelectorAll("[data-booking]").forEach((el) => {
       if (useOwn || useCalendly) {
-        el.href = sectionHash;
+        el.href = sectionHref;
         el.removeAttribute("target");
         el.removeAttribute("rel");
         el.hidden = false;
@@ -1199,23 +1216,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function initOutboundThanks() {
-    const mark = (el) => {
-      if (!el || el.dataset.thanksBound === "1") return;
-      el.dataset.thanksBound = "1";
-      el.addEventListener("click", () => {
-        showThanksToast(thanksOutboundBody());
-      });
-    };
-
-    [
-      "contactWhatsApp",
-      "heroWhatsApp",
-      "whatsappBtn",
-      "mobileCtaWhatsapp",
-      "thanksWhatsApp",
-    ].forEach((id) => mark(document.getElementById(id)));
-
-    document.querySelectorAll("[data-booking], a[href*='wa.me'], a[href^='mailto:']").forEach(mark);
+    // Intentionally empty: thank-you UI only after successful contact/booking submit
+    // (thanks page, bookingSuccess panel) — never on intermediate CTA clicks.
   }
 
   function siteBaseUrl() {

@@ -114,7 +114,7 @@ window.SITE_CONFIG = {
   bookingUrl: "",
 
   media: {
-    demoPoster: "assets/video-poster.jpg?v=20261022b",
+    demoPoster: "assets/video-poster.jpg?v=20261026a",
     /** Logo-Intro vor dem ersten Abspielen (ms), Skip-Button inklusive */
     videoIntroMs: 6500,
     heroCards: true,
