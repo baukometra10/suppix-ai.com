@@ -1668,7 +1668,7 @@ body.has-site-notice {
   color: var(--white, #fff);
 }
 .booking-panel .form-group input[type="date"] {
-  /* Match other fields; iOS needs min-width:0 or the control spills past the card */
+  /* Align with other fields; color-scheme makes iPhone render dark-native UI */
   display: block;
   width: 100%;
   max-width: 100%;
@@ -1677,23 +1677,47 @@ body.has-site-notice {
   padding: 0.75rem 1rem;
   font-size: 0.95rem;
   line-height: 1.35;
-  -webkit-appearance: none;
-  appearance: none;
+  color: #fff;
+  color-scheme: dark;
+  background-color: rgba(2, 8, 23, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 8px;
+}
+
+@supports (-webkit-touch-callout: none) {
+  /* iPhone Safari: same box as text inputs, 16px avoids zoom */
+  .booking-panel .form-group input[type="date"] {
+    min-height: 2.75rem;
+    font-size: 16px;
+  }
 }
 
 .booking-panel .form-group input[type="date"]::-webkit-date-and-time-value {
   text-align: start;
+  color: #fff;
+  min-height: 1.25em;
+}
+
+.booking-panel .form-group input[type="date"]::-webkit-datetime-edit,
+.booking-panel .form-group input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+.booking-panel .form-group input[type="date"]::-webkit-datetime-edit-text,
+.booking-panel .form-group input[type="date"]::-webkit-datetime-edit-month-field,
+.booking-panel .form-group input[type="date"]::-webkit-datetime-edit-day-field,
+.booking-panel .form-group input[type="date"]::-webkit-datetime-edit-year-field {
+  color: #fff;
+  padding: 0;
 }
 
 .booking-panel .form-group input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  width: 1.15rem;
-  height: 1.15rem;
+  width: 1.25rem;
+  height: 1.25rem;
   padding: 0;
-  margin: 0;
+  margin: 0 0 0 0.35rem;
   opacity: 1;
+  background: transparent;
   /* dark native icon → white on dark theme */
-  filter: invert(1) brightness(1.2);
+  filter: invert(1) brightness(1.25);
 }
 
 @media (max-width: 768px) {
@@ -1716,8 +1740,9 @@ body.has-site-notice {
     width: 100%;
     max-width: 100%;
     min-width: 0;
+    min-height: 2.75rem;
     padding: 0.75rem 1rem;
-    font-size: 0.95rem;
+    font-size: 16px;
   }
   .booking-perks {
     gap: 0.55rem 1.1rem;

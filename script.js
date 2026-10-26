@@ -352,6 +352,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     section.hidden = false;
     section.removeAttribute("aria-hidden");
+    // Locale for native date UI (iPhone shows mm/dd/yyyy without this)
+    const lang = pageLang();
+    dateInput.setAttribute("lang", lang === "en" ? "en-GB" : lang === "ar" ? "ar" : "de-DE");
+    dateInput.setAttribute("color-scheme", "dark");
     if (form.dataset.bookingBound === "1") return;
     form.dataset.bookingBound = "1";
 
