@@ -235,6 +235,26 @@ document.addEventListener("DOMContentLoaded", () => {
     return `${ups > 0 ? "../".repeat(ups) : ""}index.html#bookingSection`;
   }
 
+  function refreshBookingLinkHrefs() {
+    const booking = String(cfg.bookingUrl || "").trim();
+    const useOwn = ownBookingEnabled();
+    const useCalendly = !useOwn && Boolean(booking) && isCalendlyUrl(booking);
+    const useExternal = !useOwn && Boolean(booking) && !isCalendlyUrl(booking);
+    const sectionHref = bookingCtaHref();
+    document.querySelectorAll("[data-booking]").forEach((el) => {
+      if (!(el instanceof HTMLAnchorElement)) return;
+      if (useOwn || useCalendly) {
+        el.href = sectionHref;
+        el.removeAttribute("target");
+        el.removeAttribute("rel");
+      } else if (useExternal) {
+        el.href = booking;
+        el.target = "_blank";
+        el.rel = "noopener noreferrer";
+      }
+    });
+  }
+
   function initBookingLinks() {
     const booking = String(cfg.bookingUrl || "").trim();
     const useOwn = ownBookingEnabled();
@@ -2292,7 +2312,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 "صفحة التقييمات"
               )}</a>`
         }
-        <a href="#bookingSection" class="btn btn-primary btn-sm" data-booking>${t(
+        <a href="${escapeHtml(bookingCtaHref())}" class="btn btn-primary btn-sm" data-booking>${t(
           "Demo-Termin wählen",
           "Book a demo",
           "احجز موعداً"
@@ -2306,6 +2326,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "عند اعتماد التقييمات عبر واجهة المنصة تظهر هنا تلقائياً."
       );
     }
+    refreshBookingLinkHrefs();
   }
 
   async function initLiveReviews() {
@@ -2360,7 +2381,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "Reviews temporarily unavailable.",
             "التقييمات غير متاحة مؤقتاً."
           )}</p>
-          <a href="#bookingSection" class="btn btn-outline btn-sm" data-booking>${t(
+          <a href="${escapeHtml(bookingCtaHref())}" class="btn btn-outline btn-sm" data-booking>${t(
             "Trotzdem Demo buchen",
             "Book a demo anyway",
             "احجز العرض رغم ذلك"
@@ -2373,6 +2394,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "يمكنك اختيار موعد عرض رغم ذلك."
           );
         }
+        refreshBookingLinkHrefs();
       }
     } finally {
       grid.classList.remove("is-loading");
