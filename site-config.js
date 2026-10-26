@@ -99,8 +99,8 @@ window.SITE_CONFIG = {
   demoVideoSrc: "assets/workpass-lohn-bridge-de.mp4",
   demoVideoByLang: {
     de: "assets/workpass-lohn-bridge-de.mp4",
-    en: "assets/workpass-lohn-bridge-en.mp4?v=22",
-    ar: "assets/workpass-lohn-bridge-ar.mp4?v=22",
+    en: "assets/workpass-lohn-bridge-en.mp4?v=23",
+    ar: "assets/workpass-lohn-bridge-ar.mp4?v=23",
   },
 
   /**
