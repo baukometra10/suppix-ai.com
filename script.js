@@ -2462,14 +2462,19 @@ document.addEventListener("DOMContentLoaded", () => {
       if (window.innerWidth > 768) {
         bar.classList.remove("visible");
         bar.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("mobile-cta-open");
         return;
       }
       const scrollY = window.scrollY;
+      const booking = document.getElementById("bookingSection");
       const contactTop = contact ? contact.offsetTop : Infinity;
-      const show = scrollY > 400 && scrollY < contactTop - window.innerHeight * 0.5;
+      const bookingTop = booking ? booking.offsetTop : Infinity;
+      const hideNear = Math.min(contactTop, bookingTop);
+      const show = scrollY > 400 && scrollY < hideNear - window.innerHeight * 0.45;
       if (show !== visible) {
         visible = show;
         bar.classList.toggle("visible", show);
+        document.body.classList.toggle("mobile-cta-open", show);
         bar.setAttribute("aria-hidden", show ? "false" : "true");
       }
     }

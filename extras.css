@@ -2084,8 +2084,21 @@ body.has-site-notice {
     padding-bottom: 4.5rem;
   }
 
+  /* Float sits above the sticky bar when the bar is hidden */
   .whatsapp-float {
-    bottom: 5.5rem;
+    bottom: calc(1.25rem + env(safe-area-inset-bottom));
+  }
+
+  body.has-mobile-cta .whatsapp-float {
+    bottom: calc(5.25rem + env(safe-area-inset-bottom));
+  }
+
+  /* When sticky bar is visible it already has WhatsApp — hide the float to avoid overlap */
+  body.mobile-cta-open .whatsapp-float {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.85);
+    visibility: hidden;
   }
 }
 

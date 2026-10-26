@@ -18,7 +18,7 @@
   <link rel="manifest" href="../site.webmanifest">
   <link rel="icon" href="../assets/icon-192.png" type="image/png" sizes="192x192">
   <link rel="apple-touch-icon" href="../assets/icon-192.png">
-  <link rel="icon" href="../assets/logo.png?v=20261026g" type="image/png">
+  <link rel="icon" href="../assets/logo.png?v=20261026h" type="image/png">
   <link rel="alternate" hreflang="de" href="https://suppixai.com/">
   <link rel="alternate" hreflang="en" href="https://suppixai.com/en/">
   <link rel="alternate" hreflang="ar" href="https://suppixai.com/ar/">
@@ -29,8 +29,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles.css">
-  <link rel="stylesheet" href="../extras.css?v=20261026g">
-  <link rel="stylesheet" href="../premium.css?v=20261026g">
+  <link rel="stylesheet" href="../extras.css?v=20261026h">
+  <link rel="stylesheet" href="../premium.css?v=20261026h">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -152,7 +152,7 @@
   <header class="header" id="header">
     <div class="container header-inner">
       <a href="index.html" class="logo">
-        <img src="../assets/logo.png?v=20261026g" alt="SUPPIX AI – Suppix AI UG" class="logo-img">
+        <img src="../assets/logo.png?v=20261026h" alt="SUPPIX AI – Suppix AI UG" class="logo-img">
         <div class="logo-text">
           <span class="logo-platform" data-brand-platform>WorkPass</span>
           <span class="logo-sub" data-brand-tagline>Enterprise Identity · Access · Workforce</span>
@@ -219,20 +219,38 @@
         <div class="hero-actions">
           <a href="#bookingSection" class="btn btn-primary btn-glow" data-booking>Book live demo</a>
           <a href="pilot.html" class="btn btn-accent">Start 14-day pilot</a>
-          <a href="#video" class="btn btn-outline">Watch product video</a>
+          <a href="#kurzvideo" class="btn btn-outline">45-second overview</a>
         </div>
         <div class="hero-quick-contact">
-          <a href="tel:+4917631676589" class="hero-quick-link" data-phone-link>📞 Call us</a>
-          <a href="https://wa.me/4917631676589?text=Hello%2C%20I%20am%20interested%20in%20WorkPass." class="hero-quick-link" id="heroWhatsApp">💬 WhatsApp</a>
+          <a href="tel:+4917631676589" class="hero-quick-link" data-phone-link>Call us</a>
+          <a href="https://wa.me/4917631676589?text=Hello%2C%20I%20am%20interested%20in%20WorkPass." class="hero-quick-link" id="heroWhatsApp">WhatsApp</a>
+          <a href="#pilot" class="hero-quick-link">Pilot in 14 days</a>
         </div>
       </div>
       <div class="hero-visual">
         <div class="hero-cards-showcase">
-          <img src="../assets/ausweis-workpass.png" alt="WorkPass ID card" class="hero-card-img hero-card-left">
-          <img src="../assets/app-splash.png" alt="WorkPass employee app" class="hero-card-img hero-card-center">
-          <img src="../assets/ausweis-workpass-blau.png" alt="WorkPass ID card" class="hero-card-img hero-card-right">
+          <img src="../assets/ausweis-workpass.png" alt="WorkPass ID card" class="hero-card-img hero-card-left" width="220" height="320" decoding="async" fetchpriority="high">
+          <img src="../assets/app-splash.png" alt="WorkPass employee app" class="hero-card-img hero-card-center" width="200" height="400" decoding="async" fetchpriority="high">
+          <img src="../assets/ausweis-workpass-blau.png" alt="WorkPass ID card" class="hero-card-img hero-card-right" width="220" height="320" decoding="async" loading="lazy">
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="hero-short-video reveal" id="kurzvideo">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Quick look</span>
+        <h2>WorkPass in 45 seconds</h2>
+        <p>Short intro – the full product video is further down the page.</p>
+      </div>
+      <div class="video-wrapper video-wrapper-real video-poster-host hero-short-stage">
+        <video controls playsinline preload="none" poster="../assets/video-poster.jpg?v=20261026h" title="WorkPass quick overview" data-short-clip="1">
+          <source src="../assets/workpass-lohn-bridge-en.mp4#t=0,45" type="video/mp4">
+          Your browser does not support video.
+        </video>
+      </div>
+      <p class="preview-note"><a href="#video">Full product video</a> · <a href="pilot.html">14-day pilot</a></p>
     </div>
   </section>
 
@@ -459,11 +477,11 @@
             </div>
           </div>
           <button type="button" class="video-poster-cover" id="demoVideoCover" aria-label="Play video">
-            <img src="../assets/video-poster.jpg?v=20261026g" alt="" class="video-poster-cover-img" width="1920" height="1080" decoding="async">
+            <img src="../assets/video-poster.jpg?v=20261026h" alt="" class="video-poster-cover-img" width="1920" height="1080" decoding="async">
             <span class="video-poster-play" aria-hidden="true"></span>
             <span class="video-poster-hint">Tap to play</span>
           </button>
-          <video id="demoVideo" controls playsinline preload="none" poster="../assets/video-poster.jpg?v=20261026g">
+          <video id="demoVideo" controls playsinline preload="none" poster="../assets/video-poster.jpg?v=20261026h">
             <source src="../assets/workpass-lohn-bridge-en.mp4" type="video/mp4">
           </video>
         </div>
@@ -690,7 +708,7 @@
               <em>Platform ↔ WorkPass Lohn</em>
             </div>
             <div class="lohn-video-frame">
-              <video controls playsinline preload="none" poster="../assets/video-poster.jpg?v=20261026g" title="WorkPass Lohn Bridge">
+              <video controls playsinline preload="none" poster="../assets/video-poster.jpg?v=20261026h" title="WorkPass Lohn Bridge">
                 <source src="../assets/workpass-lohn-bridge-en.mp4?v=21" type="video/mp4">
                 Your browser does not support video.
               </video>
@@ -756,27 +774,25 @@
         <span class="section-tag">Industries</span>
         <h2>Built for every sector</h2>
       </div>
-      <div class="industry-cards">
-        <div class="industry-card">
-          <div class="industry-icon">🏗️</div>
+      <div class="industry-cards industry-cards-cta">
+        <article class="industry-card">
           <span class="industry-pass">Construction</span>
-          <h3>Construction</h3>
-          <p>Sites, subcontractors and crafts – identity and access on location.</p>
-          <a href="../bau.html" class="industry-card-link">Learn more →</a>
-        </div>
-        <div class="industry-card">
-          <div class="industry-icon">⚙️</div>
+          <h3>Construction &amp; trades</h3>
+          <p class="industry-benefit">One benefit: subcontractors and your crew clearly separated at the gate – no paper lists.</p>
+          <a href="../bau.html" class="btn btn-outline btn-sm">See construction solution</a>
+        </article>
+        <article class="industry-card">
           <span class="industry-pass">Industry</span>
-          <h3>Industry</h3>
-          <p>Production, logistics and shift planning – live gate view and compliance.</p>
-          <a href="../industrie.html" class="industry-card-link">Learn more →</a>
-        </div>
-        <div class="industry-card">
-          <div class="industry-icon">🏢</div>
-          <span class="industry-pass">Your pass name</span>
-          <h3>All other sectors</h3>
-          <p>Logistics, hospitality, care, retail – your own pass branding.</p>
-        </div>
+          <h3>Industry &amp; logistics</h3>
+          <p class="industry-benefit">One benefit: shift times and gate live – ready for DATEV and day-end close.</p>
+          <a href="../industrie.html" class="btn btn-outline btn-sm">See industry solution</a>
+        </article>
+        <article class="industry-card">
+          <span class="industry-pass">Care</span>
+          <h3>Care &amp; support</h3>
+          <p class="industry-benefit">One benefit: attendance and handovers documented – GDPR-friendly and auditable.</p>
+          <a href="../pflege.html" class="btn btn-outline btn-sm">See care solution</a>
+        </article>
       </div>
     </div>
   </section>
@@ -897,7 +913,10 @@
         <li>Gate / live attendance for your leads</li>
         <li>Closing call with plan &amp; package advice</li>
       </ul>
-      <a href="#bookingSection" class="btn btn-accent" data-booking>Discuss a pilot in the demo</a>
+      <div class="pilot-actions">
+        <a href="pilot.html" class="btn btn-accent">Open 14-day pilot</a>
+        <a href="#bookingSection" class="btn btn-primary" data-booking>Pick a pilot demo time</a>
+      </div>
     </div>
   </section>
 
@@ -1141,7 +1160,7 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-brand"><a href="index.html" class="logo"><img src="../assets/logo-lockup.png?v=20261026g" alt="SUPPIX.AI – Suppix AI UG" class="logo-img"></a><p>Enterprise Identity, access control and workforce – flexible for construction, industry and every sector.</p></div>
+        <div class="footer-brand"><a href="index.html" class="logo"><img src="../assets/logo-lockup.png?v=20261026h" alt="SUPPIX.AI – Suppix AI UG" class="logo-img"></a><p>Enterprise Identity, access control and workforce – flexible for construction, industry and every sector.</p></div>
         <div class="footer-col"><h4>Product</h4><ul><li><a href="#features">Features</a></li><li><a href="#live-map">Live Map</a></li><li><a href="#shift">Before / After</a></li><li><a href="#roles">Roles</a></li><li><a href="#start">Start</a></li><li><a href="#care">Care</a></li><li><a href="#lohn">Payroll</a></li><li><a href="#branding">Branding</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#faq">FAQ</a></li><li><a href="#" data-login>Open portal</a></li></ul></div>
         <div class="footer-col"><h4>Company</h4><ul><li><a href="about-us.html">About</a></li><li><a href="time-tracking.html">Time tracking Berlin &amp; Europe</a></li>
             <li><a href="blog/">Guides / Blog</a></li><li><a href="pilot.html">14-day pilot</a></li><li><a href="roi.html">ROI time tracking</a></li><li><a href="demo.html">Book a demo</a></li><li><a href="compare-excel.html">vs Excel</a></li><li><a href="compare-time-clock.html">vs time clock</a></li><li><a href="../bau.html">Construction</a></li><li><a href="../industrie.html">Industry</a></li><li><a href="flyer.html">Flyer (PDF)</a></li><li><a href="../index.html">Deutsch</a></li><li><a href="../ar/index.html">العربية</a></li><li><a href="../pl/index.html">Polski</a></li></ul></div>
@@ -1171,8 +1190,8 @@
     </div>
   </div>
 
-  <link rel="preload" href="../assets/logo.png?v=20261026g" as="image">
-  <script src="../site-config.js?v=20261026g" defer></script>
-  <script src="../script.js?v=20261026g" defer></script>
+  <link rel="preload" href="../assets/logo.png?v=20261026h" as="image">
+  <script src="../site-config.js?v=20261026h" defer></script>
+  <script src="../script.js?v=20261026h" defer></script>
 </body>
 </html>
