@@ -45,7 +45,7 @@ Rechner + Demo: https://suppixai.com/#rechner
 
 Kein Big-Bang nötig.
 
-14 Tage · 1 Standort · klarer Beweis.  
+30 Tage · 1 Standort · klarer Beweis.  
 Dann Rollout – oder nicht.
 
 Pilot in der Demo besprechen: https://suppixai.com/demo.html

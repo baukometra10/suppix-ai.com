@@ -1188,7 +1188,7 @@ export async function handleOfferPost(body, env, cors, helpers) {
   const bodyHtml = `${intro}
     <table style="width:100%;border-collapse:collapse;font-size:14px;color:#0f172a">${rowsHtml}</table>
     ${notes ? `<p style="margin:16px 0 0;font-size:14px;color:#475569">${escapeHtml(notes)}</p>` : ""}
-    <p style="margin:16px 0 0;font-size:13px;color:#64748b">Gültigkeit: 14 Tage · Preise zzgl. MwSt. soweit gesetzlich vorgesehen · ${escapeHtml(brand)}</p>
+    <p style="margin:16px 0 0;font-size:13px;color:#64748b">Gültigkeit: 30 Tage · Preise zzgl. MwSt. soweit gesetzlich vorgesehen · ${escapeHtml(brand)}</p>
     ${ctaButton(offerPage, de ? "Angebot im Browser öffnen / drucken" : "Open / print offer")}
     ${ctaButton(`${website}/demo.html`, de ? "Demo buchen" : "Book a demo")}`;
 

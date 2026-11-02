@@ -37,7 +37,7 @@ WorkPass liefert:
 - Check-in per QR/NFC/GPS
 - Live-Lage für Einsatzleitung und Kunden-Pforte
 
-Partner-Modell: Co-Pilot auf 1 Kundenbaustelle (14 Tage), danach Rollout-Empfehlung.
+Partner-Modell: Co-Pilot auf 1 Kundenbaustelle (30 Tage), danach Rollout-Empfehlung.
 
 Demo: https://suppixai.com/demo.html  
 Bau-Fokus: https://suppixai.com/bau.html

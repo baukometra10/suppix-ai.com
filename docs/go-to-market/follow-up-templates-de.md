@@ -38,7 +38,7 @@ danke für heute. Kurz zusammengefasst, was wir gezeigt haben:
 - Fokus: {Bau/Industrie/Lohn}
 - Empfohlenes Paket: {Starter/Professional/Enterprise}
 
-**Vorschlag nächster Schritt:** {Pilot 14 Tage an 1 Standort / schriftliches Angebot / zweite Session mit IT}
+**Vorschlag nächster Schritt:** {Pilot 30 Tage an 1 Standort / schriftliches Angebot / zweite Session mit IT}
 
 Termin für Kickoff: {Link demo.html oder neuer Slot}
 
@@ -63,10 +63,10 @@ Team Suppix AI
 
 1. Ausgangslage (1–2 Sätze aus der Demo)  
 2. Empfohlenes Paket + Mitarbeiterzahl  
-3. Optional: Pilot 14 Tage / 1 Standort  
+3. Optional: Pilot 30 Tage / 1 Standort  
 4. Onboarding-Schritte (Tenant, Branding, Ausweise, Go-live)  
 5. Preis (Monatspreis + ggf. Setup)  
-6. Gültigkeit 14 Tage  
+6. Gültigkeit 30 Tage  
 7. Annahme per Antwort / Unterschrift  
 
 Rechtliches: AGB + Datenschutz verlinken (suppixai.com).  

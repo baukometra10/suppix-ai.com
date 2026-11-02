@@ -28,7 +28,7 @@ Satz: „Das ist der gleiche Flow, den Ihre Leitung jeden Morgen braucht – ohn
 ## 4. Preis & Pilot (5 Min)
 
 - Preisrechner / Paket nennen (nicht feilschen in der Demo)  
-- **Pilot anbieten:** 14 Tage · 1 Standort · Abschlussgespräch  
+- **Pilot anbieten:** 30 Tage · 1 Standort · Abschlussgespräch  
 - CTA: Termin für Kickoff oder schriftliches Angebot  
 
 ## 5. Einwand-Handling
