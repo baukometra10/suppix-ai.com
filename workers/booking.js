@@ -529,6 +529,77 @@ export async function handleBookingPost(body, env, cors, helpers) {
   const whenLabel = formatSlotLabel(slotStartIso, cfg.tz, lang);
   const de = !lang || lang.startsWith("de");
   const ar = lang && lang.startsWith("ar");
+  const waConfirmDraft = (() => {
+    const first = String(name || "").trim() || (de ? "dort" : ar ? "هناك" : "there");
+    if (de) {
+      return [
+        `Hallo ${first},`,
+        ``,
+        `vielen Dank – Ihr ${platform}-Demo-Termin ist bestätigt.`,
+        ``,
+        `📅 Termin: ${whenLabel}`,
+        `⏱ Dauer: ca. 30 Minuten`,
+        teamsUrl ? `🔗 Microsoft Teams: ${teamsUrl}` : null,
+        ``,
+        `Wir freuen uns darauf, Ihnen Live-Anwesenheit, Check-in und den Alltag mit ${platform} zu zeigen.`,
+        ``,
+        `Termin verwalten (umbuchen/absagen):`,
+        manageUrl,
+        ``,
+        `Bei Fragen antworten Sie einfach auf diese Nachricht.`,
+        `Ihr Team von ${brandCompany}`,
+        `${platform}`,
+      ]
+        .filter((line) => line !== null)
+        .join("\n");
+    }
+    if (ar) {
+      return [
+        `مرحباً ${first}،`,
+        ``,
+        `شكراً لكم – تم تأكيد موعد عرض ${platform}.`,
+        ``,
+        `📅 الموعد: ${whenLabel}`,
+        `⏱ المدة: نحو 30 دقيقة`,
+        teamsUrl ? `🔗 Microsoft Teams: ${teamsUrl}` : null,
+        ``,
+        `يسعدنا أن نعرض لكم الحضور المباشر وتسجيل الدخول ويوم العمل مع ${platform}.`,
+        ``,
+        `إدارة الموعد (إعادة جدولة/إلغاء):`,
+        manageUrl,
+        ``,
+        `لأي سؤال ردّوا على هذه الرسالة.`,
+        `فريق ${brandCompany}`,
+        `${platform}`,
+      ]
+        .filter((line) => line !== null)
+        .join("\n");
+    }
+    return [
+      `Hi ${first},`,
+      ``,
+      `thank you — your ${platform} demo is confirmed.`,
+      ``,
+      `📅 When: ${whenLabel}`,
+      `⏱ Length: about 30 minutes`,
+      teamsUrl ? `🔗 Microsoft Teams: ${teamsUrl}` : null,
+      ``,
+      `We look forward to showing you live presence, check-in, and day-to-day work with ${platform}.`,
+      ``,
+      `Manage (reschedule/cancel):`,
+      manageUrl,
+      ``,
+      `Just reply here if you have any questions.`,
+      `Your team at ${brandCompany}`,
+      `${platform}`,
+    ]
+      .filter((line) => line !== null)
+      .join("\n");
+  })();
+  const customerWaDigits = phoneDigitsForWa(phone);
+  const ownerWaNew = customerWaDigits
+    ? `https://wa.me/${customerWaDigits}?text=${encodeURIComponent(waConfirmDraft)}`
+    : "";
 
   const ownerMail = ownerEmailHtml({
     fields: {
@@ -536,6 +607,7 @@ export async function handleBookingPost(body, env, cors, helpers) {
       Name: name,
       EMail: email,
       Unternehmen: company,
+      Telefon: phone || "–",
       Paket: paket,
       Standort: location,
       "Demo-Typ": demoType,
@@ -546,6 +618,7 @@ export async function handleBookingPost(body, env, cors, helpers) {
       BookingId: id,
       Verwalten: manageUrl,
       ...(teamsUrl ? { Teams: teamsUrl } : {}),
+      ...(ownerWaNew ? { "WhatsApp an Kunde": ownerWaNew } : {}),
     },
     company: brandCompany,
     platform,
@@ -559,7 +632,9 @@ export async function handleBookingPost(body, env, cors, helpers) {
     reply_to: email,
     subject: `Demo-Termin – ${name} · ${whenLabel}`,
     html: ownerMail.html,
-    text: ownerMail.text,
+    text:
+      ownerMail.text +
+      (ownerWaNew ? `\n\n——— WhatsApp an Kunde ———\n${waConfirmDraft}\n${ownerWaNew}` : ""),
   });
 
   const greeting = name
@@ -924,17 +999,28 @@ function json(body, status, headers) {
   });
 }
 
+/** Normalize phone to E.164-ish (+49…) for SMS / WhatsApp. */
+function normalizePhoneE164(raw) {
+  let to = String(raw || "").replace(/[^\d+]/g, "");
+  if (!to) return "";
+  if (to.startsWith("00")) to = `+${to.slice(2)}`;
+  if (/^0\d+/.test(to)) to = `+49${to.slice(1)}`;
+  if (!to.startsWith("+")) to = `+${to}`;
+  return to;
+}
+
+function phoneDigitsForWa(raw) {
+  return normalizePhoneE164(raw).replace(/\D/g, "");
+}
+
 /** Optional Twilio SMS. Secrets: TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER */
 async function sendTwilioSms(env, toRaw, bodyText) {
   const sid = String(env.TWILIO_ACCOUNT_SID || "").trim();
   const token = String(env.TWILIO_AUTH_TOKEN || "").trim();
   const from = String(env.TWILIO_FROM_NUMBER || "").trim();
-  let to = String(toRaw || "").replace(/[^\d+]/g, "");
+  const to = normalizePhoneE164(toRaw);
   if (!sid || !token || !from) return { skipped: true, reason: "twilio not configured" };
   if (!to) return { skipped: true, reason: "no phone" };
-  if (to.startsWith("00")) to = `+${to.slice(2)}`;
-  if (/^0\d+/.test(to)) to = `+49${to.slice(1)}`;
-  if (!to.startsWith("+")) to = `+${to}`;
 
   const auth = btoa(`${sid}:${token}`);
   const res = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
@@ -943,7 +1029,7 @@ async function sendTwilioSms(env, toRaw, bodyText) {
       Authorization: `Basic ${auth}`,
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: new URLSearchParams({ To: to, From: from, Body: String(bodyText || "").slice(0, 320) }),
+    body: new URLSearchParams({ To: to, From: from, Body: String(bodyText || "").slice(0, 600) }),
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
@@ -952,21 +1038,167 @@ async function sendTwilioSms(env, toRaw, bodyText) {
   return { ok: true, sid: data.sid };
 }
 
-/**
- * Cron: send ~24h-before reminders (email to customer + owner WhatsApp deep-link).
- * Window: slot starts in 20–28 hours; status confirmed; reminder_sent_at NULL.
- */
-export async function runDemoReminders(env, helpers) {
-  const { sendResend, escapeHtml, emailShell, ctaButton, logoAttachment, ownerEmailHtml } = helpers;
-  if (!env.DB || !env.RESEND_API_KEY) {
-    return { ok: false, error: "not configured", sent: 0 };
+/** Polished WhatsApp draft the owner sends to the customer. */
+function ownerWhatsAppCustomerDraft({ kind, lang, name, platform, whenLabel, teamsUrl, manageUrl, brandCompany }) {
+  const de = !lang || lang.startsWith("de");
+  const ar = lang.startsWith("ar");
+  const first = String(name || "").trim() || (de ? "dort" : ar ? "هناك" : "there");
+  if (kind === "1h") {
+    if (de) {
+      return [
+        `Hallo ${first},`,
+        ``,
+        `in etwa einer Stunde startet Ihre ${platform}-Demo mit uns.`,
+        ``,
+        `📅 Termin: ${whenLabel}`,
+        `⏱ Dauer: ca. 30 Minuten`,
+        teamsUrl ? `🔗 Microsoft Teams: ${teamsUrl}` : null,
+        ``,
+        `Bitte halten Sie 2–3 konkrete Use-Cases bereit (z. B. Baustelle, Schicht, Subunternehmer) – dann zeigen wir genau das, was für Sie zählt.`,
+        ``,
+        `Falls Sie kurzfristig verhindert sind, können Sie den Termin hier umbuchen oder absagen:`,
+        manageUrl,
+        ``,
+        `Wir freuen uns auf Sie!`,
+        `Ihr Team von ${brandCompany}`,
+        `${platform}`,
+      ]
+        .filter((line) => line !== null)
+        .join("\n");
+    }
+    if (ar) {
+      return [
+        `مرحباً ${first}،`,
+        ``,
+        `بعد حوالي ساعة يبدأ عرض ${platform} معنا.`,
+        ``,
+        `📅 الموعد: ${whenLabel}`,
+        `⏱ المدة: نحو 30 دقيقة`,
+        teamsUrl ? `🔗 Microsoft Teams: ${teamsUrl}` : null,
+        ``,
+        `يفضّل تجهيز حالتين أو ثلاث من عملكم (موقع، وردية، مقاولون) لنركّز العرض على ما يهمّكم.`,
+        ``,
+        `إن تعذّر الحضور يمكنكم إعادة الجدولة أو الإلغاء من هنا:`,
+        manageUrl,
+        ``,
+        `إلى اللقاء قريباً!`,
+        `فريق ${brandCompany}`,
+        `${platform}`,
+      ]
+        .filter((line) => line !== null)
+        .join("\n");
+    }
+    return [
+      `Hi ${first},`,
+      ``,
+      `your ${platform} demo with us starts in about one hour.`,
+      ``,
+      `📅 When: ${whenLabel}`,
+      `⏱ Length: about 30 minutes`,
+      teamsUrl ? `🔗 Microsoft Teams: ${teamsUrl}` : null,
+      ``,
+      `If you can, bring 2–3 real use cases (site, shift, subcontractors) so we can tailor the walkthrough.`,
+      ``,
+      `Need to reschedule or cancel?`,
+      manageUrl,
+      ``,
+      `Looking forward to speaking with you.`,
+      `Your team at ${brandCompany}`,
+      `${platform}`,
+    ]
+      .filter((line) => line !== null)
+      .join("\n");
   }
 
-  const now = Date.now();
-  const fromIso = new Date(now + 20 * 3600 * 1000).toISOString();
-  const toIso = new Date(now + 28 * 3600 * 1000).toISOString();
+  // 24h
+  if (de) {
+    return [
+      `Hallo ${first},`,
+      ``,
+      `kurze, freundliche Erinnerung: morgen steht Ihre ${platform}-Demo an.`,
+      ``,
+      `📅 Termin: ${whenLabel}`,
+      `⏱ Dauer: ca. 30 Minuten`,
+      teamsUrl ? `🔗 Microsoft Teams: ${teamsUrl}` : null,
+      ``,
+      `In der Demo zeigen wir Live-Anwesenheit, Check-in und wie ${platform} den Alltag auf Baustelle und in der Pflege vereinfacht – passend zu Ihrem Paket.`,
+      ``,
+      `Umbuchen oder absagen jederzeit hier:`,
+      manageUrl,
+      ``,
+      `Bis morgen – wir freuen uns auf Sie!`,
+      `Ihr Team von ${brandCompany}`,
+      `${platform}`,
+    ]
+      .filter((line) => line !== null)
+      .join("\n");
+  }
+  if (ar) {
+    return [
+      `مرحباً ${first}،`,
+      ``,
+      `تذكير لطيف: غداً موعد عرض ${platform}.`,
+      ``,
+      `📅 الموعد: ${whenLabel}`,
+      `⏱ المدة: نحو 30 دقيقة`,
+      teamsUrl ? `🔗 Microsoft Teams: ${teamsUrl}` : null,
+      ``,
+      `سنعرض الحضور المباشر وتسجيل الدخول وكيف يبسّط ${platform} العمل اليومي.`,
+      ``,
+      `إعادة جدولة أو إلغاء من هنا:`,
+      manageUrl,
+      ``,
+      `إلى اللقاء غداً!`,
+      `فريق ${brandCompany}`,
+      `${platform}`,
+    ]
+      .filter((line) => line !== null)
+      .join("\n");
+  }
+  return [
+    `Hi ${first},`,
+    ``,
+    `friendly reminder: your ${platform} demo is tomorrow.`,
+    ``,
+    `📅 When: ${whenLabel}`,
+    `⏱ Length: about 30 minutes`,
+    teamsUrl ? `🔗 Microsoft Teams: ${teamsUrl}` : null,
+    ``,
+    `We'll walk through live presence, check-in, and how ${platform} simplifies day-to-day operations for your team.`,
+    ``,
+    `Reschedule or cancel anytime:`,
+    manageUrl,
+    ``,
+    `See you tomorrow — looking forward to it.`,
+    `Your team at ${brandCompany}`,
+    `${platform}`,
+  ]
+    .filter((line) => line !== null)
+    .join("\n");
+}
 
-  let rows = [];
+function customerSmsBody({ kind, lang, platform, whenLabel, manageUrl, teamsUrl }) {
+  const de = !lang || lang.startsWith("de");
+  const ar = lang.startsWith("ar");
+  if (kind === "1h") {
+    if (de) {
+      return `${platform}: Ihre Demo startet in ca. 1 Stunde (${whenLabel}).${teamsUrl ? ` Teams: ${teamsUrl}` : ""} Umbuchen: ${manageUrl}`;
+    }
+    if (ar) {
+      return `${platform}: يبدأ العرض خلال ساعة تقريباً (${whenLabel}).${teamsUrl ? ` Teams: ${teamsUrl}` : ""} إدارة: ${manageUrl}`;
+    }
+    return `${platform}: your demo starts in about 1 hour (${whenLabel}).${teamsUrl ? ` Teams: ${teamsUrl}` : ""} Manage: ${manageUrl}`;
+  }
+  if (de) {
+    return `${platform}-Erinnerung: Demo morgen ${whenLabel}.${teamsUrl ? ` Teams: ${teamsUrl}` : ""} Umbuchen: ${manageUrl}`;
+  }
+  if (ar) {
+    return `تذكير ${platform}: العرض غداً ${whenLabel}.${teamsUrl ? ` Teams: ${teamsUrl}` : ""} إدارة: ${manageUrl}`;
+  }
+  return `${platform} reminder: demo tomorrow ${whenLabel}.${teamsUrl ? ` Teams: ${teamsUrl}` : ""} Manage: ${manageUrl}`;
+}
+
+async function loadReminderRows(env, { fromIso, toIso, sentColumn }) {
   try {
     const res = await env.DB.prepare(
       `SELECT id, slot_start, slot_end, name, email, company, lang, manage_token, paket, demo_type, phone
@@ -974,16 +1206,29 @@ export async function runDemoReminders(env, helpers) {
        WHERE status = 'confirmed'
          AND slot_start >= ?
          AND slot_start < ?
-         AND (reminder_sent_at IS NULL OR reminder_sent_at = '')
+         AND (${sentColumn} IS NULL OR ${sentColumn} = '')
        LIMIT 40`
     )
       .bind(fromIso, toIso)
       .all();
-    rows = res?.results || [];
+    return { rows: res?.results || [], error: null };
   } catch (err) {
-    return { ok: false, error: String(err.message || err), sent: 0 };
+    const msg = String(err?.message || err);
+    if (sentColumn === "reminder_1h_sent_at" && /no such column|reminder_1h/i.test(msg)) {
+      return { rows: [], error: "missing reminder_1h_sent_at column – run schema-reminders-1h.sql" };
+    }
+    return { rows: [], error: msg };
+  }
+}
+
+async function processReminderBatch(env, helpers, { kind, fromIso, toIso, sentColumn }) {
+  const { sendResend, escapeHtml, emailShell, ctaButton, logoAttachment, ownerEmailHtml } = helpers;
+  const loaded = await loadReminderRows(env, { fromIso, toIso, sentColumn });
+  if (loaded.error && !loaded.rows.length) {
+    return { ok: false, error: loaded.error, sent: 0, checked: 0, window: { fromIso, toIso } };
   }
 
+  const rows = loaded.rows;
   const website = String(env.WEBSITE || "https://suppixai.com").replace(/\/$/, "");
   const fromEmail = env.FROM_EMAIL || "WorkPass <info@suppixai.com>";
   const notifyFrom = env.NOTIFY_FROM_EMAIL || fromEmail;
@@ -992,10 +1237,11 @@ export async function runDemoReminders(env, helpers) {
   const brandCompany = env.BRAND_COMPANY || "Suppix AI UG";
   const ownerEmail = env.OWNER_EMAIL || toEmail;
   const platform = env.PLATFORM || "WorkPass";
-  const whatsapp = String(env.WHATSAPP || "4917631676589").replace(/\D/g, "");
+  const ownerPhone = env.WHATSAPP || env.PHONE || "";
   const teamsUrl = teamsMeetingUrl(env);
   const cfg = bookingConfig(env);
   let sent = 0;
+  const details = [];
 
   for (const row of rows) {
     const lang = String(row.lang || "de").toLowerCase();
@@ -1007,12 +1253,19 @@ export async function runDemoReminders(env, helpers) {
       manageLang !== "de" ? `&lang=${manageLang}` : ""
     }`;
     const demoUrl = `${website}/demo.html`;
+    const is1h = kind === "1h";
 
-    const subject = de
-      ? `Erinnerung: ${platform}-Demo morgen – ${whenLabel}`
-      : ar
-        ? `تذكير: عرض ${platform} غداً – ${whenLabel}`
-        : `Reminder: ${platform} demo tomorrow – ${whenLabel}`;
+    const subject = is1h
+      ? de
+        ? `Bald: ${platform}-Demo in ca. 1 Stunde – ${whenLabel}`
+        : ar
+          ? `قريباً: عرض ${platform} خلال ساعة – ${whenLabel}`
+          : `Soon: ${platform} demo in about 1 hour – ${whenLabel}`
+      : de
+        ? `Erinnerung: ${platform}-Demo morgen – ${whenLabel}`
+        : ar
+          ? `تذكير: عرض ${platform} غداً – ${whenLabel}`
+          : `Reminder: ${platform} demo tomorrow – ${whenLabel}`;
 
     const greeting = row.name
       ? de
@@ -1025,18 +1278,34 @@ export async function runDemoReminders(env, helpers) {
         : ar
           ? "مرحباً،"
           : "Hi,";
-    const title = de ? "Demo-Erinnerung" : ar ? "تذكير بالعرض" : "Demo reminder";
-    const intro = de
-      ? `kurze Erinnerung: Ihre <strong style="color:#0f172a">${escapeHtml(platform)}</strong>-Demo ist morgen.`
-      : ar
-        ? `تذكير قصير: عرض <strong style="color:#0f172a">${escapeHtml(platform)}</strong> غداً.`
-        : `quick reminder: your <strong style="color:#0f172a">${escapeHtml(platform)}</strong> demo is tomorrow.`;
+    const title = is1h
+      ? de
+        ? "Demo startet bald"
+        : ar
+          ? "العرض يبدأ قريباً"
+          : "Demo starting soon"
+      : de
+        ? "Demo-Erinnerung"
+        : ar
+          ? "تذكير بالعرض"
+          : "Demo reminder";
+    const intro = is1h
+      ? de
+        ? `in etwa <strong style="color:#0f172a">einer Stunde</strong> startet Ihre <strong style="color:#0f172a">${escapeHtml(platform)}</strong>-Demo.`
+        : ar
+          ? `بعد <strong style="color:#0f172a">ساعة تقريباً</strong> يبدأ عرض <strong style="color:#0f172a">${escapeHtml(platform)}</strong>.`
+          : `your <strong style="color:#0f172a">${escapeHtml(platform)}</strong> demo starts in about <strong style="color:#0f172a">one hour</strong>.`
+      : de
+        ? `kurze Erinnerung: Ihre <strong style="color:#0f172a">${escapeHtml(platform)}</strong>-Demo ist morgen.`
+        : ar
+          ? `تذكير قصير: عرض <strong style="color:#0f172a">${escapeHtml(platform)}</strong> غداً.`
+          : `quick reminder: your <strong style="color:#0f172a">${escapeHtml(platform)}</strong> demo is tomorrow.`;
     const whenTitle = de ? "Ihr Termin" : ar ? "موعدك" : "Your appointment";
     const teamsLabel = de ? "Microsoft Teams beitreten" : ar ? "الانضمام عبر Teams" : "Join Microsoft Teams";
     const manageLabel = de ? "Umbuchen oder absagen" : ar ? "إعادة جدولة أو إلغاء" : "Reschedule or cancel";
     const demoLabel = de ? "Demo-Seite öffnen" : ar ? "فتح صفحة العرض" : "Open demo page";
     const closing = de
-      ? `Bis bald<br><strong style="color:#0f172a">Ihr Team von ${escapeHtml(brandCompany)}</strong>`
+      ? `Bis gleich<br><strong style="color:#0f172a">Ihr Team von ${escapeHtml(brandCompany)}</strong>`
       : ar
         ? `إلى اللقاء<br><strong style="color:#0f172a">فريق ${escapeHtml(brandCompany)}</strong>`
         : `See you soon<br><strong style="color:#0f172a">Your team at ${escapeHtml(brandCompany)}</strong>`;
@@ -1059,7 +1328,7 @@ export async function runDemoReminders(env, helpers) {
 </table>
 ${teamsUrl ? ctaButton(teamsUrl, teamsLabel) : ""}
 ${ctaButton(manageUrl, manageLabel)}
-${ctaButton(demoUrl, demoLabel)}
+${is1h ? "" : ctaButton(demoUrl, demoLabel)}
 <p style="margin:12px 0 0;font-size:14px;line-height:1.6;color:#334155">${closing}</p>`,
       footerNote: `${escapeHtml(brandCompany)} · `,
       dir: ar ? "rtl" : "ltr",
@@ -1067,10 +1336,10 @@ ${ctaButton(demoUrl, demoLabel)}
     });
 
     const text = de
-      ? `Hallo ${row.name},\n\nkurze Erinnerung: Ihre ${platform}-Demo ist morgen um ${whenLabel}.\n${teamsUrl ? `Teams: ${teamsUrl}\n` : ""}Umbuchen/Absagen: ${manageUrl}\nDemo-Seite: ${demoUrl}\n\nBis bald\n${platform}`
+      ? `Hallo ${row.name},\n\n${is1h ? "in ca. einer Stunde" : "morgen"} startet Ihre ${platform}-Demo (${whenLabel}).\n${teamsUrl ? `Teams: ${teamsUrl}\n` : ""}Umbuchen/Absagen: ${manageUrl}\n\nBis bald\n${platform}`
       : ar
-        ? `مرحباً ${row.name},\n\nتذكير: عرض ${platform} غداً الساعة ${whenLabel}.\n${teamsUrl ? `Teams: ${teamsUrl}\n` : ""}إدارة الموعد: ${manageUrl}\n\nإلى اللقاء\n${platform}`
-        : `Hi ${row.name},\n\nreminder: your ${platform} demo is tomorrow at ${whenLabel}.\n${teamsUrl ? `Teams: ${teamsUrl}\n` : ""}Reschedule/cancel: ${manageUrl}\nDemo page: ${demoUrl}\n\nSee you soon\n${platform}`;
+        ? `مرحباً ${row.name},\n\n${is1h ? "خلال ساعة تقريباً" : "غداً"} عرض ${platform} (${whenLabel}).\n${teamsUrl ? `Teams: ${teamsUrl}\n` : ""}إدارة: ${manageUrl}\n\nإلى اللقاء\n${platform}`
+        : `Hi ${row.name},\n\nyour ${platform} demo is ${is1h ? "in about one hour" : "tomorrow"} (${whenLabel}).\n${teamsUrl ? `Teams: ${teamsUrl}\n` : ""}Manage: ${manageUrl}\n\nSee you soon\n${platform}`;
 
     await sendResend(env, {
       from: fromEmail,
@@ -1082,26 +1351,45 @@ ${ctaButton(demoUrl, demoLabel)}
       attachments: logoAttachment ? [logoAttachment(logo)] : undefined,
     });
 
-    const smsBody = de
-      ? `WorkPass-Demo morgen ${whenLabel}. Umbuchen: ${manageUrl}`
-      : ar
-        ? `عرض WorkPass غداً ${whenLabel}. إدارة: ${manageUrl}`
-        : `WorkPass demo tomorrow ${whenLabel}. Manage: ${manageUrl}`;
+    const smsBody = customerSmsBody({
+      kind,
+      lang,
+      platform,
+      whenLabel,
+      manageUrl,
+      teamsUrl,
+    });
     const smsResult = await sendTwilioSms(env, row.phone, smsBody);
 
-    const waText = encodeURIComponent(
-      de
-        ? `Hallo ${row.name}, Erinnerung an Ihre WorkPass-Demo morgen: ${whenLabel}. Umbuchen: ${manageUrl}`
+    const waDraft = ownerWhatsAppCustomerDraft({
+      kind,
+      lang,
+      name: row.name,
+      platform,
+      whenLabel,
+      teamsUrl,
+      manageUrl,
+      brandCompany,
+    });
+    const customerWaDigits = phoneDigitsForWa(row.phone);
+    const ownerWa = customerWaDigits
+      ? `https://wa.me/${customerWaDigits}?text=${encodeURIComponent(waDraft)}`
+      : "";
+
+    let ownerSmsResult = null;
+    if (is1h) {
+      const ownerSms = de
+        ? `${platform}: Demo in ca. 1 Std – ${row.name}${row.company ? ` (${row.company})` : ""} · ${whenLabel}`
         : ar
-          ? `مرحباً ${row.name}، تذكير بعرض WorkPass غداً: ${whenLabel}`
-          : `Hi ${row.name}, reminder for your WorkPass demo tomorrow: ${whenLabel}. Manage: ${manageUrl}`
-    );
-    const ownerWa = `https://wa.me/${whatsapp}?text=${waText}`;
+          ? `${platform}: عرض خلال ساعة – ${row.name}${row.company ? ` (${row.company})` : ""} · ${whenLabel}`
+          : `${platform}: demo in ~1h – ${row.name}${row.company ? ` (${row.company})` : ""} · ${whenLabel}`;
+      ownerSmsResult = await sendTwilioSms(env, ownerPhone, ownerSms);
+    }
 
     const ownerMail = ownerEmailHtml
       ? ownerEmailHtml({
           fields: {
-            Typ: "Demo-Erinnerung (24h)",
+            Typ: is1h ? "Demo-Erinnerung (~1h)" : "Demo-Erinnerung (24h)",
             Name: row.name,
             EMail: row.email,
             Unternehmen: row.company || "–",
@@ -1109,14 +1397,23 @@ ${ctaButton(demoUrl, demoLabel)}
             Termin: whenLabel,
             Paket: row.paket || "–",
             "Demo-Typ": row.demo_type || "–",
-            SMS: smsResult?.ok
+            "SMS Kunde": smsResult?.ok
               ? "gesendet"
               : smsResult?.skipped
                 ? `übersprungen (${smsResult.reason || "–"})`
                 : smsResult?.error || "–",
+            ...(ownerSmsResult
+              ? {
+                  "SMS Owner": ownerSmsResult?.ok
+                    ? "gesendet"
+                    : ownerSmsResult?.skipped
+                      ? `übersprungen (${ownerSmsResult.reason || "–"})`
+                      : ownerSmsResult?.error || "–",
+                }
+              : {}),
             Teams: teamsUrl || "–",
             Verwalten: manageUrl,
-            WhatsApp: ownerWa,
+            ...(ownerWa ? { "WhatsApp an Kunde": ownerWa } : { WhatsApp: "kein Kundentelefon" }),
             Angebot: `${website}/angebot.html?name=${encodeURIComponent(row.name)}&email=${encodeURIComponent(row.email)}&company=${encodeURIComponent(row.company || "")}&paket=${encodeURIComponent(row.paket || "")}`,
           },
           company: brandCompany,
@@ -1129,28 +1426,64 @@ ${ctaButton(demoUrl, demoLabel)}
     await sendResend(env, {
       from: notifyFrom,
       to: [ownerEmail],
-      subject: `[Reminder] Demo ${whenLabel} – ${row.name}`,
+      subject: `[Reminder${is1h ? " 1h" : ""}] Demo ${whenLabel} – ${row.name}`,
       html: ownerMail?.html,
       text:
-        ownerMail?.text ||
-        [
-          `Kunde: ${row.name} <${row.email}>`,
-          row.company ? `Firma: ${row.company}` : null,
-          `Termin: ${whenLabel}`,
-          teamsUrl ? `Teams: ${teamsUrl}` : null,
-          `Verwalten: ${manageUrl}`,
-        ]
-          .filter(Boolean)
-          .join("\n"),
+        (ownerMail?.text || "") +
+        (ownerWa ? `\n\n——— WhatsApp-Vorlage an Kunde ———\n${waDraft}\n${ownerWa}` : `\n\n${waDraft}`),
     });
 
-    await env.DB.prepare(`UPDATE demo_bookings SET reminder_sent_at = datetime('now') WHERE id = ?`)
+    await env.DB.prepare(`UPDATE demo_bookings SET ${sentColumn} = datetime('now') WHERE id = ?`)
       .bind(row.id)
       .run();
     sent += 1;
+    details.push({
+      id: row.id,
+      kind,
+      sms: smsResult?.ok ? "ok" : smsResult?.skipped ? smsResult.reason : smsResult?.error,
+    });
   }
 
-  return { ok: true, sent, checked: rows.length, window: { fromIso, toIso } };
+  return {
+    ok: true,
+    sent,
+    checked: rows.length,
+    window: { fromIso, toIso },
+    details,
+    warning: loaded.error || undefined,
+  };
+}
+
+/**
+ * Cron: ~24h email/SMS reminder + ~1h SMS/email reminder.
+ * 24h window: slot in 20–28 hours (reminder_sent_at).
+ * 1h window: slot in 45–90 minutes (reminder_1h_sent_at).
+ */
+export async function runDemoReminders(env, helpers) {
+  if (!env.DB || !env.RESEND_API_KEY) {
+    return { ok: false, error: "not configured", sent: 0 };
+  }
+
+  const now = Date.now();
+  const r24 = await processReminderBatch(env, helpers, {
+    kind: "24h",
+    fromIso: new Date(now + 20 * 3600 * 1000).toISOString(),
+    toIso: new Date(now + 28 * 3600 * 1000).toISOString(),
+    sentColumn: "reminder_sent_at",
+  });
+  const r1h = await processReminderBatch(env, helpers, {
+    kind: "1h",
+    fromIso: new Date(now + 45 * 60 * 1000).toISOString(),
+    toIso: new Date(now + 90 * 60 * 1000).toISOString(),
+    sentColumn: "reminder_1h_sent_at",
+  });
+
+  return {
+    ok: Boolean(r24.ok || r1h.ok),
+    sent: (r24.sent || 0) + (r1h.sent || 0),
+    reminder24h: r24,
+    reminder1h: r1h,
+  };
 }
 
 /** Email a printable offer summary (HTML) – customer + owner copy. */

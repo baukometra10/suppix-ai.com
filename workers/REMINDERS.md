@@ -1,18 +1,20 @@
 # Demo-Reminder & Angebot
 
-## 24h-Reminder
+## Zwei Reminder-Stufen
 
-- Cron: stündlich (`0 * * * *` in `wrangler.toml`)
-- Fenster: Termin in **20–28 Stunden**
-- Kunde: Erinnerungs-E-Mail (Resend)
-- Owner: E-Mail mit WhatsApp-Vorlage-Link + Link zu `angebot.html`
-- Spalte: `demo_bookings.reminder_sent_at`
+Cron: alle **15 Minuten** (`*/15 * * * *` in `wrangler.toml`)
 
-Migration (einmalig remote):
+| Stufe | Fenster | Kunde | Owner | Spalte |
+|-------|---------|-------|-------|--------|
+| ~24h | Termin in **20–28 Stunden** | E-Mail + SMS (wenn Telefon) | E-Mail + WhatsApp-Vorlage an Kunde | `reminder_sent_at` |
+| ~1h | Termin in **45–90 Minuten** | E-Mail + **SMS** | E-Mail + SMS an Owner-Nummer + WhatsApp-Vorlage | `reminder_1h_sent_at` |
+
+Migrationen (einmalig remote):
 
 ```bash
 cd workers
 npx wrangler d1 execute suppixai-bookings --remote --file=./schema-reminders.sql
+npx wrangler d1 execute suppixai-bookings --remote --file=./schema-reminders-1h.sql
 ```
 
 Manuell testen:
@@ -24,8 +26,9 @@ curl -X POST https://suppixai-contact.suppix-ai.workers.dev/cron/reminders \
 
 ## Reminder- & Storno-Mails
 
-- Kunden-Erinnerung (~24h vorher): HTML mit Logo, Termin-Box, Buttons (Teams / Verwalten / Demo)
+- Kunden-Erinnerung (~24h / ~1h): HTML mit Logo, Termin-Box, Buttons (Teams / Verwalten)
 - Absage (`termin.html` → POST cancel): Status `cancelled` in D1, Slot frei, HTML-Mail an Kunde + Owner (`STORNIERT:…` an OWNER_EMAIL und TO_EMAIL)
+- Vergangene Termine können nicht storniert werden (API + UI)
 
 ## Microsoft Teams (kostenlos möglich)
 
@@ -35,7 +38,7 @@ curl -X POST https://suppixai-contact.suppix-ai.workers.dev/cron/reminders \
 
 Der Link erscheint in Bestätigung, Reminder und ICS. Ohne URL kein Teams-Button (Demo bleibt per Termin-Absprache).
 
-## SMS (optional, Twilio)
+## SMS (Twilio)
 
 Secrets:
 
@@ -51,7 +54,13 @@ Phone-Spalte:
 npx wrangler d1 execute suppixai-bookings --remote --file=./schema-phone.sql
 ```
 
-Kunde trägt optional Telefon im Buchungsformular ein → Reminder per SMS + E-Mail.
+Kunde trägt Telefon im Buchungsformular ein → Reminder per SMS + E-Mail.
+Ohne Telefon: nur E-Mail (1h-SMS entfällt für den Kunden).
+
+## WhatsApp-Vorlage (Owner → Kunde)
+
+In der Owner-Mail steht ein Link **WhatsApp an Kunde** (`wa.me/<Kundentelefon>?text=…`) mit professionellem DE/EN/AR-Text (Bestätigung bzw. Erinnerung).  
+Voraussetzung: Telefonnummer bei der Buchung.
 
 ## Angebot
 

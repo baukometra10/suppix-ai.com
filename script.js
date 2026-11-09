@@ -177,16 +177,27 @@ document.addEventListener("DOMContentLoaded", () => {
     return cfg.platform || cfg.product || "WorkPass";
   }
 
+  function polishedWhatsAppIntro() {
+    const p = platformName();
+    return t(
+      `Hallo Suppix AI Team,\n\nich interessiere mich für ${p} – digitale Anwesenheit, Check-in und Zeiterfassung ohne Excel-Chaos.\n\nKönnen wir bitte eine kurze Demo (ca. 30 Min.) vereinbaren?\n\nUnternehmen:\nStandort / Branche:\nMitarbeiterzahl (ca.):\n\nVielen Dank!`,
+      `Hello Suppix AI team,\n\nI am interested in ${p} – live presence, check-in and time tracking without spreadsheet chaos.\n\nCould we schedule a short demo (about 30 minutes)?\n\nCompany:\nSite / industry:\nApprox. headcount:\n\nThank you!`,
+      `مرحباً فريق Suppix AI،\n\nأهتم بـ ${p} – الحضور المباشر وتسجيل الدخول وتتبع الوقت دون فوضى الجداول.\n\nهل يمكننا حجز عرض قصير (نحو 30 دقيقة)؟\n\nالشركة:\nالموقع / القطاع:\nعدد الموظفين تقريباً:\n\nشكراً لكم!`
+    );
+  }
+
+  function polishedWhatsAppDemoRequest() {
+    const p = platformName();
+    return t(
+      `Hallo Suppix AI Team,\n\nich möchte einen Demo-Termin für ${p} buchen.\n\nBevorzugte Zeiten (falls möglich):\nUnternehmen:\nKurz zum Use-Case (Baustelle / Pflege / Schicht):\n\nBitte schicken Sie mir die nächsten freien Slots – danke!`,
+      `Hello Suppix AI team,\n\nI would like to book a ${p} demo.\n\nPreferred times (if any):\nCompany:\nUse case (construction / care / shifts):\n\nPlease send the next available slots — thank you!`,
+      `مرحباً فريق Suppix AI،\n\nأود حجز موعد عرض لـ ${p}.\n\nالأوقات المفضّلة (إن وُجدت):\nالشركة:\nحالة الاستخدام (موقع / رعاية / ورديات):\n\nأرجو إرسال أقرب المواعيد المتاحة — شكراً!`
+    );
+  }
+
   function initContactWhatsApp() {
     const link = document.getElementById("contactWhatsApp");
-    setWhatsAppLink(
-      link,
-      t(
-        `Hallo, ich interessiere mich für ${platformName()}.`,
-        `Hello, I am interested in ${platformName()}.`,
-        `مرحبا، أهتم بـ ${platformName()}.`
-      )
-    );
+    setWhatsAppLink(link, polishedWhatsAppIntro());
   }
 
   function isCalendlyUrl(url) {
@@ -286,14 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
             : t("Termin online buchen", "Book a time online", "احجز موعداً أونلاين");
         }
       } else {
-        setWhatsAppLink(
-          el,
-          t(
-            `Hallo, ich möchte einen Demo-Termin für ${platformName()} vereinbaren.`,
-            `Hello, I would like to schedule a ${platformName()} demo.`,
-            `مرحبا، أود حجز موعد عرض لـ ${platformName()}.`
-          )
-        );
+        setWhatsAppLink(el, polishedWhatsAppDemoRequest());
         el.hidden = false;
         if (el.dataset.bookingLabel === "auto") {
           el.textContent = t(
@@ -315,14 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const waAlt =
       document.getElementById("bookingWhatsAppAlt") || document.getElementById("calendlyWhatsAppAlt");
     if (waAlt) {
-      setWhatsAppLink(
-        waAlt,
-        t(
-          `Hallo, ich möchte einen Demo-Termin für ${platformName()} vereinbaren.`,
-          `Hello, I would like to schedule a ${platformName()} demo.`,
-          `مرحبا، أود حجز موعد عرض لـ ${platformName()}.`
-        )
-      );
+      setWhatsAppLink(waAlt, polishedWhatsAppDemoRequest());
     }
 
     if (useOwn) {
@@ -606,14 +603,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function initHeroWhatsApp() {
     const link = document.getElementById("heroWhatsApp");
-    setWhatsAppLink(
-      link,
-      t(
-        `Hallo, ich interessiere mich für ${platformName()}.`,
-        `Hello, I am interested in ${platformName()}.`,
-        `مرحبا، أهتم بـ ${platformName()}.`
-      )
-    );
+    setWhatsAppLink(link, polishedWhatsAppIntro());
   }
 
   function applyBranding() {
@@ -2425,14 +2415,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function initWhatsApp() {
     const btn = document.getElementById("whatsappBtn");
     if (!btn) return;
-    setWhatsAppLink(
-      btn,
-      t(
-        `Hallo, ich interessiere mich für ${platformName()}. Können wir eine Demo vereinbaren?`,
-        `Hello, I am interested in ${platformName()}. Can we schedule a demo?`,
-        `مرحبا، أهتم بـ ${platformName()}. هل يمكننا حجز عرض تجريبي؟`
-      )
-    );
+    setWhatsAppLink(btn, polishedWhatsAppIntro());
     btn.setAttribute("aria-label", t("Demo per WhatsApp anfragen", "Request demo via WhatsApp", "اطلب عرضاً عبر واتساب"));
     btn.setAttribute("data-tooltip", t("Demo per WhatsApp", "Demo via WhatsApp", "عرض عبر واتساب"));
   }
@@ -2445,14 +2428,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("has-mobile-cta");
 
     if (waBtn) {
-      setWhatsAppLink(
-        waBtn,
-        t(
-          `Hallo, ich möchte eine Demo für ${platformName()} buchen.`,
-          `Hello, I would like to book a ${platformName()} demo.`,
-          `مرحبا، أريد حجز عرض لـ ${platformName()}.`
-        )
-      );
+      setWhatsAppLink(waBtn, polishedWhatsAppDemoRequest());
     }
 
     const contact = document.getElementById("kontakt") || document.getElementById("contact");
