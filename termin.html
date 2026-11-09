@@ -95,6 +95,8 @@
           emailFollows: "Sie und wir erhalten eine Bestätigung per E-Mail. Sie können sofort einen neuen Termin buchen.",
           cancelFail: "Absage fehlgeschlagen. Bitte E-Mail an info@suppixai.com.",
           cancelledHint: "Der Termin ist nicht mehr aktiv. Buchen Sie bei Bedarf einen neuen Slot.",
+          past: "Dieser Termin ist bereits vorbei und kann nicht mehr storniert werden.",
+          pastHint: "Vergangene Termine lassen sich nicht absagen. Bei Bedarf einen neuen Slot buchen.",
           imprint: "Impressum",
           privacy: "Datenschutz",
           htmlLang: "de",
@@ -122,6 +124,8 @@
           emailFollows: "You and we will get email confirmation. You can book a new time now.",
           cancelFail: "Cancel failed. Please email info@suppixai.com.",
           cancelledHint: "This appointment is no longer active. Book a new slot if needed.",
+          past: "This appointment is already over and can no longer be cancelled.",
+          pastHint: "Past appointments cannot be cancelled. Book a new slot if needed.",
           imprint: "Imprint",
           privacy: "Privacy",
           htmlLang: "en",
@@ -149,6 +153,8 @@
           emailFollows: "ستصلك رسالة تأكيد ونحن أيضاً. يمكنك حجز موعد جديد الآن.",
           cancelFail: "فشل الإلغاء. راسل info@suppixai.com.",
           cancelledHint: "الموعد لم يعد فعالاً. احجز موعداً جديداً عند الحاجة.",
+          past: "انتهى هذا الموعد ولا يمكن إلغاؤه بعد الآن.",
+          pastHint: "لا يمكن إلغاء المواعيد المنتهية. احجز موعداً جديداً عند الحاجة.",
           imprint: "البيانات القانونية",
           privacy: "الخصوصية",
           htmlLang: "ar",
@@ -226,6 +232,16 @@
             statusEl.textContent = t.emailFollows;
             return;
           }
+          if (d.past || d.cancellable === false) {
+            lead.textContent = t.past;
+            whenEl.textContent = d.label || d.slotStart || "";
+            metaEl.textContent = t.pastHint || "";
+            details.hidden = false;
+            details.classList.add("is-past");
+            actions.hidden = false;
+            cancelBtn.hidden = true;
+            return;
+          }
           lead.textContent = t.yourBooking;
           whenEl.textContent = d.label || d.slotStart;
           metaEl.textContent = [d.demoType, d.paket, d.location, d.timezone].filter(Boolean).join(" · ");
@@ -247,10 +263,21 @@
           body: JSON.stringify({ token: token, action: "cancel" }),
         })
           .then(function (r) {
-            return r.json();
+            return r.json().then(function (d) {
+              return { httpOk: r.ok, d: d };
+            });
           })
-          .then(function (d) {
-            if (!d.ok) throw new Error(d.error || "fail");
+          .then(function (res) {
+            const d = res.d || {};
+            if (d.past || d.error === "past") {
+              lead.textContent = d.message || t.past;
+              metaEl.textContent = t.pastHint || "";
+              details.classList.add("is-past");
+              cancelBtn.hidden = true;
+              statusEl.textContent = "";
+              return;
+            }
+            if (!res.httpOk || !d.ok) throw new Error(d.error || "fail");
             lead.textContent = t.cancelledOk;
             statusEl.textContent = t.emailFollows;
             metaEl.textContent = t.cancelledHint || "";

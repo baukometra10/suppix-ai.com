@@ -686,6 +686,13 @@ ${ctaButton(manageUrl, manageLabel)}
   );
 }
 
+/** True if the appointment end (or start) is already in the past. */
+function isBookingPast(row) {
+  const endMs = Date.parse(String(row.slot_end || row.slot_start || ""));
+  if (!Number.isFinite(endMs)) return false;
+  return endMs <= Date.now();
+}
+
 export async function handleManageGet(request, env, cors) {
   const cfg = bookingConfig(env);
   const url = new URL(request.url);
@@ -700,10 +707,14 @@ export async function handleManageGet(request, env, cors) {
     .bind(token)
     .first();
   if (!row) return json({ ok: false, error: "Not found" }, 404, cors);
+  const past = isBookingPast(row);
+  const cancellable = row.status === "confirmed" && !past;
   return json(
     {
       ok: true,
       status: row.status,
+      past,
+      cancellable,
       slotStart: row.slot_start,
       slotEnd: row.slot_end,
       label: formatSlotLabel(row.slot_start, cfg.tz, row.lang || "de"),
@@ -736,6 +747,16 @@ export async function handleManagePost(body, env, cors, helpers) {
   if (!row) return json({ ok: false, error: "Not found" }, 404, cors);
   if (row.status !== "confirmed") {
     return json({ ok: true, status: row.status, already: true }, 200, cors);
+  }
+  if (isBookingPast(row)) {
+    const lang = String(row.lang || "de").toLowerCase().slice(0, 2);
+    const msg =
+      lang === "en"
+        ? "This appointment is already over and can no longer be cancelled."
+        : lang === "ar"
+          ? "انتهى هذا الموعد ولا يمكن إلغاؤه بعد الآن."
+          : "Dieser Termin liegt bereits in der Vergangenheit und kann nicht mehr storniert werden.";
+    return json({ ok: false, error: "past", message: msg, past: true }, 409, cors);
   }
 
   await env.DB.prepare(`UPDATE demo_bookings SET status = 'cancelled' WHERE id = ?`)
