@@ -988,6 +988,26 @@ document.addEventListener("DOMContentLoaded", () => {
     if (mapsUrl.startsWith("http")) {
       document.querySelectorAll("[data-google-business]").forEach((el) => {
         el.href = mapsUrl;
+        el.target = "_blank";
+        el.rel = "noopener noreferrer";
+      });
+      document.querySelectorAll("[data-google-maps-embed]").forEach((wrap) => {
+        let hit = wrap.querySelector("a.contact-map-hit");
+        if (!hit) {
+          hit = document.createElement("a");
+          hit.className = "contact-map-hit";
+          hit.target = "_blank";
+          hit.rel = "noopener noreferrer";
+          const label = t(
+            "Suppix AI UG auf Google Maps öffnen",
+            "Open Suppix AI UG on Google Maps",
+            "فتح ملف Suppix AI UG على خرائط Google"
+          );
+          hit.setAttribute("aria-label", label);
+          hit.textContent = label;
+          wrap.appendChild(hit);
+        }
+        hit.href = mapsUrl;
       });
     }
     const embedSrc = String(cfg.googleMapsEmbed || "").trim();

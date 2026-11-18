@@ -2342,6 +2342,7 @@ button:focus-visible {
 }
 
 .contact-map {
+  position: relative;
   margin-top: 1.25rem;
   border-radius: 12px;
   overflow: hidden;
@@ -2354,6 +2355,34 @@ button:focus-visible {
   width: 100%;
   height: 220px;
   max-width: 100%;
+  /* Clicks go to .contact-map-hit → company Google Business profile */
+  pointer-events: none;
+}
+
+/* Full-map hit target: opens Suppix AI UG on Google Maps (not a generic pin). */
+.contact-map-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block;
+  border-radius: inherit;
+  cursor: pointer;
+  text-indent: -9999px;
+  overflow: hidden;
+  background: transparent;
+}
+
+.contact-map-hit:focus-visible {
+  outline: 2px solid var(--primary, #2b8fc0);
+  outline-offset: -2px;
+  text-indent: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.55);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
 }
 
 .booking-manage-details.is-cancelled {

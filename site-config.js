@@ -23,9 +23,9 @@ window.SITE_CONFIG = {
     youtube: "", // https://www.youtube.com/@…
     x: "", // https://x.com/…
     tiktok: "",
-    /** Öffentlicher Google-Business / Maps-Link (auch Bewertungsseite) */
+    /** Öffentlicher Google-Business / Maps-Link (Profil, nicht nur Koordinaten) */
     googleBusiness:
-      "https://www.google.com/maps/place/Suppix+AI+UG/@52.535222,13.404971,17z/data=!4m6!3m5!1s0x47a8514752d130e9:0x121f76063e00f284!8m2!3d52.535221972065116!4d13.404971276502327",
+      "https://www.google.com/maps?cid=1303848719169282692",
   },
 
   /** Google Maps Embed (Kontaktseite). */
