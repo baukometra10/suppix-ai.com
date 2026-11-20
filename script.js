@@ -748,22 +748,54 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function initAllVideoPosters() {
+    initShortVideosByLang();
     document.querySelectorAll("video").forEach((el) => {
       ensureClickToPlay(el);
       bindShortClipLimit(el);
     });
   }
 
+  function initShortVideosByLang() {
+    const byLang = cfg.shortVideoByLang || {};
+    const lang = pageLang();
+    const src = resolveAssetPath(byLang[lang] || byLang.de || "");
+    if (!src) return;
+    const poster = brandVideoPosterSrc();
+    document.querySelectorAll("video[data-short-clip='1']").forEach((video) => {
+      if (!(video instanceof HTMLVideoElement)) return;
+      const source = video.querySelector("source");
+      if (source) source.setAttribute("src", src);
+      else {
+        const s = document.createElement("source");
+        s.src = src;
+        s.type = "video/mp4";
+        video.appendChild(s);
+      }
+      video.setAttribute("poster", poster);
+      const host = video.closest(".video-poster-host, .video-wrapper");
+      const coverImg = host?.querySelector(".video-poster-cover-img");
+      if (coverImg) coverImg.src = poster;
+      try {
+        video.load();
+      } catch (_) {
+        /* ignore */
+      }
+    });
+  }
+
   function bindShortClipLimit(video) {
     if (!(video instanceof HTMLVideoElement) || video.dataset.shortBound === "1") return;
     if (video.getAttribute("data-short-clip") !== "1") return;
+    const maxSec = Number(cfg.media?.shortClipMaxSec);
+    // 0 / missing = play full video (ImageFilm on site)
+    if (!Number.isFinite(maxSec) || maxSec <= 0) return;
     video.dataset.shortBound = "1";
-    const maxSec = 45;
+    const limit = Math.max(5, Math.min(120, maxSec));
     video.addEventListener("timeupdate", () => {
-      if (video.currentTime >= maxSec - 0.05) {
+      if (video.currentTime >= limit - 0.05) {
         try {
           video.pause();
-          video.currentTime = maxSec;
+          video.currentTime = limit;
         } catch (_) {
           /* ignore */
         }

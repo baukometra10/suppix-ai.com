@@ -238,7 +238,7 @@
         <div class="hero-actions">
           <a href="#bookingSection" class="btn btn-primary btn-glow" data-booking>Live-Demo buchen</a>
           <a href="pilot.html" class="btn btn-accent">30-Tage-Pilot starten</a>
-          <a href="#kurzvideo" class="btn btn-outline">45-Sekunden-Überblick</a>
+          <a href="#video" class="btn btn-outline">ImageFilm ansehen</a>
         </div>
         <div class="hero-quick-contact">
           <a href="tel:+4917631676589" class="hero-quick-link" data-phone-link>017631676589</a>
@@ -269,23 +269,6 @@
         <strong>Volle Lohn- &amp; Steuer-Engine</strong>
         <p>Mehr als Stunden zählen: Schichten und Verträge mitführen, Lohn und Steuern nach Land, Region und Gesetz berechnen – Abrechnungen zurück in die Plattform.</p>
       </a>
-    </div>
-  </section>
-
-  <section class="hero-short-video reveal" id="kurzvideo">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Schnellcheck</span>
-        <h2>In 45 Sekunden verstehen</h2>
-        <p>Kurz: Was WorkPass am Einsatzort und WorkPass Lohn in der Abrechnung leisten.</p>
-      </div>
-      <div class="video-wrapper video-wrapper-real video-poster-host hero-short-stage">
-        <video controls playsinline preload="none" poster="assets/video-poster.jpg?v=20261026h" title="WorkPass Kurzüberblick" data-short-clip="1">
-          <source src="assets/workpass-lohn-bridge-de.mp4#t=0,45" type="video/mp4">
-          Ihr Browser unterstützt kein Video.
-        </video>
-      </div>
-      <p class="preview-note"><a href="#video">Zum vollständigen Produktvideo</a> · <a href="pilot.html">30-Tage-Pilot</a></p>
     </div>
   </section>
 
@@ -664,11 +647,12 @@
 
   <!-- Video / Storyboard -->
   <section class="video-section reveal" id="video">
+    <div id="kurzvideo" aria-hidden="true"></div>
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Produktvideo</span>
+        <span class="section-tag">ImageFilm</span>
         <h2>WorkPass sehen – nicht nur lesen</h2>
-        <p>Kurzfilm zur Plattform (WorkPass Lohn-Bridge) und die Kernstory Szene für Szene. Danach Demo buchen.</p>
+        <p>Der vollständige Film: Chaos, Lösung, Lohnkette, Freigabe, Chat, Kameras und KI. Danach Demo buchen.</p>
       </div>
 
       <ol class="storyboard-grid">
@@ -721,16 +705,20 @@
             </div>
           </div>
           <button type="button" class="video-poster-cover" id="demoVideoCover" aria-label="Video abspielen">
-            <img src="assets/video-poster.jpg?v=20261026h" alt="" class="video-poster-cover-img" width="1920" height="1080" decoding="async">
+            <img src="assets/imagefilm/web/imagefilm-poster.jpg?v=10" alt="" class="video-poster-cover-img" width="1920" height="1080" decoding="async">
             <span class="video-poster-play" aria-hidden="true"></span>
             <span class="video-poster-hint">Tippen zum Abspielen</span>
           </button>
-          <video id="demoVideo" controls playsinline preload="none" poster="assets/video-poster.jpg?v=20261026h">
-            <source src="assets/workpass-lohn-bridge-de.mp4" type="video/mp4">
+          <video id="demoVideo" controls playsinline preload="none" poster="assets/imagefilm/web/imagefilm-poster.jpg?v=10">
+            <source src="assets/imagefilm/web/SUPPIX_AI_ImageFilm_DE.mp4?v=10" type="video/mp4">
             Ihr Browser unterstützt kein Video.
           </video>
         </div>
-        <p class="preview-note">Produktvideo · Kernstory darunter · Enterprise: Kamera · KI · Wallet · White-Label</p>
+        <div class="video-cta-row">
+          <a href="#bookingSection" class="btn btn-primary" data-booking>Live-Demo buchen</a>
+          <a href="#kontakt" class="btn btn-outline">Kontakt aufnehmen</a>
+        </div>
+        <p class="preview-note">SUPPIX.AI ImageFilm · Chat · Meetings · Kameras · KI · Vier-Augen · Lohnkette</p>
       </div>
     </div>
   </section>

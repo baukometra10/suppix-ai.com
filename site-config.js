@@ -94,13 +94,24 @@ window.SITE_CONFIG = {
   marketingDisplayHost: "suppixai.com",
 
   /**
-   * Demo-/Produktvideo (Fallback). Sprachvarianten: demoVideoByLang.
+   * ImageFilm / Produktvideo (Fallback). Sprachvarianten: demoVideoByLang.
+   * Web-optimierte 720p-Fassungen unter assets/imagefilm/web/
    */
-  demoVideoSrc: "assets/workpass-lohn-bridge-de.mp4",
+  demoVideoSrc: "assets/imagefilm/web/SUPPIX_AI_ImageFilm_DE.mp4?v=10",
   demoVideoByLang: {
-    de: "assets/workpass-lohn-bridge-de.mp4",
-    en: "assets/workpass-lohn-bridge-en.mp4?v=23",
-    ar: "assets/workpass-lohn-bridge-ar.mp4?v=23",
+    de: "assets/imagefilm/web/SUPPIX_AI_ImageFilm_DE.mp4?v=10",
+    en: "assets/imagefilm/web/SUPPIX_AI_ImageFilm_EN.mp4?v=10",
+    ar: "assets/imagefilm/web/SUPPIX_AI_ImageFilm_AR.mp4?v=10",
+  },
+
+  /**
+   * Optional Kurz-Ads (nicht auf der Homepage eingebettet – nur für Anzeigen).
+   * Homepage zeigt genau ein ImageFilm unter #video via demoVideoByLang.
+   */
+  shortVideoByLang: {
+    de: "assets/imagefilm/web/SUPPIX_AI_AD_25s_DE.mp4?v=10",
+    en: "assets/imagefilm/web/SUPPIX_AI_AD_25s_EN.mp4?v=10",
+    ar: "assets/imagefilm/web/SUPPIX_AI_AD_25s_AR.mp4?v=10",
   },
 
   /**
@@ -114,10 +125,12 @@ window.SITE_CONFIG = {
   bookingUrl: "",
 
   media: {
-    demoPoster: "assets/video-poster.jpg?v=20261026h",
+    demoPoster: "assets/imagefilm/web/imagefilm-poster.jpg?v=10",
     /** Logo-Intro vor dem ersten Abspielen (ms), Skip-Button inklusive */
     videoIntroMs: 6500,
     heroCards: true,
+    /** Nur falls data-short-clip gesetzt ist (Ads). ImageFilm auf der Site läuft vollständig. */
+    shortClipMaxSec: 0,
   },
 
   /** Plattform-Login-Domain (App), nicht die Marketing-Website. */

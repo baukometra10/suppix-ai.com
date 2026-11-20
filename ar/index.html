@@ -218,7 +218,7 @@
         <div class="hero-actions">
           <a href="#bookingSection" class="btn btn-primary btn-glow" data-booking>احجز عرضاً مباشراً</a>
           <a href="pilot.html" class="btn btn-accent">تجربة 30 يوماً</a>
-          <a href="#kurzvideo" class="btn btn-outline">نظرة في 45 ثانية</a>
+          <a href="#video" class="btn btn-outline">شاهد الفيلم الكامل</a>
         </div>
         <div class="hero-quick-contact">
           <a href="tel:+4917631676589" class="hero-quick-link" data-phone-link>اتصل بنا</a>
@@ -248,23 +248,6 @@
         <strong>محرك أجور وضرائب كامل</strong>
         <p>أكثر من عدّ الساعات: يدير الورديات والعقود، ويحسب الأجور والضرائب حسب البلد والمنطقة والقانون – ثم يعيد الكشوف إلى المنصة.</p>
       </a>
-    </div>
-  </section>
-
-  <section class="hero-short-video reveal" id="kurzvideo">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">نظرة سريعة</span>
-        <h2>افهمه خلال 45 ثانية</h2>
-        <p>باختصار: ماذا يفعل WorkPass في الموقع وماذا يفعل WorkPass Lohn في الرواتب.</p>
-      </div>
-      <div class="video-wrapper video-wrapper-real video-poster-host hero-short-stage">
-        <video controls playsinline preload="none" poster="../assets/video-poster.jpg?v=20261026h" title="نظرة سريعة على WorkPass" data-short-clip="1">
-          <source src="../assets/workpass-lohn-bridge-ar.mp4?v=23#t=0,45" type="video/mp4">
-          متصفحك لا يدعم الفيديو.
-        </video>
-      </div>
-      <p class="preview-note"><a href="#video">الفيديو الكامل</a> · <a href="pilot.html">تجربة 30 يوماً</a></p>
     </div>
   </section>
 
@@ -425,11 +408,12 @@
   </section>
 
   <section class="video-section reveal" id="video">
+    <div id="kurzvideo" aria-hidden="true"></div>
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">فيديو المنتج</span>
+        <span class="section-tag">ImageFilm</span>
         <h2>شاهد WorkPass – لا تكتفِ بالقراءة</h2>
-        <p>فيلم منتج قصير (جسر الرواتب) مع القصة الأساسية مشهداً بمشهد. ثم احجز عرضاً.</p>
+        <p>الفيلم الكامل: الفوضى، الحل، الرواتب، الاعتماد، الدردشة، الكاميرات والذكاء الاصطناعي. ثم احجز عرضاً.</p>
       </div>
 
       <ol class="storyboard-grid">
@@ -482,15 +466,19 @@
             </div>
           </div>
           <button type="button" class="video-poster-cover" id="demoVideoCover" aria-label="تشغيل الفيديو">
-            <img src="../assets/video-poster.jpg?v=20261026h" alt="" class="video-poster-cover-img" width="1920" height="1080" decoding="async">
+            <img src="../assets/imagefilm/web/imagefilm-poster.jpg?v=10" alt="" class="video-poster-cover-img" width="1920" height="1080" decoding="async">
             <span class="video-poster-play" aria-hidden="true"></span>
             <span class="video-poster-hint">انقر للتشغيل</span>
           </button>
-          <video id="demoVideo" controls playsinline preload="none" poster="../assets/video-poster.jpg?v=20261026h">
-            <source src="../assets/workpass-lohn-bridge-ar.mp4?v=23" type="video/mp4">
+          <video id="demoVideo" controls playsinline preload="none" poster="../assets/imagefilm/web/imagefilm-poster.jpg?v=10">
+            <source src="../assets/imagefilm/web/SUPPIX_AI_ImageFilm_AR.mp4?v=10" type="video/mp4">
           </video>
         </div>
-        <p class="preview-note">فيديو المنتج · القصة أعلاه · Enterprise: كاميرا · AI · Wallet · White-Label</p>
+        <div class="video-cta-row">
+          <a href="#bookingSection" class="btn btn-primary" data-booking>احجز عرضاً مباشراً</a>
+          <a href="#contact" class="btn btn-outline">تواصل معنا</a>
+        </div>
+        <p class="preview-note">فيلم SUPPIX.AI · دردشة · اجتماعات · كاميرات · ذكاء اصطناعي · أربع عيون · رواتب</p>
       </div>
     </div>
   </section>

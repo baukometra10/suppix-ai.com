@@ -10,6 +10,20 @@ assets/demo-voice-music*.m4a
 assets/lohn-dub/
 tools/.ffmpeg-shim/
 
+# ImageFilm: keep only web/ deliverables in git (masters + intermediates are huge)
+Videos/
+assets/imagefilm/norm_*/
+assets/imagefilm/vo_*/
+assets/imagefilm/qr/
+assets/imagefilm/_*/
+assets/imagefilm/*.mp4
+assets/imagefilm/*.mp3
+assets/imagefilm/*.wav
+assets/imagefilm/*.aac
+assets/imagefilm/*.webm
+!assets/imagefilm/web/
+!assets/imagefilm/web/**
+
 # OS / editor
 .DS_Store
 Thumbs.db
@@ -24,3 +38,5 @@ __pycache__/
 *.pyc
 workers/.wrangler/
 
+
+assets/imagefilm/web/_ad_*/
