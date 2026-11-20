@@ -114,6 +114,14 @@ window.SITE_CONFIG = {
     ar: "assets/imagefilm/web/SUPPIX_AI_AD_25s_AR.mp4?v=10",
   },
 
+  /** Öffentliche Share-Seiten (WhatsApp / E-Mail / Messenger). */
+  filmShareByLang: {
+    de: "film.html",
+    en: "en/film.html",
+    ar: "ar/film.html",
+  },
+  marketingUrl: "https://suppixai.com",
+
   /**
    * Eigene Demo-Buchung (Cloudflare Worker).
    * Leer = Termin-Links nutzen WhatsApp als Fallback.

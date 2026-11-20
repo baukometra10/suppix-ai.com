@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initCopyrightNote();
   initDemoVideo();
   initAllVideoPosters();
+  initVideoShare();
   initHeader();
   initSmoothScroll();
   initContactForm();
@@ -752,6 +753,143 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("video").forEach((el) => {
       ensureClickToPlay(el);
       bindShortClipLimit(el);
+    });
+  }
+
+  function filmSharePath(lang) {
+    const byLang = cfg.filmShareByLang || {
+      de: "film.html",
+      en: "en/film.html",
+      ar: "ar/film.html",
+    };
+    return byLang[lang] || byLang.de || "film.html";
+  }
+
+  function filmShareAbsoluteUrl(lang) {
+    const path = String(filmSharePath(lang || pageLang())).replace(/^\//, "");
+    const base =
+      String(cfg.liveUrl || cfg.marketingUrl || "https://suppixai.com").replace(
+        /\/$/,
+        ""
+      ) || sitePublicUrl();
+    return `${base}/${path}`;
+  }
+
+  function initVideoShare() {
+    document.querySelectorAll("[data-video-share]").forEach((root) => {
+      if (!(root instanceof HTMLElement) || root.dataset.shareBound === "1") return;
+      root.dataset.shareBound = "1";
+      const lang = pageLang();
+      const url =
+        root.getAttribute("data-share-url") || filmShareAbsoluteUrl(lang);
+      const title =
+        root.getAttribute("data-share-title") ||
+        t(
+          "SUPPIX AI ImageFilm – WorkPass",
+          "SUPPIX AI ImageFilm – WorkPass",
+          "فيلم SUPPIX AI – WorkPass"
+        );
+      const text =
+        root.getAttribute("data-share-text") ||
+        t(
+          "SUPPIX AI ImageFilm: WorkPass von Chaos bis Lohnkette – ansehen:",
+          "SUPPIX AI ImageFilm: WorkPass from chaos to payroll – watch:",
+          "فيلم SUPPIX AI: WorkPass من الفوضى إلى الرواتب – شاهد:"
+        );
+      const message = `${text} ${url}`.trim();
+      const menu = root.querySelector("[data-share-menu]");
+      const toggle = root.querySelector("[data-share-menu-toggle]");
+      const statusEl = root.querySelector("[data-share-status]");
+
+      const setOpen = (open) => {
+        if (!(menu instanceof HTMLElement) || !(toggle instanceof HTMLElement)) return;
+        menu.hidden = !open;
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        root.classList.toggle("is-open", open);
+      };
+
+      const setStatus = (msg) => {
+        if (!(statusEl instanceof HTMLElement)) return;
+        statusEl.hidden = !msg;
+        statusEl.textContent = msg || "";
+      };
+
+      if (toggle instanceof HTMLElement && menu instanceof HTMLElement) {
+        toggle.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setOpen(menu.hidden);
+        });
+        document.addEventListener("click", (e) => {
+          if (!root.contains(e.target)) setOpen(false);
+        });
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") setOpen(false);
+        });
+      }
+
+      const wa = root.querySelector("[data-share-whatsapp]");
+      if (wa instanceof HTMLAnchorElement) {
+        wa.href = `https://wa.me/?text=${encodeURIComponent(message)}`;
+        wa.target = "_blank";
+        wa.rel = "noopener noreferrer";
+      }
+
+      const mail = root.querySelector("[data-share-email]");
+      if (mail instanceof HTMLAnchorElement) {
+        mail.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(message)}`;
+      }
+
+      const copyBtn = root.querySelector("[data-share-copy]");
+      if (copyBtn instanceof HTMLElement) {
+        copyBtn.addEventListener("click", async () => {
+          try {
+            if (navigator.clipboard?.writeText) {
+              await navigator.clipboard.writeText(url);
+            } else {
+              const ta = document.createElement("textarea");
+              ta.value = url;
+              ta.setAttribute("readonly", "");
+              ta.style.position = "fixed";
+              ta.style.left = "-9999px";
+              document.body.appendChild(ta);
+              ta.select();
+              document.execCommand("copy");
+              ta.remove();
+            }
+            setStatus(t("Link kopiert.", "Link copied.", "تم نسخ الرابط."));
+            window.setTimeout(() => setStatus(""), 2500);
+          } catch (_) {
+            setStatus(url);
+          }
+        });
+      }
+
+      const nativeBtn = root.querySelector("[data-share-native]");
+      if (nativeBtn instanceof HTMLElement) {
+        const canShare =
+          typeof navigator.share === "function" &&
+          (!navigator.canShare || navigator.canShare({ title, text, url }));
+        if (!canShare) {
+          nativeBtn.hidden = true;
+        } else {
+          nativeBtn.addEventListener("click", async () => {
+            try {
+              await navigator.share({ title, text, url });
+              setOpen(false);
+            } catch (err) {
+              if (err && err.name === "AbortError") return;
+              setStatus(
+                t(
+                  "Teilen nicht möglich – Link kopieren.",
+                  "Share unavailable – copy the link.",
+                  "المشاركة غير متاحة – انسخ الرابط."
+                )
+              );
+            }
+          });
+        }
+      }
     });
   }
 
