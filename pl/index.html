@@ -22,8 +22,8 @@
   <title>System ewidencji czasu pracy | WorkPass – Polska i Europa</title>
   <link rel="icon" href="../assets/icon-192.png" type="image/png">
   <link rel="stylesheet" href="../styles.css">
-  <link rel="stylesheet" href="../extras.css?v=20261016c">
-  <link rel="stylesheet" href="../premium.css?v=20261016c">
+  <link rel="stylesheet" href="../extras.css?v=20261120c">
+  <link rel="stylesheet" href="../premium.css?v=20261026h">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -83,11 +83,15 @@
         </div>
       </a>
       <nav class="nav-desktop">
-        <a href="../demo.html">Demo</a>
+        <a href="film.html">ImageFilm</a>
         <a href="blog/">Blog</a>
-        <a href="../index.html">Deutsch</a>
-        <a href="../en/index.html">English</a>
-        <a href="../demo.html" class="btn btn-primary">Umów demo</a>
+        <div class="lang-switch-group" aria-label="Język">
+          <a href="../index.html" class="lang-switch" hreflang="de">DE</a>
+          <a href="../en/index.html" class="lang-switch" hreflang="en">EN</a>
+          <a href="../ar/index.html" class="lang-switch" hreflang="ar">AR</a>
+          <a href="index.html" class="lang-switch is-active" hreflang="pl" aria-current="page">PL</a>
+        </div>
+        <a href="../index.html#bookingSection" class="btn btn-primary" data-booking>Umów demo</a>
       </nav>
     </div>
   </header>
@@ -97,13 +101,43 @@
       <span class="section-tag">Polska · Berlin · Europa</span>
       <h1>System ewidencji czasu pracy dla firm</h1>
       <p>WorkPass to nowoczesny system rejestracji czasu: wejście przez QR, NFC lub GPS, obecność na żywo i raporty dla księgowości. Dla ekip budowlanych, przemysłu i firm z pracownikami w Polsce i w Europie.</p>
-      <a href="../demo.html" class="btn btn-primary">Zamów demo na żywo</a>
-      <a href="../index.html#bookingSection" class="btn btn-outline" style="margin-left:0.5rem">Wybierz termin</a>
+      <a href="../index.html#bookingSection" class="btn btn-primary" data-booking>Zamów demo na żywo</a>
+      <a href="film.html" class="btn btn-outline" style="margin-left:0.5rem">Obejrzyj ImageFilm</a>
     </div>
   </section>
 
   <div class="page-content">
     <div class="container">
+      <div class="video-showcase storyboard-player" id="video" style="margin-bottom:2rem">
+        <div class="video-wrapper video-wrapper-real demo-video-stage video-poster-host is-poster" id="demoVideoStage">
+          <button type="button" class="video-poster-cover" id="demoVideoCover" aria-label="Odtwórz wideo">
+            <img src="../assets/imagefilm/web/imagefilm-poster.jpg?v=10" alt="" class="video-poster-cover-img" width="1920" height="1080" decoding="async">
+            <span class="video-poster-play" aria-hidden="true"></span>
+            <span class="video-poster-hint">Dotknij, aby odtworzyć</span>
+          </button>
+          <video id="demoVideo" controls playsinline preload="none" poster="../assets/imagefilm/web/imagefilm-poster.jpg?v=10">
+            <source src="../assets/imagefilm/web/SUPPIX_AI_ImageFilm_EN.mp4?v=10" type="video/mp4">
+          </video>
+          <div class="video-more" data-video-share
+               data-share-url="https://suppixai.com/pl/film.html"
+               data-share-title="SUPPIX AI ImageFilm – WorkPass"
+               data-share-text="SUPPIX AI ImageFilm: WorkPass od chaosu do płac – obejrzyj:">
+            <button type="button" class="video-more-toggle" data-share-menu-toggle aria-expanded="false" aria-haspopup="true" aria-label="Udostępnij wideo">
+              <span class="video-more-toggle-dots" aria-hidden="true"></span>
+            </button>
+            <div class="video-more-menu" data-share-menu hidden role="menu">
+              <button type="button" class="video-more-item" data-share-native role="menuitem">Udostępnij…</button>
+              <a class="video-more-item" data-share-whatsapp href="#" rel="noopener" role="menuitem">WhatsApp</a>
+              <a class="video-more-item" data-share-email href="#" role="menuitem">E-mail</a>
+              <button type="button" class="video-more-item" data-share-copy role="menuitem">Kopiuj link</button>
+              <a class="video-more-item" data-share-youtube href="#" rel="noopener" role="menuitem" hidden>YouTube</a>
+              <a class="video-more-item" href="film.html" role="menuitem">Strona udostępniania</a>
+              <p class="video-more-status" data-share-status hidden></p>
+            </div>
+          </div>
+        </div>
+        <p class="preview-note">SUPPIX.AI ImageFilm (EN) · udostępnij link PL</p>
+      </div>
       <p><a href="blog/">Przewodniki / Blog</a> · <a href="../pilot.html">30-dniowy pilot</a> · <a href="../roi.html">ROI</a> · <a href="../suppix.html">Czym jest Suppix?</a></p>
       <h2>Zamiast papieru, Excela i WhatsAppa</h2>
       <p>Klasyczna ewidencja czasu pracy gubi się w listach i plikach. WorkPass łączy <strong>tożsamość cyfrową</strong>, <strong>kontrolę dostępu</strong> i <strong>rejestrację czasu</strong> w jednej platformie — karta lub aplikacja, także bez smartfona u każdego pracownika.</p>
@@ -134,7 +168,8 @@
       <div class="subpage-cta">
         <h3>Zobacz system na żywo</h3>
         <p>Tożsamość → wejście → obecność → raport. Potem decydujecie, czy WorkPass zostaje Waszym systemem ewidencji czasu pracy.</p>
-        <a href="../demo.html" class="btn btn-primary">Demo / kontakt</a>
+        <a href="../index.html#bookingSection" class="btn btn-primary" data-booking>Demo / kontakt</a>
+        <a href="film.html" class="btn btn-outline">ImageFilm</a>
       </div>
       <p>Języki: <a href="../index.html">Deutsch</a> · <a href="../en/index.html">English</a> · <a href="../ar/index.html">العربية</a> · Polski</p>
     </div>
@@ -146,7 +181,17 @@
       <span><a href="../impressum.html">Impressum</a> · <a href="../datenschutz.html">Prywatność</a> · <a href="../suppix.html">Suppix</a></span>
     </div>
   </footer>
-  <script src="../site-config.js?v=20261109b" defer></script>
-  <script src="../script.js?v=20261016c" defer></script>
+
+  <div class="mobile-cta-bar" id="mobileCtaBar" aria-hidden="true">
+    <a href="../index.html#bookingSection" class="btn btn-primary" data-booking>Umów demo</a>
+    <a href="https://wa.me/4917631676589?text=Dzie%C5%84%20dobry%2C%20chcia%C5%82bym%20um%C3%B3wi%C4%87%20demo%20WorkPass." class="btn btn-outline" id="mobileCtaWhatsapp">WhatsApp</a>
+  </div>
+  <a href="https://wa.me/4917631676589?text=Dzie%C5%84%20dobry%2C%20interesuje%20mnie%20WorkPass.%20Czy%20mo%C5%BCemy%20um%C3%B3wi%C4%87%20demo%3F" class="whatsapp-float" id="whatsappBtn" data-tooltip="Demo przez WhatsApp">
+    <img class="whatsapp-float-mark" src="../assets/logo-mark.png?v=20261028b" alt="" width="34" height="34" decoding="async">
+    <span class="whatsapp-float-label">WhatsApp</span>
+  </a>
+
+  <script src="../site-config.js?v=20261120c" defer></script>
+  <script src="../script.js?v=20261120c" defer></script>
 </body>
 </html>

@@ -7,7 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
   initCopyrightNote();
   initDemoVideo();
   initAllVideoPosters();
+  initLohnBridgeVideos();
   initVideoShare();
+  initFilmPageAnalytics();
   initHeader();
   initSmoothScroll();
   initContactForm();
@@ -123,24 +125,31 @@ document.addEventListener("DOMContentLoaded", () => {
     document.head.appendChild(s);
   }
 
+  function trackEvent(name, params) {
+    try {
+      const payload = Object.assign({ event: name }, params || {});
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push(payload);
+      if (typeof window.gtag === "function") {
+        window.gtag("event", name, params || {});
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
   function trackDemoBooking(detail) {
     try {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: "demo_booking",
+      trackEvent("demo_booking", {
+        event_category: "conversion",
+        event_label: detail?.label || "booking",
         booking_label: detail?.label || "",
         booking_id: detail?.id || "",
+        value: 1,
       });
-      if (typeof window.gtag === "function") {
-        window.gtag("event", "demo_booking", {
-          event_category: "conversion",
-          event_label: detail?.label || "booking",
-          value: 1,
-        });
-        const sendTo = String(cfg.analytics?.adsSendTo || "").trim();
-        if (sendTo) {
-          window.gtag("event", "conversion", { send_to: sendTo, value: 1.0, currency: "EUR" });
-        }
+      const sendTo = String(cfg.analytics?.adsSendTo || "").trim();
+      if (sendTo && typeof window.gtag === "function") {
+        window.gtag("event", "conversion", { send_to: sendTo, value: 1.0, currency: "EUR" });
       }
     } catch {
       /* ignore */
@@ -775,13 +784,47 @@ document.addEventListener("DOMContentLoaded", () => {
     return `${base}/${path}`;
   }
 
+  function filmYouTubeUrl(lang) {
+    const byLang = cfg.filmYouTubeByLang || {};
+    return String(byLang[lang || pageLang()] || byLang.de || "").trim();
+  }
+
+  function initFilmPageAnalytics() {
+    if (!document.body.classList.contains("film-share-page")) return;
+    trackEvent("film_view", {
+      event_category: "video",
+      event_label: pageLang(),
+      page_path: location.pathname,
+    });
+  }
+
+  function initLohnBridgeVideos() {
+    const byLang = cfg.lohnBridgeByLang || {};
+    const src = resolveAssetPath(byLang[pageLang()] || byLang.de || "");
+    if (!src) return;
+    document.querySelectorAll("video source[src*='workpass-lohn-bridge']").forEach((source) => {
+      if (!(source instanceof HTMLSourceElement)) return;
+      source.setAttribute("src", src);
+      const video = source.parentElement;
+      if (video instanceof HTMLVideoElement) {
+        try {
+          video.load();
+        } catch (_) {
+          /* ignore */
+        }
+      }
+    });
+  }
+
   function initVideoShare() {
     document.querySelectorAll("[data-video-share]").forEach((root) => {
       if (!(root instanceof HTMLElement) || root.dataset.shareBound === "1") return;
       root.dataset.shareBound = "1";
       const lang = pageLang();
-      const url =
+      const pageUrl =
         root.getAttribute("data-share-url") || filmShareAbsoluteUrl(lang);
+      const ytUrl = filmYouTubeUrl(lang);
+      const url = ytUrl || pageUrl;
       const title =
         root.getAttribute("data-share-title") ||
         t(
@@ -814,6 +857,16 @@ document.addEventListener("DOMContentLoaded", () => {
         statusEl.textContent = msg || "";
       };
 
+      const trackShare = (method) => {
+        trackEvent("video_share", {
+          event_category: "video",
+          event_label: method,
+          share_method: method,
+          language: lang,
+          share_target: ytUrl ? "youtube" : "film_page",
+        });
+      };
+
       if (toggle instanceof HTMLElement && menu instanceof HTMLElement) {
         toggle.addEventListener("click", (e) => {
           e.preventDefault();
@@ -828,16 +881,31 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
 
+      const ytLink = root.querySelector("[data-share-youtube]");
+      if (ytLink instanceof HTMLAnchorElement) {
+        if (ytUrl) {
+          ytLink.hidden = false;
+          ytLink.href = ytUrl;
+          ytLink.target = "_blank";
+          ytLink.rel = "noopener noreferrer";
+          ytLink.addEventListener("click", () => trackShare("youtube"));
+        } else {
+          ytLink.hidden = true;
+        }
+      }
+
       const wa = root.querySelector("[data-share-whatsapp]");
       if (wa instanceof HTMLAnchorElement) {
         wa.href = `https://wa.me/?text=${encodeURIComponent(message)}`;
         wa.target = "_blank";
         wa.rel = "noopener noreferrer";
+        wa.addEventListener("click", () => trackShare("whatsapp"));
       }
 
       const mail = root.querySelector("[data-share-email]");
       if (mail instanceof HTMLAnchorElement) {
         mail.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(message)}`;
+        mail.addEventListener("click", () => trackShare("email"));
       }
 
       const copyBtn = root.querySelector("[data-share-copy]");
@@ -857,6 +925,7 @@ document.addEventListener("DOMContentLoaded", () => {
               document.execCommand("copy");
               ta.remove();
             }
+            trackShare("copy");
             setStatus(t("Link kopiert.", "Link copied.", "تم نسخ الرابط."));
             window.setTimeout(() => setStatus(""), 2500);
           } catch (_) {
@@ -876,6 +945,7 @@ document.addEventListener("DOMContentLoaded", () => {
           nativeBtn.addEventListener("click", async () => {
             try {
               await navigator.share({ title, text, url });
+              trackShare("native");
               setOpen(false);
             } catch (err) {
               if (err && err.name === "AbortError") return;

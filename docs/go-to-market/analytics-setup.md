@@ -15,4 +15,14 @@ analytics: {
 5. Test: Demo buchen → in GA4 DebugView Event `demo_booking` prüfen
 6. In Google Ads Conversion mit Event `conversion` / `send_to` verknüpfen
 
+Weitere Events (ohne Extra-Setup, sobald `gtagId` gesetzt):
+- `film_view` – Aufruf einer Share-Seite (`film.html` / Sprachvarianten)
+- `video_share` – Teilen (whatsapp / email / copy / native / youtube)
+
+## YouTube (unlisted) für Messenger-Preview
+
+1. ImageFilm (DE/EN/AR Web-MP4) als **unlisted** auf YouTube hochladen
+2. Watch-URLs in `site-config.js` → `filmYouTubeByLang` eintragen
+3. Share/WhatsApp nutzt dann automatisch YouTube; Menüpunkt „YouTube“ erscheint
+
 Ohne IDs lädt die Seite **kein** gtag-Skript (Privacy-by-default).

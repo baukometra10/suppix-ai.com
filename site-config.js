@@ -69,7 +69,7 @@ window.SITE_CONFIG = {
    * Events: demo_booking + optional conversion.
    */
   analytics: {
-    // Sobald IDs da sind eintragen – Demo-Buchungen feuern dann automatisch Events.
+    // IDs eintragen → gtag lädt; Events: demo_booking, video_share, film_view, conversion.
     gtagId: "", // z. B. "G-XXXXXXXXXX" oder "G-XXX,AW-YYYY"
     adsSendTo: "", // z. B. "AW-YYYY/AbCdef"
   },
@@ -79,7 +79,7 @@ window.SITE_CONFIG = {
    * enabled: false → Banner ausblenden (wenn alles final ist).
    */
   siteNotice: {
-    enabled: true,
+    enabled: false,
     dismissible: true,
   },
 
@@ -102,6 +102,8 @@ window.SITE_CONFIG = {
     de: "assets/imagefilm/web/SUPPIX_AI_ImageFilm_DE.mp4?v=10",
     en: "assets/imagefilm/web/SUPPIX_AI_ImageFilm_EN.mp4?v=10",
     ar: "assets/imagefilm/web/SUPPIX_AI_ImageFilm_AR.mp4?v=10",
+    /** Bis PL-Master fertig: EN-Film */
+    pl: "assets/imagefilm/web/SUPPIX_AI_ImageFilm_EN.mp4?v=10",
   },
 
   /**
@@ -112,6 +114,7 @@ window.SITE_CONFIG = {
     de: "assets/imagefilm/web/SUPPIX_AI_AD_25s_DE.mp4?v=10",
     en: "assets/imagefilm/web/SUPPIX_AI_AD_25s_EN.mp4?v=10",
     ar: "assets/imagefilm/web/SUPPIX_AI_AD_25s_AR.mp4?v=10",
+    pl: "assets/imagefilm/web/SUPPIX_AI_AD_25s_EN.mp4?v=10",
   },
 
   /** Öffentliche Share-Seiten (WhatsApp / E-Mail / Messenger). */
@@ -119,7 +122,28 @@ window.SITE_CONFIG = {
     de: "film.html",
     en: "en/film.html",
     ar: "ar/film.html",
+    pl: "pl/film.html",
   },
+
+  /**
+   * Unlisted YouTube-URLs für stärkere Messenger-Previews.
+   * Leer = Share nutzt film.html; sobald URL gesetzt → WhatsApp/Share bevorzugt YouTube.
+   * Beispiel: "https://youtu.be/XXXXXXXXXXX" oder Watch-URL.
+   */
+  filmYouTubeByLang: {
+    de: "",
+    en: "",
+    ar: "",
+    pl: "",
+  },
+
+  /** Komprimierte Lohn-Bridge-Clips (~720p) statt 59MB-Originale. */
+  lohnBridgeByLang: {
+    de: "assets/web/workpass-lohn-bridge-de.mp4?v=24",
+    en: "assets/web/workpass-lohn-bridge-en.mp4?v=24",
+    ar: "assets/web/workpass-lohn-bridge-ar.mp4?v=24",
+  },
+
   marketingUrl: "https://suppixai.com",
 
   /**
